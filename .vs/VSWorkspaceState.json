@@ -1,8 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Backend"
+    "\\src"
   ],
-  "SelectedNode": "\\Backend\\controller-backend",
+  "SelectedNode": "\\package-lock.json",
   "PreviewInSolutionExplorer": false
 }

@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import Header from './components/Header';
 import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
+import NaviBar from './components/NaviBar';
 
 function App() {
     // Step 1: Create a state variable to track the login status
@@ -24,6 +25,7 @@ function App() {
     return (
         <Router>
             <Header title="Soul taker industries" />
+            <NaviBar></NaviBar>
             <RegistrationForm />
             <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} />
             <h1>Soultaker App</h1>
