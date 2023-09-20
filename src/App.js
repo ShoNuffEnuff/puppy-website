@@ -12,22 +12,32 @@ import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 
 function App() {
-    // Step 1: Create a state variable to track the login status
+    // State Variable for Login Status
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [idusername, setIdUsername] = useState(null);
+    const [keyProp, setKeyProp] = useState(0);
 
-    // Step 1: Create a function to update the login status
+    //Pass isLoggedIn State
     const handleLogin = () => {
         setIsLoggedIn(true);
+        
+    };
+    //Pass isLoggedIn State
+    const handleLogout = () => {
+        setIsLoggedIn(false);
+    };
+    //Pass the key
+    const changeKey = () => {
+        setKeyProp(prevKey => prevKey + 1); // Increment the key
     };
 
     return (
         <Router>
             <Header title="Soul taker industries" />
             <RegistrationForm />
-            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} />
+            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
             <h1>Soultaker App</h1>
-            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} /> {/* Pass idusername */}
+            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp}  /> {/* Pass idusername */}
             <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const LoginForm = ({ onLogin, onLogout, idusername, setIdUsername }) => {
+const LoginForm = ({ onLogin, onLogout, idusername, setIdUsername, changeKey}) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -23,7 +23,7 @@ const LoginForm = ({ onLogin, onLogout, idusername, setIdUsername }) => {
     };
 
     const handleLogout = () => {
-        // Clear the JWT token, isLoggedIn state, and idUsername from local storage
+        // Clear the JWT, isLoggedIn state, and idUsername from local storage
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('idUsername');
@@ -34,7 +34,11 @@ const LoginForm = ({ onLogin, onLogout, idusername, setIdUsername }) => {
         // Set isLoggedIn to false
         setIsLoggedIn(false);
 
-        
+
+
+        // Call the changeKey function to trigger the key change
+        changeKey();
+        onLogout();
     };
 
     const handleSubmit = async (e) => {

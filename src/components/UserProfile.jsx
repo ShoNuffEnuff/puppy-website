@@ -3,7 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import axios from 'axios';
 
-const UserProfile = ({ idusername, isLoggedIn }) => {
+const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
     const [pets, setPets] = useState([]);
     const [showProfile, setShowProfile] = useState(false);
@@ -15,6 +15,9 @@ const UserProfile = ({ idusername, isLoggedIn }) => {
     useEffect(() => {
         isLoggedInRef.current = isLoggedIn;
     }, [isLoggedIn]);
+
+   
+   
 
     const fetchUserData = useCallback(async () => {
         // Use the ref instead of directly using isLoggedIn
@@ -51,10 +54,16 @@ const UserProfile = ({ idusername, isLoggedIn }) => {
     }, [idusername]);
 
     useEffect(() => {
-        if (showProfile) {
+        if (showProfile && isLoggedIn) {
             fetchUserData();
         }
-    }, [showProfile, fetchUserData]);
+    }, [showProfile, isLoggedIn, fetchUserData]);
+
+    // Reset user and pets state when keyProp changes
+    useEffect(() => {
+        setUser({ username: '' });
+        setPets([]);
+    }, [keyProp]);
 
     const handleShow = () => {
         setShowProfile(true);
@@ -63,7 +72,9 @@ const UserProfile = ({ idusername, isLoggedIn }) => {
     const handleClose = () => setShowProfile(false);
 
     return (
-        <>
+
+        
+            <div key={keyProp}>
             <button className="btn btn-primary" onClick={handleShow}>
                 Open User Profile
             </button>
@@ -95,7 +106,7 @@ const UserProfile = ({ idusername, isLoggedIn }) => {
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>
-        </>
+        </div>
     );
 };
 
