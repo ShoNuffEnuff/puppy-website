@@ -3,10 +3,12 @@
     "",
     "\\Backend",
     "\\Backend\\controller-backend",
+    "\\Backend\\controller-backend\\venv\\Lib",
+    "\\Backend\\controller-backend\\venv\\Lib\\site-packages",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components",
+  "SelectedNode": "\\src\\components\\NaviBar.jsx",
   "PreviewInSolutionExplorer": false
 }

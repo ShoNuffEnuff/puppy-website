@@ -15,39 +15,34 @@ function NaviBar() {
     return (
         <Navbar expand="lg" className="custom-nav-bar">
             <Container className="Nav01">
-                <Navbar.Brand href="#home"><Image src={petplusLogo} alt= "Veterinary Services Logo" className="custom-logo" /></Navbar.Brand>
+                {/*<Navbar.Brand href="#home"><Image src={petplusLogo} alt= "Veterinary Services Logo" className="custom-logo" /></Navbar.Brand>*/}
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                <Navbar.Collapse id="basic-navbar-nav" />
                 <Nav className="custom-navlinks">
-                    <Nav.Link href="#home">Home</Nav.Link>
-                    <Nav.Link href="#staff">Staff</Nav.Link>
-                    <Nav.Link href="#services">Services</Nav.Link>
-                    <Nav.Link href="#contact">Contact</Nav.Link>
-                    <Form inline>
-                        <InputGroup>
+                        <div className="nav-row">
+                            <Nav.Link href="#home" className="mr-1">Home</Nav.Link>
+                            <Nav.Link href="#staff" className="mr-2">Staff</Nav.Link>
+                            <Nav.Link href="#services" className="mr-3">Services</Nav.Link>
+                            <Nav.Link href="#contact" className="mr-4">Contact</Nav.Link>
+                        </div>
+                    <Form inline className="login-form">
+                        <div className="userForm">
                             <Form.Control
                                 placeholder="Username"
                                 aria-label="Username"
                                 aria-describedby="basic-addon1"
                             />
-                        </InputGroup>
-                    </Form>
-                    <Form inline>
-                        <Row>
-                            <Col xs="auto">
-                                <Form.Control
-                                    type="password"
-                                    placeholder="Password"
-                                    className=" mr-sm-2"
-                                />
-                            </Col>
-                            <Col xs="auto">
+                        </div>
+                        <div className="passwordForm">
+                            <Form.Control
+                                type="password"
+                                placeholder="Password"
+                                className=" mr-sm-2"
+                                /> 
+                        </div>
+                        <div className="btn-nav-row">
                                 <Button type="submit" className="custom-btn-Login">Login</Button>
-                            </Col>
-                            <Col>
-                                <Button type="submit" className="custom-btn-Register" >Register</Button>
-                            </Col>
-                        </Row>
+                                <Button type="submit" className="custom-btn-Register" >Register</Button> 
+                        </div>
                     </Form>
                 </Nav>
             </Container>
