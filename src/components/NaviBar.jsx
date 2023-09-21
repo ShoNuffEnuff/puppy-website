@@ -9,15 +9,16 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import Nav01 from './NaviBar.css';
+import petplusLogo from './petplus_logo.png';
 
 function NaviBar() {
     return (
-        <Navbar expand="lg" className="Home-Nav-Bar">
+        <Navbar expand="lg" className="custom-nav-bar">
             <Container className="Nav01">
-                <Navbar.Brand href="#home"><Image src="./petplus_logo.png" alt= "Veterinary Services Logo" /></Navbar.Brand>
+                <Navbar.Brand href="#home"><Image src={petplusLogo} alt= "Veterinary Services Logo" className="custom-logo" /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" />
-                <Nav className="me-auto">
+                <Nav className="custom-navlinks">
                     <Nav.Link href="#home">Home</Nav.Link>
                     <Nav.Link href="#staff">Staff</Nav.Link>
                     <Nav.Link href="#services">Services</Nav.Link>
@@ -41,10 +42,10 @@ function NaviBar() {
                                 />
                             </Col>
                             <Col xs="auto">
-                                <Button type="submit" className="login">Login</Button>
+                                <Button type="submit" className="custom-btn-Login">Login</Button>
                             </Col>
                             <Col>
-                                <Button type="submit">Register</Button>
+                                <Button type="submit" className="custom-btn-Register" >Register</Button>
                             </Col>
                         </Row>
                     </Form>

@@ -1,3 +1,27 @@
-Nav01 {
-    backgroundColor: 'aquamarine';
+
+.custom-nav-bar {
+    display: flex;
+    align-items: flex-start;
+    border-top: 3px solid black;
+    
+}
+.custom-logo {
+    margin-top: 0;
+    margin-right: 0;
+}
+.custom-navlinks {
+    margin-bottom: 0;
+}
+.custom-btn-Login {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+.custom-btn-Register {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+    margin-top: 0;
 }
