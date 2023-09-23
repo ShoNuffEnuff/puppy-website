@@ -118,7 +118,7 @@ const PetGroupCard = () => {
         <div>
             <Button onClick={() => setShowModal(true)}>Open Modal</Button>
 
-            <Modal show={showModal} onHide={clearSelectedPet} size="xl">
+            <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedPet ? 'Select a Date and Time' : 'All Pets'}</Modal.Title>
                 </Modal.Header>
@@ -192,7 +192,7 @@ const PetGroupCard = () => {
                             Back to All Pets
                         </Button>
                     ) : null}
-                    <Button variant="secondary" onClick={clearSelectedPet}>
+                    <Button variant="secondary" onClick={() => setShowModal(false)}>
                         Close
                     </Button>
                 </Modal.Footer>

@@ -50,7 +50,7 @@ function App() {
                 <Route path="/Contacts" element={<Contacts />} />
                 </Routes>
             </NaviBar>
-            {/*<RegistrationForm />*/}
+            <RegistrationForm />
             <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
             {/*<DatePicker></DatePicker>*/}
             <PetGroupCard></PetGroupCard>
