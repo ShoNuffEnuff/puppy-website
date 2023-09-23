@@ -76,7 +76,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         
             <div key={keyProp}>
             <button className="btn btn-primary" onClick={handleShow}>
-                Open User Profile
+                Your Profile
             </button>
 
             <Offcanvas show={showProfile} onHide={handleClose} placement="end">

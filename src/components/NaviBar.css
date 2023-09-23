@@ -1,0 +1,37 @@
+
+.custom-nav-bar {
+    display: flex;
+    align-items: flex-start;
+    border-top: 3px solid black;
+}
+
+.custom-logo {
+    margin-top: 20px;
+    margin-right: 0;
+    width: 100px;
+    height: auto;
+    position: absolute;
+}
+
+.custom-navlinks {
+    margin-bottom: 0;
+    margin-top: 0;
+    height: 0;
+    top: 0px;
+
+}
+
+.custom-btn-Login {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+
+.custom-btn-Register {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+    margin-top: 0;
+}

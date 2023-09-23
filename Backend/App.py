@@ -50,6 +50,20 @@ class Pets(db.Model):
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(45), nullable=False)
     photo = db.Column(db.LargeBinary, default=b'')
+    
+class Playdates(db.Model):
+    __tablename__ = 'playdates'
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(45))
+    customer1 = db.Column(db.String(45))
+    customer1pet = db.Column(db.String(45))
+    customer1petphoto = db.Column(db.LargeBinary)
+    customer2 = db.Column(db.String(45))
+    customer2pet = db.Column(db.String(45))
+    customer2petphoto = db.Column(db.LargeBinary)
+    time = db.Column(db.DateTime)
+    status = db.Column(db.String(45))
+    
 
 user_parser = reqparse.RequestParser()
 user_parser.add_argument('username', type=str, required=True, help='Username is required')
@@ -69,6 +83,17 @@ pet_parser.add_argument('breed', type=str, required=True, help='Pet breed is req
 pet_parser.add_argument('age', type=int, required=True, help='Pet age is required')
 pet_parser.add_argument('gender', type=str, required=True, help='Pet gender is required')
 pet_parser.add_argument('photo', type=werkzeug.datastructures.FileStorage, location='files')
+
+# parser = reqparse.RequestParser()
+# parser.add_argument('customer1', type=str)
+# parser.add_argument('customer1pet', type=str)
+# parser.add_argument('customer1petphoto', type=werkzeug.datastructures.FileStorage, location='files')
+# parser.add_argument('customer2', type=str)
+# parser.add_argument('customer2pet', type=str)
+# parser.add_argument('customer2petphoto', type=werkzeug.datastructures.FileStorage, location='files')
+# parser.add_argument('time', type=str)
+# parser.add_argument('status', type=str)
+# args = parser.parse_args()
 
 @app.after_request
 def after_request(response):
@@ -244,6 +269,51 @@ class PetList(Resource):
         return jsonify(pet_data)
 
 
+# class PlaydateResource(Resource):
+#     @jwt_required()
+#     def post(self, idusername):
+#         data = parser.parse_args()  # Use the existing parser
+
+#         # Extract playdate data from the request
+#         customer1_name = data['customer1']
+#         customer2_name = data['customer2']
+#         customer1_pet_name = data['customer1pet']
+#         customer2_pet_name = data['customer2pet']
+
+#         # Retrieve customer and pet information based on the provided names
+#         customer1 = Customer.query.filter_by(idusername=idusername, first_name=customer1_name).first()
+#         customer2 = Customer.query.filter_by(idusername=idusername, first_name=customer2_name).first()
+#         customer1_pet = Pets.query.filter_by(idusername=idusername, name=customer1_pet_name).first()
+#         customer2_pet = Pets.query.filter_by(idusername=idusername, name=customer2_pet_name).first()
+
+#         if not customer1 or not customer2 or not customer1_pet or not customer2_pet:
+#             return {'message': 'Customer or pet not found'}, 404
+
+#         # Handle file uploads for pet photos
+#         customer1_petphoto = data['customer1petphoto'].read() if data['customer1petphoto'] else None
+#         customer2_petphoto = data['customer2petphoto'].read() if data['customer2petphoto'] else None
+#         time = data['time']
+#         status = data['status']
+
+#         # Create a new playdate entry
+#         new_playdate = Playdates(
+#             username=idusername,
+#             customer1=customer1_name,
+#             customer1pet=customer1_pet_name,
+#             customer1petphoto=customer1_petphoto,
+#             customer2=customer2_name,
+#             customer2pet=customer2_pet_name,
+#             customer2petphoto=customer2_petphoto,
+#             time=time,
+#             status=status
+#         )
+
+#         # Add the new playdate to the database
+#         db.session.add(new_playdate)
+#         db.session.commit()
+
+#         # Return a success message
+#         return {'message': 'Playdate created successfully'}, 201
 
 
 
@@ -308,15 +378,43 @@ class UserProfile(Resource):
         # Return the user_data dictionary directly
         return user_data
 
+#     # Fetch playdates from the database
+# playdates = Playdates.query.all()
 
+# # Initialize the list to store playdate data
+# playdates_data = []
 
+# # Iterate through playdates and build playdate_data list
+# for playdate in playdates:
+#     playdate_entry = {
+#         'id': playdate.id,
+#         'username': playdate.username,
+#         'customer1': playdate.customer1,
+#         'customer1pet': playdate.customer1pet,
+#         'customer1petphoto': None,
+#         'customer2': playdate.customer2,
+#         'customer2pet': playdate.customer2pet,
+#         'customer2petphoto': None,
+#         'time': playdate.time.strftime('%Y-%m-%d %H:%M:%S'),
+#         'status': playdate.status
+#     }
 
+#     if playdate.customer1petphoto:
+#         with io.BytesIO(playdate.customer1petphoto) as binary_stream:
+#             photo_data = base64.b64encode(binary_stream.read()).decode()
+#             playdate_entry['customer1petphoto'] = f"data:image/jpeg;base64,{photo_data}"
 
+#     if playdate.customer2petphoto:
+#         with io.BytesIO(playdate.customer2petphoto) as binary_stream:
+#             photo_data = base64.b64encode(binary_stream.read()).decode()
+#             playdate_entry['customer2petphoto'] = f"data:image/jpeg;base64,{photo_data}"
+
+#     playdates_data.append(playdate_entry)
 
 
 api.add_resource(UserProfile, '/user-profile/<string:idusername>', methods=['GET'])
-
-
+# api.add_resource(UserProfile, '/user-profile/<string:idusername>/playdates', methods=['GET'])
+# api.add_resource(PlaydateResource, '/user-profile/<string:idusername>/playdates', methods=['POST'])
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
