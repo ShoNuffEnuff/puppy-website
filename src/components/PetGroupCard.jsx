@@ -98,6 +98,8 @@ const PetGroupCard = () => {
     const handlePetSelection = (pet) => {
         setSelectedPet(pet);
         setShowModal(true);
+        localStorage.setItem('selectedPetIdusername', pet.idusername);
+
     };
 
     const clearSelectedPet = () => {

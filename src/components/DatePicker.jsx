@@ -1,11 +1,49 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import axios from 'axios'; // Import axios
 
 function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
+
+    // Define the handleBookPlaydate function
+    const handleBookPlaydate = () => {
+        // Retrieve customer1Id and customer2Id from local storage
+        const customer1Id = localStorage.getItem('idUsername');
+        const customer2Id = localStorage.getItem('selectedPetIdusername');
+
+        if (!customer1Id || !customer2Id) {
+            console.error('Customer IDs not found in local storage');
+            return;
+        }
+
+        // Fetch data for customer 1
+        axios
+            .get(`http://localhost:5000/get_customer_data/${customer1Id}`)
+            .then((response1) => {
+                const customer1Data = response1.data;
+                console.log(customer1Data);
+
+                // Fetch data for customer 2
+                axios
+                    .get(`http://localhost:5000/get_customer_data2/${customer2Id}`)
+                    .then((response2) => {
+                        const customer2Data = response2.data;
+                        console.log(customer2Data);
+
+                        // Now you have customer1Data and customer2Data
+                        // Create a playdate or perform other actions as needed
+                    })
+                    .catch((error) => {
+                        console.error('Error fetching customer 2 data:', error);
+                    });
+            })
+            .catch((error) => {
+                console.error('Error fetching customer 1 data:', error);
+            });
+    };
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -65,6 +103,9 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                     </select>
                 </div>
             )}
+
+            {/* Add the Book Playdate button */}
+            <button onClick={handleBookPlaydate}>Finalise Playdate</button>
         </div>
     );
 }
