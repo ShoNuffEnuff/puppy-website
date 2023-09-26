@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import axios from 'axios'; // Import axios
+import axios from 'axios';
 
 function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
@@ -35,9 +35,43 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
 
                         // Now you have customer1Data and customer2Data
                         // Create a playdate or perform other actions as needed
+
+                        const formattedDate = selectedDate
+                            ? selectedDate.toISOString().slice(0, 19).replace('T', ' ')
+                            : null;
+
+                        const playdateData = {
+                            idusername1: customer1Data.idusername,
+                            idusername2: customer2Data.idusername,
+                            customer1: {
+                                first_name: customer1Data.first_name,
+                            },
+                            customer2: {
+                                first_name: customer2Data.first_name,
+                            },
+                            customer1pet: {
+                                ...selectedPet,
+                            },
+                            customer2pet: {
+                                ...datepickerUserPets.find((pet) => pet.name === selectedUserPet),
+                            },
+                            time: formattedDate,
+                            status: 'pending',
+                        };
+
+                        // Create the playdate via POST request
+                        axios
+                            .post('http://localhost:5000/create_playdate', playdateData)
+                            .then((response3) => {
+                                console.log('Playdate created successfully:', response3.data);
+                                // Handle any further actions after playdate creation
+                            })
+                            .catch((error3) => {
+                                console.error('Error creating playdate:', error3);
+                            });
                     })
-                    .catch((error) => {
-                        console.error('Error fetching customer 2 data:', error);
+                    .catch((error2) => {
+                        console.error('Error fetching customer 2 data:', error2);
                     });
             })
             .catch((error) => {
@@ -59,7 +93,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
             const parsedData = JSON.parse(userProfileData);
-            const userPets = parsedData.pets || []; // Access the pets array
+            const userPets = parsedData.pets || [];
 
             setDatepickerUserPets(userPets);
         }
@@ -80,7 +114,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             />
             {selectedDate && selectedPet && (
                 <div>
-                    <p>You selected: {selectedDate.toString()}</p>
+                    <p>You selected: {selectedDate.toLocaleString()}</p>
                     <p>Pet Name: {selectedPet.name}</p>
                     <p>Breed: {selectedPet.breed}</p>
                     <p>Age: {selectedPet.age}</p>
@@ -89,7 +123,6 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             )}
             <button onClick={clearSelectedPet}>Back to All Pets</button>
 
-            {/* Dropdown to select userPets */}
             {datepickerUserPets && datepickerUserPets.length > 0 && (
                 <div>
                     <h3>Your Pets</h3>
@@ -104,7 +137,6 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                 </div>
             )}
 
-            {/* Add the Book Playdate button */}
             <button onClick={handleBookPlaydate}>Finalise Playdate</button>
         </div>
     );

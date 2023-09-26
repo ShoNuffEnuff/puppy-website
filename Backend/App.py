@@ -1,6 +1,6 @@
 import base64
 import io
-from flask import Flask, request, jsonify
+from flask import Flask, json, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
 from flask_cors import CORS
@@ -10,6 +10,7 @@ import werkzeug
 from werkzeug.utils import secure_filename
 from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
 from datetime import timedelta
+from datetime import datetime
 
 app = Flask(__name__)
 CORS(app, origins=["*"], supports_credentials=True, headers="*")
@@ -30,6 +31,8 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     customer = db.relationship('Customer', backref='user', uselist=False)
     pets = db.relationship('Pets', backref='user', foreign_keys='Pets.idusername')
+    playdatesid = db.Column(db.Integer, db.ForeignKey('playdates.playdatesid'))
+    # playdates = db.relationship('Playdates', backref='username', foreign_keys=[playdates_id])
 
 class Customer(db.Model):
     __tablename__ = 'customer'
@@ -55,14 +58,11 @@ class Pets(db.Model):
     
 class Playdates(db.Model):
     __tablename__ = 'playdates'
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(45))
+    playdatesid = db.Column(db.Integer, primary_key=True)
     customer1 = db.Column(db.String(45))
     customer1pet = db.Column(db.String(45))
-    customer1petphoto = db.Column(db.LargeBinary)
     customer2 = db.Column(db.String(45))
     customer2pet = db.Column(db.String(45))
-    customer2petphoto = db.Column(db.LargeBinary)
     time = db.Column(db.DateTime)
     status = db.Column(db.String(45))
     
@@ -91,10 +91,8 @@ pet_parser.add_argument('photo', type=werkzeug.datastructures.FileStorage, locat
 # parser = reqparse.RequestParser()
 # parser.add_argument('customer1', type=str)
 # parser.add_argument('customer1pet', type=str)
-# parser.add_argument('customer1petphoto', type=werkzeug.datastructures.FileStorage, location='files')
 # parser.add_argument('customer2', type=str)
 # parser.add_argument('customer2pet', type=str)
-# parser.add_argument('customer2petphoto', type=werkzeug.datastructures.FileStorage, location='files')
 # parser.add_argument('time', type=str)
 # parser.add_argument('status', type=str)
 # args = parser.parse_args()
@@ -368,6 +366,68 @@ def get_customer_data2(idusername):
     }
 
     return jsonify(customer_data)
+
+@app.route('/create_playdate', methods=['POST'])
+def create_playdate():
+    try:
+        # Parse request data using reqparse
+        parser = reqparse.RequestParser()
+        parser.add_argument('customer1', type=dict)
+        parser.add_argument('customer2', type=dict)
+        parser.add_argument('customer1pet', type=dict)
+        parser.add_argument('customer2pet', type=dict)
+        parser.add_argument('time', type=str)
+        parser.add_argument('status', type=str)
+        args = parser.parse_args()
+
+        # Extract the first names of Customer1 and Customer2
+        customer1_first_name = args['customer1'].get('first_name', '')
+        customer2_first_name = args['customer2'].get('first_name', '')
+
+        # Extract the pet names of Customer1's pet and Customer2's pet
+        customer1_pet_name = args['customer1pet'].get('name', '')
+        customer2_pet_name = args['customer2pet'].get('name', '')
+
+        # Create a new Playdate object
+        playdate = Playdates(
+            customer1=customer1_first_name,
+            customer2=customer2_first_name,
+            customer1pet=customer1_pet_name,
+            customer2pet=customer2_pet_name,
+            time=args['time'],
+            status=args['status']
+        )
+
+        # Add the playdate to the database
+        db.session.add(playdate)
+        db.session.commit()
+
+        # Create a JSON response with "first_name" for both customers and pet names
+        response_data = {
+            "message": "Playdate created successfully",
+            "customer1": {
+                "first_name": customer1_first_name
+            },
+            "customer2": {
+                "first_name": customer2_first_name
+            },
+            "pet1": {
+                "name": customer1_pet_name
+            },
+            "pet2": {
+                "name": customer2_pet_name
+            }
+        }
+
+        return jsonify(response_data), 201
+    except Exception as e:
+        # Log the error for debugging
+        print(f"Error in create_playdate: {str(e)}")
+        return jsonify({"error": "An error occurred"}), 500
+
+
+
+
 
 
 
