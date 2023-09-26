@@ -7,7 +7,7 @@ import About from './pages/Staff';
 import Services from './pages/Services';
 import Contacts from './pages/Contacts';
 import 'bootstrap/dist/css/bootstrap.min.css';
-//import Header from './components/Header';
+/*import Header from './components/Header';*/
 import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
@@ -20,6 +20,7 @@ function App() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [idusername, setIdUsername] = useState(null);
     const [keyProp, setKeyProp] = useState(0);
+    const [userPets, setUserPets] = useState([]);
 
     //Pass isLoggedIn State
     const handleLogin = () => {
@@ -40,8 +41,8 @@ function App() {
             {/*<Header title="Soul taker industries" />*/}
             
             
-            <h1>Pets N' Shit</h1>
-            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp}  /> 
+            <h1>Pet + Veterinary Services</h1>
+            
             <NaviBar>
             <Routes>
                 <Route path="/" element={<Home />} />
@@ -51,9 +52,11 @@ function App() {
                 </Routes>
             </NaviBar>
             <RegistrationForm />
-            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
-            {/*<DatePicker></DatePicker>*/}
+            
+            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} /> 
+           
             <PetGroupCard></PetGroupCard>
+            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
         </Router>
     );
 }

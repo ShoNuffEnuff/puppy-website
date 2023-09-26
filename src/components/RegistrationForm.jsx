@@ -86,7 +86,7 @@ const RegistrationForm = () => {
 
     return (
         <div>
-            <h2>Registration</h2>
+            {/*<h2>Registration</h2>*/}
             {/* Registration button that opens the modal */}
             <Button variant="primary" onClick={handleShowModal}>Registration</Button>
 

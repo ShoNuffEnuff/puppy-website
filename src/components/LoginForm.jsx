@@ -27,6 +27,7 @@ const LoginForm = ({ onLogin, onLogout, idusername, setIdUsername, changeKey}) =
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
         localStorage.removeItem('idUsername');
+        localStorage.removeItem('userProfileData');
 
         // Clear the idUsername state
         setIdUsername('');

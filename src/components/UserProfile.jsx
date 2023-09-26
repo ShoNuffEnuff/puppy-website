@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
-    const [pets, setPets] = useState([]);
+    const [userPets, setUserPets] = useState([]); // Renamed to userPets
     const [showProfile, setShowProfile] = useState(false);
 
     // Use a useRef to store the isLoggedIn value
@@ -16,9 +16,19 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         isLoggedInRef.current = isLoggedIn;
     }, [isLoggedIn]);
 
-   
-   
+    // Retrieve user profile data from local storage on component mount
+    useEffect(() => {
+        const userProfileData = localStorage.getItem('userProfileData');
+        if (userProfileData) {
+            
+            const parsedData = JSON.parse(userProfileData);
+            console.log(parsedData);
+            setUser(parsedData.user);
+            setUserPets(parsedData.pets); // Updated to setUserPets
+        }
+    }, []);
 
+    // Fetch user data from the server and save it to local storage
     const fetchUserData = useCallback(async () => {
         // Use the ref instead of directly using isLoggedIn
         if (!isLoggedInRef.current || !idusername) {
@@ -39,10 +49,14 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             });
 
             if (response.status === 200) {
-                const data = response.data;
-                setUser({ username: data.username });
-                setPets(data.pets);
-                console.log('Frontend - Pet Photo Data:', data.pets);
+                const userdata = response.data;
+                setUser({ username: userdata.username });
+                setUserPets(userdata.pets); // Updated to setUserPets
+                console.log('Frontend - Pet Photo Data:', userdata.pets);
+
+                // Save user profile data in local storage with the same key
+                const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
+                localStorage.setItem('userProfileData', userProfileData);
             } else if (response.status === 401) {
                 console.error('Token expired or invalid');
             } else {
@@ -59,10 +73,10 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         }
     }, [showProfile, isLoggedIn, fetchUserData]);
 
-    // Reset user and pets state when keyProp changes
+    // Reset user and userPets state when keyProp changes
     useEffect(() => {
         setUser({ username: '' });
-        setPets([]);
+        setUserPets([]); // Updated to setUserPets
     }, [keyProp]);
 
     const handleShow = () => {
@@ -72,9 +86,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const handleClose = () => setShowProfile(false);
 
     return (
-
-        
-            <div key={keyProp}>
+        <div key={keyProp}>
             <button className="btn btn-primary" onClick={handleShow}>
                 Your Profile
             </button>
@@ -87,7 +99,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                     <h2>Welcome, {user.username}</h2>
                     <h3>Your Pets</h3>
                     <div className="d-flex flex-wrap">
-                        {pets.map((pet) => (
+                        {userPets.map((pet) => ( // Updated to use userPets
                             <Card key={pet.name} style={{ width: '15rem', margin: '10px' }}>
                                 <Card.Img
                                     variant="top"
@@ -103,9 +115,11 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                                 </Card.Body>
                             </Card>
                         ))}
+                        <h4>Your Play Dates</h4>
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>
+
         </div>
     );
 };

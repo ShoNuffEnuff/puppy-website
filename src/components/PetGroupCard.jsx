@@ -101,9 +101,9 @@ const PetGroupCard = () => {
     };
 
     const clearSelectedPet = () => {
-    setSelectedPet(null);
-    
-};
+        setSelectedPet(null);
+
+    };
 
 
     if (loading) {

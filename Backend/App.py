@@ -51,6 +51,8 @@ class Pets(db.Model):
     gender = db.Column(db.String(45), nullable=False)
     photo = db.Column(db.LargeBinary, default=b'')
     
+    
+    
 class Playdates(db.Model):
     __tablename__ = 'playdates'
     id = db.Column(db.Integer, primary_key=True)
@@ -63,6 +65,8 @@ class Playdates(db.Model):
     customer2petphoto = db.Column(db.LargeBinary)
     time = db.Column(db.DateTime)
     status = db.Column(db.String(45))
+    
+
     
 
 user_parser = reqparse.RequestParser()
@@ -242,21 +246,24 @@ class PetList(Resource):
         if selected_breed != 'all':
             pets_query = pets_query.filter_by(breed=selected_breed)
 
+        # Modify the query to select idusername along with other pet data
+        pets_query = pets_query.add_columns(Pets.idusername)  # Modify this line
+
         # Execute the query to get the filtered pets
         pets = pets_query.all()
-
 
         # Create a list to store the pet data
         pet_data = []
 
-        for pet in pets:
+        for pet, idusername in pets:  # Iterate over both pet and idusername
             pet_entry = {
                 'petid': pet.petid,
                 'name': pet.name,
                 'breed': pet.breed,
                 'age': pet.age,
                 'gender': pet.gender,
-                'photo': None
+                'photo': None,
+                'idusername': idusername  # Include idusername in the pet data
             }
 
             if pet.photo:
@@ -267,6 +274,7 @@ class PetList(Resource):
 
         # Return the list of pet data as a JSON array
         return jsonify(pet_data)
+
 
 
 # class PlaydateResource(Resource):
@@ -343,7 +351,7 @@ class UserLogin(Resource):
         return response_data, 200
 
 
-# New endpoint for fetching user profile data including pets and their images
+
 class UserProfile(Resource):
     @jwt_required()
     def get(self, idusername):
