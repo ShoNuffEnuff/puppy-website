@@ -61,7 +61,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
 
                         // Create the playdate via POST request
                         axios
-                            .post('http://localhost:5000/create_playdate', playdateData)
+                            .post(`http://localhost:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
                             .then((response3) => {
                                 console.log('Playdate created successfully:', response3.data);
                                 // Handle any further actions after playdate creation

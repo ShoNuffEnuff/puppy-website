@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from 'react-bootstrap/Card';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import axios from 'axios';
@@ -6,6 +6,7 @@ import axios from 'axios';
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
     const [userPets, setUserPets] = useState([]); // Renamed to userPets
+    const [playdates, setPlaydates] = useState([]); // Added for playdates
     const [showProfile, setShowProfile] = useState(false);
 
     // Use a useRef to store the isLoggedIn value
@@ -20,9 +21,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
-            
             const parsedData = JSON.parse(userProfileData);
-            console.log(parsedData);
             setUser(parsedData.user);
             setUserPets(parsedData.pets); // Updated to setUserPets
         }
@@ -52,7 +51,6 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 const userdata = response.data;
                 setUser({ username: userdata.username });
                 setUserPets(userdata.pets); // Updated to setUserPets
-                console.log('Frontend - Pet Photo Data:', userdata.pets);
 
                 // Save user profile data in local storage with the same key
                 const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
@@ -67,16 +65,30 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         }
     }, [idusername]);
 
+    // Fetch playdates data from the server when the user logs in
+    useEffect(() => {
+        if (isLoggedIn) {
+            axios.get(`http://localhost:5000/api/get_playdates/${idusername}`)
+                .then((response) => {
+                    setPlaydates(response.data);
+                })
+                .catch((error) => {
+                    console.error('Error fetching playdates:', error);
+                });
+        }
+    }, [idusername, isLoggedIn]);
+
     useEffect(() => {
         if (showProfile && isLoggedIn) {
             fetchUserData();
         }
     }, [showProfile, isLoggedIn, fetchUserData]);
 
-    // Reset user and userPets state when keyProp changes
+    // Reset user, userPets, and playdates state when keyProp changes
     useEffect(() => {
         setUser({ username: '' });
         setUserPets([]); // Updated to setUserPets
+        setPlaydates([]);
     }, [keyProp]);
 
     const handleShow = () => {
@@ -115,7 +127,22 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                                 </Card.Body>
                             </Card>
                         ))}
-                        <h4>Your Play Dates</h4>
+                    </div>
+                    <h4>Your Play Dates</h4>
+                    <div className="card-deck">
+                        {playdates.map((playdate) => (
+                            <div key={playdate.id} className="card">
+                                <div className="card-body">
+                                    <h5 className="card-title">Playdate</h5>
+                                    <p className="card-text"> {playdate.customer1}</p>
+                                    <p className="card-text"> {playdate.customer1}'s Pet: {playdate.customer1pet}</p>
+                                    <p className="card-text"> {playdate.customer2}</p>
+                                    <p className="card-text"> {playdate.customer2}'s Pet: {playdate.customer2pet}</p>
+                                    <p className="card-text">Time: {playdate.time}</p>
+                                    <p className="card-text">Status: {playdate.status}</p>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>

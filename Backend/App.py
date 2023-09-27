@@ -1,5 +1,6 @@
 import base64
 import io
+import logging
 from flask import Flask, json, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from passlib.hash import sha256_crypt
@@ -32,7 +33,7 @@ class User(db.Model):
     customer = db.relationship('Customer', backref='user', uselist=False)
     pets = db.relationship('Pets', backref='user', foreign_keys='Pets.idusername')
     playdatesid = db.Column(db.Integer, db.ForeignKey('playdates.playdatesid'))
-    # playdates = db.relationship('Playdates', backref='username', foreign_keys=[playdates_id])
+    # playdates = db.relationship('Playdates', backref='username', foreign_keys=[playdatesid])
 
 class Customer(db.Model):
     __tablename__ = 'customer'
@@ -367,18 +368,31 @@ def get_customer_data2(idusername):
 
     return jsonify(customer_data)
 
-@app.route('/create_playdate', methods=['POST'])
-def create_playdate():
+@app.route('/create_playdate/<int:idusername1>/<int:idusername2>', methods=['POST'])
+def create_playdate(idusername1, idusername2):
     try:
         # Parse request data using reqparse
         parser = reqparse.RequestParser()
-        parser.add_argument('customer1', type=dict)
-        parser.add_argument('customer2', type=dict)
-        parser.add_argument('customer1pet', type=dict)
-        parser.add_argument('customer2pet', type=dict)
+        parser.add_argument('idusername1', type=int, required=True)
+        parser.add_argument('idusername2', type=int, required=True)
+        parser.add_argument('customer1', type=dict, required=True)
+        parser.add_argument('customer2', type=dict, required=True)
+        parser.add_argument('customer1pet', type=dict, required=True)
+        parser.add_argument('customer2pet', type=dict, required=True)
         parser.add_argument('time', type=str)
         parser.add_argument('status', type=str)
         args = parser.parse_args()
+
+        # Extract data from the payload
+        idusername1 = args['idusername1']
+        idusername2 = args['idusername2']
+
+        # Check if both users exist in the 'username' table
+        user1 = User.query.get(idusername1)
+        user2 = User.query.get(idusername2)
+
+        if not user1 or not user2:
+            return jsonify({'error': 'One or both users not found'}), 404
 
         # Extract the first names of Customer1 and Customer2
         customer1_first_name = args['customer1'].get('first_name', '')
@@ -398,9 +412,29 @@ def create_playdate():
             status=args['status']
         )
 
-        # Add the playdate to the database
-        db.session.add(playdate)
-        db.session.commit()
+        # Add the playdate to the database and handle transactions
+        try:
+            db.session.add(playdate)
+            db.session.commit()
+        except Exception as db_error:
+            db.session.rollback()
+            logging.error(f"Database error: {str(db_error)}")
+            return jsonify({"error": "Database error"}), 500
+
+        # Retrieve the playdatesid of the newly created playdate
+        playdatesid = playdate.playdatesid
+
+        # Update the playdatesid for both users in the 'username' table
+        user1.playdatesid = playdatesid
+        user2.playdatesid = playdatesid
+
+        # Commit the user updates within the same transaction
+        try:
+            db.session.commit()
+        except Exception as user_update_error:
+            db.session.rollback()
+            logging.error(f"User update error: {str(user_update_error)}")
+            return jsonify({"error": "User update error"}), 500
 
         # Create a JSON response with "first_name" for both customers and pet names
         response_data = {
@@ -420,10 +454,13 @@ def create_playdate():
         }
 
         return jsonify(response_data), 201
+
     except Exception as e:
-        # Log the error for debugging
-        print(f"Error in create_playdate: {str(e)}")
+        # Log the error using the logging module
+        logging.error(f"Error in create_playdate: {str(e)}")
         return jsonify({"error": "An error occurred"}), 500
+
+
 
 
 
@@ -492,38 +529,39 @@ class UserProfile(Resource):
         # Return the user_data dictionary directly
         return user_data
 
-#     # Fetch playdates from the database
-# playdates = Playdates.query.all()
+@app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
+def get_playdates_by_idusername(idusername):
+    # Query the 'User' table to get the user by 'idusername'
+    user = User.query.get(idusername)
 
-# # Initialize the list to store playdate data
-# playdates_data = []
+    if not user:
+        return jsonify({'error': 'User not found'}), 404
 
-# # Iterate through playdates and build playdate_data list
-# for playdate in playdates:
-#     playdate_entry = {
-#         'id': playdate.id,
-#         'username': playdate.username,
-#         'customer1': playdate.customer1,
-#         'customer1pet': playdate.customer1pet,
-#         'customer1petphoto': None,
-#         'customer2': playdate.customer2,
-#         'customer2pet': playdate.customer2pet,
-#         'customer2petphoto': None,
-#         'time': playdate.time.strftime('%Y-%m-%d %H:%M:%S'),
-#         'status': playdate.status
-#     }
+    # Get the 'playdatesid' from the user
+    playdatesid = user.playdatesid
 
-#     if playdate.customer1petphoto:
-#         with io.BytesIO(playdate.customer1petphoto) as binary_stream:
-#             photo_data = base64.b64encode(binary_stream.read()).decode()
-#             playdate_entry['customer1petphoto'] = f"data:image/jpeg;base64,{photo_data}"
+    # Query the 'Playdates' table to get playdates associated with 'playdatesid'
+    playdates = Playdates.query.filter_by(playdatesid=playdatesid).all()
 
-#     if playdate.customer2petphoto:
-#         with io.BytesIO(playdate.customer2petphoto) as binary_stream:
-#             photo_data = base64.b64encode(binary_stream.read()).decode()
-#             playdate_entry['customer2petphoto'] = f"data:image/jpeg;base64,{photo_data}"
+    # Initialize the list to store playdate data
+    playdates_data = []
 
-#     playdates_data.append(playdate_entry)
+    # Iterate through playdates and build playdate_data list
+    for playdate in playdates:
+        playdate_entry = {
+            'id': playdate.playdatesid,
+            'customer1': playdate.customer1,
+            'customer1pet': playdate.customer1pet,
+            'customer2': playdate.customer2,
+            'customer2pet': playdate.customer2pet,
+            'time': playdate.time.strftime('%Y-%m-%d %H:%M:%S'),
+            'status': playdate.status
+        }
+
+        playdates_data.append(playdate_entry)
+
+    # Return playdate data as JSON response
+    return jsonify(playdates_data)
 
 
 api.add_resource(UserProfile, '/user-profile/<string:idusername>', methods=['GET'])
