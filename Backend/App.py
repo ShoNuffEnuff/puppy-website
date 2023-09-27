@@ -61,8 +61,10 @@ class Playdates(db.Model):
     __tablename__ = 'playdates'
     playdatesid = db.Column(db.Integer, primary_key=True)
     customer1 = db.Column(db.String(45))
+    c1id = db.Column(db.Integer)
     customer1pet = db.Column(db.String(45))
     customer2 = db.Column(db.String(45))
+    c2id = db.Column(db.Integer)
     customer2pet = db.Column(db.String(45))
     time = db.Column(db.DateTime)
     status = db.Column(db.String(45))
@@ -404,13 +406,16 @@ def create_playdate(idusername1, idusername2):
 
         # Create a new Playdate object
         playdate = Playdates(
-            customer1=customer1_first_name,
-            customer2=customer2_first_name,
-            customer1pet=customer1_pet_name,
-            customer2pet=customer2_pet_name,
-            time=args['time'],
-            status=args['status']
-        )
+        customer1=customer1_first_name,
+        c1id=idusername1,  # Assign idusername1 to c1id
+        customer2=customer2_first_name,
+        c2id=idusername2,  # Assign idusername2 to c2id
+        customer1pet=customer2_pet_name,
+        customer2pet=customer1_pet_name,
+        time=args['time'],
+        status=args['status']
+)
+
 
         # Add the playdate to the database and handle transactions
         try:
@@ -461,8 +466,26 @@ def create_playdate(idusername1, idusername2):
         return jsonify({"error": "An error occurred"}), 500
 
 
+@app.route('/update_playdate_status/<int:playdateId>', methods=['PUT'])
+def update_playdate_status(playdateId):
+    try:
+        # Get the new status from the request
+        new_status = request.json.get('status')
 
+        # Find the playdate by ID
+        playdate = Playdates.query.get(playdateId)
 
+        if not playdate:
+            return jsonify({'error': 'Playdate not found'}), 404
+
+        # Update the playdate status
+        playdate.status = new_status
+        db.session.commit()
+
+        return jsonify({'message': 'Playdate status updated successfully'}), 200
+
+    except Exception as e:
+        return jsonify({'error': 'An error occurred'}), 500
 
 
 
@@ -531,17 +554,10 @@ class UserProfile(Resource):
 
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 def get_playdates_by_idusername(idusername):
-    # Query the 'User' table to get the user by 'idusername'
-    user = User.query.get(idusername)
-
-    if not user:
-        return jsonify({'error': 'User not found'}), 404
-
-    # Get the 'playdatesid' from the user
-    playdatesid = user.playdatesid
-
-    # Query the 'Playdates' table to get playdates associated with 'playdatesid'
-    playdates = Playdates.query.filter_by(playdatesid=playdatesid).all()
+    # Query the 'Playdates' table to get playdates associated with 'idusername' in either 'c1id' or 'c2id'
+    playdates = Playdates.query.filter(
+        (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
+    ).all()
 
     # Initialize the list to store playdate data
     playdates_data = []

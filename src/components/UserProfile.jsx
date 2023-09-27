@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Card from 'react-bootstrap/Card';
 import Offcanvas from 'react-bootstrap/Offcanvas';
+import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
@@ -65,12 +66,13 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         }
     }, [idusername]);
 
-    // Fetch playdates data from the server when the user logs in
-    useEffect(() => {
+    // Fetch playdates data from the server when the component mounts
+    const fetchPlaydates = useCallback(() => {
         if (isLoggedIn) {
             axios.get(`http://localhost:5000/api/get_playdates/${idusername}`)
                 .then((response) => {
-                    setPlaydates(response.data);
+                    console.log('Fetched Playdates:', response.data);
+                    setPlaydates(response.data); // Replace with the fetched data
                 })
                 .catch((error) => {
                     console.error('Error fetching playdates:', error);
@@ -79,10 +81,11 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     }, [idusername, isLoggedIn]);
 
     useEffect(() => {
-        if (showProfile && isLoggedIn) {
+        if (isLoggedIn) {
             fetchUserData();
+            fetchPlaydates(); // Fetch playdates when component mounts
         }
-    }, [showProfile, isLoggedIn, fetchUserData]);
+    }, [showProfile, isLoggedIn, fetchUserData, fetchPlaydates]);
 
     // Reset user, userPets, and playdates state when keyProp changes
     useEffect(() => {
@@ -96,6 +99,35 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     };
 
     const handleClose = () => setShowProfile(false);
+
+    // Function to update the playdate status
+    const updatePlaydateStatus = (playdateId, newStatus) => {
+        // Send a request to update the playdate status
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            console.error('Unauthorized access');
+            return;
+        }
+
+        axios.put(`http://localhost:5000/update_playdate_status/${playdateId}`, { status: newStatus }, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+            .then((response) => {
+                // Update the playdates state with the updated status
+                const updatedPlaydates = playdates.map((playdate) => {
+                    if (playdate.id === playdateId) {
+                        return { ...playdate, status: newStatus };
+                    }
+                    return playdate;
+                });
+                setPlaydates(updatedPlaydates);
+            })
+            .catch((error) => {
+                console.error('Error updating playdate status:', error);
+            });
+    };
 
     return (
         <div key={keyProp}>
@@ -140,13 +172,29 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                                     <p className="card-text"> {playdate.customer2}'s Pet: {playdate.customer2pet}</p>
                                     <p className="card-text">Time: {playdate.time}</p>
                                     <p className="card-text">Status: {playdate.status}</p>
+                                    <Form.Check
+                                        type="switch"
+                                        id={`switch-${playdate.id}`}
+                                        label={playdate.status}
+                                        checked={playdate.status === 'accepted' || playdate.status === 'neutral'}
+                                        onChange={(e) => {
+                                            let newStatus = 'neutral';
+
+                                            if (e.target.checked) {
+                                                newStatus = 'accepted';
+                                            } else if (!e.target.checked) {
+                                                newStatus = 'declined';
+                                            }
+
+                                            updatePlaydateStatus(playdate.id, newStatus);
+                                        }}
+                                    />
                                 </div>
                             </div>
                         ))}
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>
-
         </div>
     );
 };
