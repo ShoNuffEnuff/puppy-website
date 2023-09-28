@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
+import { ToastContainer, Toast } from 'react-bootstrap';
 
 function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
+    const [showToast, setShowToast] = useState(false);
+    const [toastMessage, setToastMessage] = useState('');
 
     // Define the handleBookPlaydate function
     const handleBookPlaydate = () => {
@@ -64,6 +67,11 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                             .post(`http://localhost:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
                             .then((response3) => {
                                 console.log('Playdate created successfully:', response3.data);
+
+                                // Set the toast message and show the toast for successful booking
+                                setToastMessage('Playdate booked successfully.');
+                                setShowToast(true);
+
                                 // Handle any further actions after playdate creation
                             })
                             .catch((error3) => {
@@ -101,6 +109,17 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
 
     return (
         <div className="datepicker-container">
+            <ToastContainer position="top-end" className="p-3">
+                {showToast && (
+                    <Toast bg="success" onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                        <Toast.Header closeButton={false}>
+                            <strong className="me-auto">Success</strong>
+                        </Toast.Header>
+                        <Toast.Body>{toastMessage}</Toast.Body>
+                    </Toast>
+                )}
+            </ToastContainer>
+
             <h2>Select a Date and Time</h2>
             <DatePicker
                 selected={selectedDate}
