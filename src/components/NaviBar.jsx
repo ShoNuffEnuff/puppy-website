@@ -24,7 +24,7 @@ function NaviBar() {
                     <Nav.Link as={Link} to="/staff">Staff</Nav.Link>
                     <Nav.Link as={Link} to="/services">Services</Nav.Link>
                     <Nav.Link as={Link} to="/contacts">Contacts</Nav.Link>
-                    <Form inline>
+                    <Form >
                         <InputGroup>
                             <Form.Control
                                 placeholder="Username"
@@ -33,7 +33,7 @@ function NaviBar() {
                             />
                         </InputGroup>
                     </Form>
-                    <Form inline>
+                    <Form >
                         <Row>
                             <Col xs="auto">
                                 <Form.Control

@@ -3,7 +3,7 @@ import petplusLogo from './petplus_logo.png';
 
 const Home = () => {
     return (
-        <div className="Home" img src={petplusLogo} alt="Veterinary Services Logo" >
+        <div> 
             <h4>Home Page</h4>
             
         </div>
