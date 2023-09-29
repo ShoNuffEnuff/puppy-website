@@ -12,6 +12,7 @@ import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
 import DatePicker from './components/DatePicker';
+import './App.css';
 
 
 
@@ -36,25 +37,23 @@ function App() {
     };
 
     return (
+        <div class="background-div">
         <Router>
-            {/*<Header title="Soul taker industries" />*/}
-            
-            
-            <h1>Pets N' Shit</h1>
-            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp}  /> 
-            <NaviBar>
+            <Header title="Soul taker industries" />
+            <NaviBar></NaviBar>
+            <RegistrationForm />
+            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} />
+            <h1>Soultaker App</h1>
+            <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} /> {/* Pass idusername */}
             <Routes>
                 <Route path="/" element={<Home />} />
-                <Route path="/Staff" element={<About />} />
-                <Route path="/Services" element={<Services />} />
-                <Route path="/Contacts" element={<Contacts />} />
-                </Routes>
-            </NaviBar>
-            <RegistrationForm />
-            <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
-            {/*<DatePicker></DatePicker>*/}
+                <Route path="/about" element={<About />} />
+                <Route path="/services" element={<Services />} />
+                <Route path="/contacts" element={<Contacts />} />
+            </Routes>
             <PetGroupCard></PetGroupCard>
-        </Router>
+            </Router>
+        </div>
     );
 }
 
