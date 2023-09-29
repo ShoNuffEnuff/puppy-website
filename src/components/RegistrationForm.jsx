@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
+import Toast from 'react-bootstrap/Toast';
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -20,6 +21,9 @@ const RegistrationForm = () => {
     });
 
     const [showModal, setShowModal] = useState(false);
+    const [showToast, setShowToast] = useState(false);
+    const [errorToast, setErrorToast] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleCloseModal = () => setShowModal(false);
     const handleShowModal = () => setShowModal(true);
@@ -36,6 +40,17 @@ const RegistrationForm = () => {
         if (file) {
             setFormData({ ...formData, photo: file });
         }
+    };
+
+    const showToastMessage = (message) => {
+        setShowToast(true);
+        setTimeout(() => setShowToast(false), 5000);
+        setErrorMessage(message);
+    };
+
+    const showErrorToast = (message) => {
+        setErrorToast(true);
+        setErrorMessage(message);
     };
 
     const handleRegistration = async () => {
@@ -77,20 +92,23 @@ const RegistrationForm = () => {
             });
             console.log(petResponse.data);
 
-            handleCloseModal(); // Close the modal after successful registration
+            showToastMessage('Registration Successful!');
+            handleCloseModal();
 
         } catch (error) {
             console.error(error.response.data);
+            if (error.response.status === 400) {
+                showErrorToast('User already exists.');
+            } else {
+                showErrorToast('An error occurred during registration. Please try again later.');
+            }
         }
     };
 
     return (
         <div>
-            <h2>Registration</h2>
-            {/* Registration button that opens the modal */}
             <Button variant="primary" onClick={handleShowModal}>Registration</Button>
 
-            {/* Modal */}
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Registration</Modal.Title>
@@ -211,6 +229,38 @@ const RegistrationForm = () => {
                     <Button variant="primary" onClick={handleRegistration}>Register</Button>
                 </Modal.Footer>
             </Modal>
+
+            <Toast
+                show={showToast}
+                onClose={() => setShowToast(false)}
+                style={{
+                    position: 'fixed',
+                    bottom: '10px',
+                    right: '10px',
+                    backgroundColor: 'green',
+                    color: 'white',
+                }}
+                delay={5000}
+                autohide
+            >
+                <Toast.Body>{errorMessage}</Toast.Body>
+            </Toast>
+
+            <Toast
+                show={errorToast}
+                onClose={() => setErrorToast(false)}
+                style={{
+                    position: 'fixed',
+                    bottom: '10px',
+                    right: '10px',
+                    backgroundColor: 'red',
+                    color: 'white',
+                }}
+                delay={5000}
+                autohide
+            >
+                <Toast.Body>{errorMessage}</Toast.Body>
+            </Toast>
         </div>
     );
 };

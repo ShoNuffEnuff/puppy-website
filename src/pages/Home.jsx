@@ -1,9 +1,10 @@
 import React from 'react';
+import petplusLogo from './petplus_logo.png';
 
 const Home = () => {
     return (
-        <div className="Home">
-            <h1>Home Page</h1>
+        <div> 
+            <h4>Home Page</h4>
             
         </div>
     );

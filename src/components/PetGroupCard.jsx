@@ -98,12 +98,14 @@ const PetGroupCard = () => {
     const handlePetSelection = (pet) => {
         setSelectedPet(pet);
         setShowModal(true);
+        localStorage.setItem('selectedPetIdusername', pet.idusername);
+
     };
 
     const clearSelectedPet = () => {
-    setSelectedPet(null);
-    
-};
+        setSelectedPet(null);
+
+    };
 
 
     if (loading) {
@@ -116,7 +118,7 @@ const PetGroupCard = () => {
 
     return (
         <div>
-            <Button onClick={() => setShowModal(true)}>Open Modal</Button>
+            <Button onClick={() => setShowModal(true)}>Book Playdate</Button>
 
             <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
                 <Modal.Header closeButton>
