@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
-import DatePicker from './components/DatePicker';
 import './App.css';
 
 function App() {
@@ -40,7 +39,10 @@ function App() {
         <Router>
             <div>
                 <h1>Pet + Veterinary Services</h1>
-                <NaviBar />
+                    <div className='absolute-Nav' >
+                        <NaviBar />
+                    </div>
+                
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/staff" element={<Staff />} />

@@ -1,13 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Backend",
-    "\\Backend\\controller-backend",
-    "\\Backend\\controller-backend\\venv",
-    "\\public",
     "\\src",
-    "\\src\\components"
+    "\\src\\components",
+    "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\ImageCard.jsx",
+  "SelectedNode": "\\src\\components\\NaviBar.jsx",
   "PreviewInSolutionExplorer": false
 }
