@@ -10,12 +10,12 @@ import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom'; // Import Link for routing
 import petplusLogo from './petplus_logo.png';
-import customNavBar from './NaviBar.css';
+import Nav01 from './NaviBar.css';
 
 function NaviBar() {
     return (
         <Navbar expand="lg" className="custom-nav-bar">
-            <Container>
+            <Container className="Nav01">
                 <Navbar.Brand as={Link} to="/"><Image src={petplusLogo} alt="Veterinary Services Logo" className="custom-logo" /></Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav" />

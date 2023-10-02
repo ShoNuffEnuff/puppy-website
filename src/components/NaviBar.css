@@ -5,7 +5,13 @@
     border-top: 3px solid black;
 }
 
-
+.custom-logo {
+    margin-top: 0px;
+    margin-right: 0;
+    width: 100px;
+    height: auto;
+    position: absolute;
+}
 
 .custom-navlinks {
     margin-bottom: 0;
