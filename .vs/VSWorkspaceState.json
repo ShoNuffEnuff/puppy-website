@@ -1,7 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\Backend",
+    "\\Backend\\controller-backend",
+    "\\src",
+    "\\src\\components",
+    "\\src\\pages"
   ],
-  "SelectedNode": "\\C:\\Users\\sharn\\Source\\Repos\\puppy-website",
+  "SelectedNode": "\\src\\components\\petplus_logo.png",
   "PreviewInSolutionExplorer": false
 }
