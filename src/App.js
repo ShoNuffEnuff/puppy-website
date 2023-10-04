@@ -11,7 +11,6 @@ import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
 import DatePicker from './components/DatePicker';
-/*import axios from 'axios';*/
 
 function App() {
     // State Variable for Login Status
@@ -59,6 +58,7 @@ function App() {
     };
 
     return (
+        <div class="background-div">
         <Router>
             <div>
                 <h1>Pet + Veterinary Services</h1>
@@ -77,7 +77,7 @@ function App() {
                 </div>
             </div>
         </Router>
-
+        </div>
     );
 }
 
