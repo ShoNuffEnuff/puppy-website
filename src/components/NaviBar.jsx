@@ -14,8 +14,26 @@ import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistrationForm from './RegistrationForm';
+import UserProfile from './UserProfile';
+import PetGroupCard from './PetGroupCard';
 
-function NaviBar({ isLoggedIn, onLogin, onLogout, setShowToast, setToastMessage, setIdUsername, setIsLoggedIn, changeKey, showToast, toastMessage }) {
+function NaviBar({
+    isLoggedIn,
+    onLogin,
+    onLogout,
+    setShowToast,
+    setToastMessage,
+    setIdUsername,
+    setIsLoggedIn,
+    changeKey,
+    showToast,
+    toastMessage,
+    idusername,
+    keyProp,
+    userPets,
+    userProfileData,
+    token,
+}) {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -83,7 +101,6 @@ function NaviBar({ isLoggedIn, onLogin, onLogout, setShowToast, setToastMessage,
         setIsLoggedIn(false);
         changeKey();
         onLogout();
-        
     };
 
     return (
@@ -96,48 +113,73 @@ function NaviBar({ isLoggedIn, onLogin, onLogout, setShowToast, setToastMessage,
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav" />
                     <Nav>
-                        <Nav.Link as={Link} to="/">Home</Nav.Link>
-                        <Nav.Link as={Link} to="/staff">Staff</Nav.Link>
-                        <Nav.Link as={Link} to="/services">Services</Nav.Link>
-                        <Nav.Link as={Link} to="/contacts">Contacts</Nav.Link>
+                        <Nav.Link as={Link} to="/">
+                            Home
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/staff">
+                            Staff
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/services">
+                            Services
+                        </Nav.Link>
+                        <Nav.Link as={Link} to="/contacts">
+                            Contacts
+                        </Nav.Link>
                         {isLoggedIn ? (
-                            <Button onClick={handleLogoutClick}>Logout</Button>
-                        ) : (
-                            <Form onSubmit={handleSubmit}>
-                                <InputGroup>
-                                    <Form.Control
-                                        placeholder="Username"
-                                        aria-label="Username"
-                                        aria-describedby="basic-addon1"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
+                            <>
+                                <Col>
+                                    <UserProfile
+                                        isLoggedIn={isLoggedIn}
+                                        idusername={idusername}
+                                        setIdUsername={setIdUsername}
+                                        keyProp={keyProp}
+                                        userPets={userPets}
+                                        userProfileData={userProfileData}
+                                        token={token}
                                     />
-                                </InputGroup>
-                                <Row>
-                                    <Col xs="auto">
+                                </Col>
+                                <Col>
+                                    <PetGroupCard />
+                                </Col>
+                                <Col>
+                                    <Button onClick={handleLogoutClick}>Logout</Button>
+                                </Col>
+                            </>
+                        ) : (
+                            <>
+                                <Form onSubmit={handleSubmit}>
+                                    <InputGroup>
                                         <Form.Control
-                                            type="password"
-                                            placeholder="Password"
-                                            className="mr-sm-2"
-                                            name="password"
-                                            value={formData.password}
+                                            placeholder="Username"
+                                            aria-label="Username"
+                                            aria-describedby="basic-addon1"
+                                            name="username"
+                                            value={formData.username}
                                             onChange={handleChange}
                                         />
-                                    </Col>
-                                    <Col xs="auto">
-                                        <Button
-                                            type="submit"
-                                            className="custom-btn-Login"
-                                        >
-                                            Login
-                                        </Button>
-                                    </Col>
-                                    <Col>
-                                        <RegistrationForm />
-                                    </Col>
-                                </Row>
-                            </Form>
+                                    </InputGroup>
+                                    <Row>
+                                        <Col xs="auto">
+                                            <Form.Control
+                                                type="password"
+                                                placeholder="Password"
+                                                className="mr-sm-2"
+                                                name="password"
+                                                value={formData.password}
+                                                onChange={handleChange}
+                                            />
+                                        </Col>
+                                        <Col xs="auto">
+                                            <Button type="submit" className="custom-btn-Login">
+                                                Login
+                                            </Button>
+                                        </Col>
+                                        <Col>
+                                            <RegistrationForm />
+                                        </Col>
+                                    </Row>
+                                </Form>
+                            </>
                         )}
                     </Nav>
                 </Container>

@@ -37,7 +37,8 @@
   }
 }
 .background-div {
-    background-image: url('36738-Puppy-love-white-background.jpg');
-    background-size: cover;
+    background-image: url('components/pawPrint.jpg');
+    background-size: contain;
     background-position: center;
+    height: 100vh;
 }

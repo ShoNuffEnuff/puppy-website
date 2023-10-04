@@ -9,7 +9,6 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [userPets, setUserPets] = useState([]);
     const [playdates, setPlaydates] = useState([]); 
     const [showProfile, setShowProfile] = useState(false);
-
     // Use a useRef to store the isLoggedIn value
     const isLoggedInRef = useRef(isLoggedIn);
 
@@ -24,9 +23,12 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         if (userProfileData) {
             const parsedData = JSON.parse(userProfileData);
             setUser(parsedData.user);
-            setUserPets(parsedData.pets); // Updated to setUserPets
-        }
-    }, []);
+            setUserPets(parsedData.pets);
+
+            
+            
+            }
+        }, []);
 
     // Fetch user data from the server and save it to local storage
     const fetchUserData = useCallback(async () => {
@@ -132,7 +134,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     return (
         <div key={keyProp}>
             <button className="btn btn-primary" onClick={handleShow}>
-                Your Profile
+                Profile
             </button>
 
             <Offcanvas show={showProfile} onHide={handleClose} placement="end">

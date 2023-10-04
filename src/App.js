@@ -11,6 +11,7 @@ import PetGroupCard from './components/PetGroupCard';
 import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
 import DatePicker from './components/DatePicker';
+import './App.css';
 
 function App() {
     // State Variable for Login Status
@@ -58,11 +59,11 @@ function App() {
     };
 
     return (
-        <div class="background-div">
+        <div className="background-div">
         <Router>
             <div>
                 <h1>Pet + Veterinary Services</h1>
-                <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} />
+                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/staff" element={<Staff />} />
@@ -71,8 +72,8 @@ function App() {
                 </Routes>
                 <div>
                 {/*<RegistrationForm />*/}
-                <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} />
-                <PetGroupCard />
+                {/*<UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} />*/}
+                {/*<PetGroupCard />*/}
                     {/*<LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />*/}
                 </div>
             </div>
