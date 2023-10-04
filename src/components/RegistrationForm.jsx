@@ -25,7 +25,13 @@ const RegistrationForm = () => {
     const [errorToast, setErrorToast] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleCloseModal = () => setShowModal(false);
+    const handleCloseModal = () => {
+        setShowModal(false);
+        // Reset error toast when the modal is closed
+        setErrorToast(false);
+        setErrorMessage('');
+    };
+
     const handleShowModal = () => setShowModal(true);
 
     const registrationUrl = 'http://localhost:5000';
@@ -54,6 +60,24 @@ const RegistrationForm = () => {
     };
 
     const handleRegistration = async () => {
+        // Validation checks for required user fields
+        if (
+            !formData.username ||
+            !formData.password ||
+            !formData.first_name ||
+            !formData.surname ||
+            !formData.email
+        ) {
+            showErrorToast('Please fill in all required user fields.');
+            return; // Prevent registration if required fields are empty
+        }
+
+        // Validation checks for required pet fields
+        if (!formData.pet_name || !formData.pet_breed || !formData.pet_age || !formData.pet_gender) {
+            showErrorToast('Please fill in all required pet fields.');
+            return; // Prevent registration if required pet fields are empty
+        }
+
         const userData = {
             username: formData.username,
             password: formData.password,
@@ -107,7 +131,7 @@ const RegistrationForm = () => {
 
     return (
         <div>
-            <Button variant="primary" onClick={handleShowModal}>Registration</Button>
+            <Button variant="primary" onClick={handleShowModal}>Register</Button>
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>

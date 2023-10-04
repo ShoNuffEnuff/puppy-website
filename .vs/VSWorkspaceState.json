@@ -3,10 +3,12 @@
     "",
     "\\Backend",
     "\\Backend\\controller-backend",
+    "\\Backend\\controller-backend\\venv",
+    "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\petplus_logo.png",
+  "SelectedNode": "\\Backend\\App.py",
   "PreviewInSolutionExplorer": false
 }

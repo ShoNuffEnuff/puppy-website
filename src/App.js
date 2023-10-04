@@ -19,9 +19,32 @@ function App() {
     const [idusername, setIdUsername] = useState(null);
     const [keyProp, setKeyProp] = useState(0);
     const [userPets, setUserPets] = useState([]);
+    const [showToast, setShowToast] = useState(false); 
+    const [toastMessage, setToastMessage] = useState(''); 
+
+
+    //// Function to handle login API call
+    //const handleLoginAPI = async (formData) => {
+    //    try {
+    //        const response = await axios.post('http://localhost:5000/login', formData);
+    //        console.log('Login response:', response.data);
+
+    //        // Handle the response and update state as needed
+    //        // Example: Update isLoggedIn and idusername state
+    //        setIsLoggedIn(true);
+    //        setIdUsername(response.data.idusername);
+
+    //        // Perform other actions after successful login
+    //        // ...
+
+    //    } catch (error) {
+    //        console.error('Login error:', error.response.data);
+    //    }
+    //};
 
     // Pass isLoggedIn State
-    const handleLogin = () => {
+    const handleLogin = (formData) => {
+        /*handleLoginAPI(formData);*/
         setIsLoggedIn(true);
     };
 
@@ -36,11 +59,11 @@ function App() {
     };
 
     return (
-        <div class="background-div">
+        <div className="background-div">
         <Router>
             <div>
                 <h1>Pet + Veterinary Services</h1>
-                <NaviBar />
+                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/staff" element={<Staff />} />
@@ -48,10 +71,10 @@ function App() {
                     <Route path="/contacts" element={<Contacts />} />
                 </Routes>
                 <div>
-                <RegistrationForm />
-                <UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} />
-                <PetGroupCard />
-                    <LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />
+                {/*<RegistrationForm />*/}
+                {/*<UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} />*/}
+                {/*<PetGroupCard />*/}
+                    {/*<LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />*/}
                 </div>
             </div>
         </Router>

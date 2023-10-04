@@ -104,6 +104,7 @@ const PetGroupCard = () => {
 
     const clearSelectedPet = () => {
         setSelectedPet(null);
+        localStorage.removeItem('selectedPetIdusername');
 
     };
 
@@ -118,7 +119,7 @@ const PetGroupCard = () => {
 
     return (
         <div>
-            <Button onClick={() => setShowModal(true)}>Book Playdate</Button>
+            <Button onClick={() => setShowModal(true)}>Playdate</Button>
 
             <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
                 <Modal.Header closeButton>
@@ -194,7 +195,7 @@ const PetGroupCard = () => {
                             Back to All Pets
                         </Button>
                     ) : null}
-                    <Button variant="secondary" onClick={() => setShowModal(false)}>
+                    <Button variant="secondary" onClick={(_clearSelectedPet) => setShowModal(false)}>
                         Close
                     </Button>
                 </Modal.Footer>

@@ -548,7 +548,7 @@ class UserProfile(Resource):
                     pet_data['photo'] = base64.b64encode(binary_stream.read()).decode()
                     pet_data['photo_url'] = f"data:image/jpeg;base64,{pet_data['photo']}"  # Add the image URL
                     
-            print('Image Data:', pet_data['photo'])
+            # print('Image Data:', pet_data['photo'])
         # Return the user_data dictionary directly
         return user_data
 
