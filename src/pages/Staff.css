@@ -1,0 +1,60 @@
+.staffBackground {
+    display: grid;
+    position: absolute;
+    grid-template-columns: 1fr 1fr;
+    row-gap: 50px;
+    column-gap: 200px;
+    margin-top: 150px;
+    margin-left: 350px;
+    background-color:transparent;
+
+    justify-content: center;
+}
+
+.Staff01 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height:200px;
+    width:500px;
+}
+.staff01Info{
+    display:flex;
+    justify-content:flex-end;
+    width:50%;
+}
+.Staff02 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height: 200px;
+    width: 500px;
+}
+.Staff03 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height: 200px;
+    width: 500px;
+}
+.Staff04 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height: 200px;
+    width: 500px;
+}
+.Staff05 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height: 200px;
+    width: 500px;
+}
+.Staff06 {
+    border-radius: 25px;
+    border: 2px #999999;
+    background: #00bf63;
+    height: 200px;
+    width: 500px;
+}
