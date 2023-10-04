@@ -6,8 +6,8 @@ import axios from 'axios';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
-    const [userPets, setUserPets] = useState([]); // Renamed to userPets
-    const [playdates, setPlaydates] = useState([]); // Added for playdates
+    const [userPets, setUserPets] = useState([]);
+    const [playdates, setPlaydates] = useState([]); 
     const [showProfile, setShowProfile] = useState(false);
 
     // Use a useRef to store the isLoggedIn value

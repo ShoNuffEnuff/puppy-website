@@ -1,5 +1,5 @@
 import React from 'react';
-import petplusLogo from './petplus_logo.png';
+/*import petplusLogo from './petplus_logo.png';*/
 
 const Home = () => {
     return (

@@ -6,8 +6,9 @@
     "\\Backend\\controller-backend\\venv",
     "\\public",
     "\\src",
-    "\\src\\components"
+    "\\src\\components",
+    "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\ImageCard.jsx",
+  "SelectedNode": "\\Backend\\App.py",
   "PreviewInSolutionExplorer": false
 }

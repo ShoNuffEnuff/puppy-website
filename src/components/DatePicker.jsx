@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
 
-function Datepicker({ selectedPet, clearSelectedPet }) {
+function Datepicker({ selectedPet, clearSelectedPet,  }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
@@ -71,6 +71,9 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                                 // Set the toast message and show the toast for successful booking
                                 setToastMessage('Playdate booked successfully.');
                                 setShowToast(true);
+
+                                // Remove selectedPetIdusername from local storage
+                                localStorage.removeItem('selectedPetIdusername');
 
                                 // Handle any further actions after playdate creation
                             })
