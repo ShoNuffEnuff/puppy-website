@@ -59,7 +59,7 @@ function App() {
     };
 
     return (
-        <div className="background-div">
+        <body className="background-div">
         <Router>
             <div>
                 <h1>Pet + Veterinary Services</h1>
@@ -78,7 +78,7 @@ function App() {
                 </div>
             </div>
         </Router>
-        </div>
+        </body>
     );
 }
 

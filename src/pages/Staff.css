@@ -4,7 +4,7 @@
     grid-template-columns: 1fr 1fr;
     row-gap: 50px;
     column-gap: 200px;
-    margin-top: 150px;
+    margin-top: 50px;
     margin-left: 350px;
     background-color:transparent;
 
@@ -17,6 +17,10 @@
     background: #00bf63;
     height:200px;
     width:500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .staff01Info{
     display:flex;
@@ -29,6 +33,10 @@
     background: #00bf63;
     height: 200px;
     width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .Staff03 {
     border-radius: 25px;
@@ -36,6 +44,10 @@
     background: #00bf63;
     height: 200px;
     width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .Staff04 {
     border-radius: 25px;
@@ -43,6 +55,10 @@
     background: #00bf63;
     height: 200px;
     width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .Staff05 {
     border-radius: 25px;
@@ -50,6 +66,10 @@
     background: #00bf63;
     height: 200px;
     width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }
 .Staff06 {
     border-radius: 25px;
@@ -57,4 +77,8 @@
     background: #00bf63;
     height: 200px;
     width: 500px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
 }

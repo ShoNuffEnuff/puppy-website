@@ -15,22 +15,27 @@ const About = () => {
             <body className='staffBackground'>
                 <div className= 'Staff01'>
                 <Image src={Stirling} roundedCircle height={200} width={200}/>
-                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. Curabitur mollis ante at lacus hendrerit ullamcorper. In porttitor justo id orci tempus, eu porttitor odio dapibus</p>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
                 <div className= 'Staff02'>
                 <Image src={EdAPoe} roundedCircle height={200} width={200}/>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
                 <div className= 'Staff03'>
                 <Image src={Amy} roundedCircle height={200} width={200}/>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
                 <div className= 'Staff04'>
                 <Image src={Randy} roundedCircle height={200} width={200}/>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
                 <div className= 'Staff05'>
                 <Image src={Roger} roundedCircle height={200} width={200}/>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
                 <div className= 'Staff06'>
                 <Image src={Charlie} roundedCircle height={200} width={200}/>
+                <p className='staff01Info'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. </p>
                 </div>
             </body>
 
