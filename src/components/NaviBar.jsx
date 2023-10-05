@@ -106,7 +106,7 @@ function NaviBar({
 
     return (
         <div>
-            <Navbar expand="sm">
+            <Navbar expand="sm" className= 'custom-nav-bar'>
                 <Container>
                     <Navbar.Brand as={Link} to="/">
                         <Image src={petplusLogo} className="custom-logo" alt="Logo" />
@@ -139,7 +139,7 @@ function NaviBar({
                                     token={token}
                                 />
                                 <PetGroupCard />
-                                <Button onClick={handleLogoutClick}>Logout</Button>
+                                <Button onClick={handleLogoutClick} className="custom-btn-Logout">Logout</Button>
                             </div>
                         ) : (
                             <Form onSubmit={handleSubmit} className="d-flex">
@@ -162,11 +162,11 @@ function NaviBar({
                                         value={formData.password}
                                         onChange={handleChange}
                                     />
-                                    <Button type="submit" className="custom-btn-Login">
+                                        <Button type="submit" className="custom-btn-Login">
                                         Login
                                     </Button>
                                 </InputGroup>
-                                <RegistrationForm />
+                                    <RegistrationForm />
                             </Form>
                         )}
                     </Navbar.Collapse>

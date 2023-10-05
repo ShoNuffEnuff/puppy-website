@@ -119,7 +119,7 @@ const PetGroupCard = () => {
 
     return (
         <div>
-            <Button onClick={() => setShowModal(true)}>Playdate</Button>
+            <Button className="custom-btn-Playdate" onClick={() => setShowModal(true)}>Playdate</Button>
 
             <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
                 <Modal.Header closeButton>

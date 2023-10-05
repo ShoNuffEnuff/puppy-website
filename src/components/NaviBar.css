@@ -1,0 +1,89 @@
+.custom-nav-bar {
+    display: flex;
+    align-items: center;
+    border-top: 2px solid black;
+}
+
+.custom-logo {
+    float:left;
+    margin-top: 0px;
+    margin-right: 200px;
+    margin-left: 0px;
+    width: 100px;
+    height: auto;
+    position: relative;
+}
+
+.custom-navlinks {
+    margin-bottom: 0;
+    margin-top: 0;
+    height: 0;
+    top: 0px;
+
+}
+
+.custom-btn-Login {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+
+    .custom-btn-Login:hover {
+        background-color: #01592f;
+    }
+
+.custom-btn-Logout {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+
+    .custom-btn-Logout:hover {
+        background-color: #01592f;
+    }
+
+.custom-btn-Register {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+    margin-top: 0;
+}
+
+    .custom-btn-Register:hover {
+        background-color: #01592f;
+    }
+
+.custom-btn-Profile {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+
+    .custom-btn-Profile:hover {
+        background-color: #01592f;
+    }
+
+.custom-btn-Playdate {
+    background-color: #00bf63;
+    border-color: #00bf63;
+    width: 100px;
+    height: 40px;
+}
+
+    .custom-btn-Playdate:hover {
+        background-color: #01592f;
+    }
+
+/*.usernameForm {
+    width: 100px;
+}
+
+.passwordForm {
+    width: 100px;
+}
+*/
+
