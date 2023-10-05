@@ -16,6 +16,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistrationForm from './RegistrationForm';
 import UserProfile from './UserProfile';
 import PetGroupCard from './PetGroupCard';
+import './NaviBar.css';
 
 function NaviBar({
     isLoggedIn,
@@ -105,83 +106,70 @@ function NaviBar({
 
     return (
         <div>
-            <Navbar expand="lg">
+            <Navbar expand="sm" className= 'custom-nav-bar'>
                 <Container>
                     <Navbar.Brand as={Link} to="/">
-                        <Image src={petplusLogo} alt="Logo" />
+                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />
                     </Navbar.Brand>
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
-                    <Navbar.Collapse id="basic-navbar-nav" />
-                    <Nav>
-                        <Nav.Link as={Link} to="/">
-                            Home
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/staff">
-                            Staff
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/services">
-                            Services
-                        </Nav.Link>
-                        <Nav.Link as={Link} to="/contacts">
-                            Contacts
-                        </Nav.Link>
+                    <Navbar.Collapse id="basic-navbar-nav">
+                        <Nav className="mr-auto">
+                            <Nav.Link as={Link} to="/">
+                                Home
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/staff">
+                                Staff
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/services">
+                                Services
+                            </Nav.Link>
+                            <Nav.Link as={Link} to="/contacts">
+                                Contacts
+                            </Nav.Link>
+                        </Nav>
                         {isLoggedIn ? (
-                            <>
-                                <Col>
-                                    <UserProfile
-                                        isLoggedIn={isLoggedIn}
-                                        idusername={idusername}
-                                        setIdUsername={setIdUsername}
-                                        keyProp={keyProp}
-                                        userPets={userPets}
-                                        userProfileData={userProfileData}
-                                        token={token}
-                                    />
-                                </Col>
-                                <Col>
-                                    <PetGroupCard />
-                                </Col>
-                                <Col>
-                                    <Button onClick={handleLogoutClick}>Logout</Button>
-                                </Col>
-                            </>
+                            <div className="d-flex">
+                                <UserProfile
+                                    isLoggedIn={isLoggedIn}
+                                    idusername={idusername}
+                                    setIdUsername={setIdUsername}
+                                    keyProp={keyProp}
+                                    userPets={userPets}
+                                    userProfileData={userProfileData}
+                                    token={token}
+                                />
+                                <PetGroupCard />
+                                <Button onClick={handleLogoutClick} className="custom-btn-Logout">Logout</Button>
+                            </div>
                         ) : (
-                            <>
-                                <Form onSubmit={handleSubmit}>
-                                    <InputGroup>
-                                        <Form.Control
-                                            placeholder="Username"
-                                            aria-label="Username"
-                                            aria-describedby="basic-addon1"
-                                            name="username"
-                                            value={formData.username}
-                                            onChange={handleChange}
-                                        />
-                                    </InputGroup>
-                                    <Row>
-                                        <Col xs="auto">
-                                            <Form.Control
-                                                type="password"
-                                                placeholder="Password"
-                                                className="mr-sm-2"
-                                                name="password"
-                                                value={formData.password}
-                                                onChange={handleChange}
-                                            />
-                                        </Col>
-                                        <Col xs="auto">
-                                            <Button type="submit" className="custom-btn-Login">
-                                                Login
-                                            </Button>
-                                        </Col>
-                                        <Col>
-                                            <RegistrationForm />
-                                        </Col>
-                                    </Row>
-                                </Form>
-                            </>
+                            <Form onSubmit={handleSubmit} className="d-flex">
+                                <InputGroup>
+                                    <Form.Control
+                                        placeholder="Username"
+                                        aria-label="Username"
+                                        aria-describedby="basic-addon1"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleChange}
+                                    />
+                                </InputGroup>
+                                <InputGroup>
+                                    <Form.Control
+                                        type="password"
+                                        placeholder="Password"
+                                        className="mr-sm-2"
+                                        name="password"
+                                        value={formData.password}
+                                        onChange={handleChange}
+                                    />
+                                        <Button type="submit" className="custom-btn-Login">
+                                        Login
+                                    </Button>
+                                </InputGroup>
+                                    <RegistrationForm />
+                            </Form>
                         )}
-                    </Nav>
+                    </Navbar.Collapse>
                 </Container>
             </Navbar>
             <ToastContainer position="top-end">

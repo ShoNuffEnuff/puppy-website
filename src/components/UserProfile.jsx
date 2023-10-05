@@ -3,6 +3,7 @@ import Card from 'react-bootstrap/Card';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
+import Button from 'react-bootstrap/Button';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
@@ -133,9 +134,9 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
 
     return (
         <div key={keyProp}>
-            <button className="btn btn-primary" onClick={handleShow}>
+            <Button className="custom-btn-Profile" onClick={handleShow}>
                 Profile
-            </button>
+            </Button>
 
             <Offcanvas show={showProfile} onHide={handleClose} placement="end">
                 <Offcanvas.Header closeButton>

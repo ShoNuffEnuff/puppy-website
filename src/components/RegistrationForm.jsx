@@ -131,7 +131,7 @@ const RegistrationForm = () => {
 
     return (
         <div>
-            <Button variant="primary" onClick={handleShowModal}>Register</Button>
+            <Button variant="primary" onClick={handleShowModal} className="custom-btn-Register">Register</Button>
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
