@@ -20,27 +20,17 @@ function App() {
     const [keyProp, setKeyProp] = useState(0);
     const [userPets, setUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false); 
-    const [toastMessage, setToastMessage] = useState(''); 
+    const [toastMessage, setToastMessage] = useState('');
+    const [backgroundClasses, setBackgroundClasses] = useState(['bg-cat', 'bg-dog', 'bg-both', 'bg-default', 'bg-warning', 'bg-danger']);
+    const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
 
-    //// Function to handle login API call
-    //const handleLoginAPI = async (formData) => {
-    //    try {
-    //        const response = await axios.post('http://localhost:5000/login', formData);
-    //        console.log('Login response:', response.data);
+    // Function to handle background change
+    const handleBackgroundChange = (index) => {
+        setCurrentBackgroundIndex(index);
+    };
 
-    //        // Handle the response and update state as needed
-    //        // Example: Update isLoggedIn and idusername state
-    //        setIsLoggedIn(true);
-    //        setIdUsername(response.data.idusername);
 
-    //        // Perform other actions after successful login
-    //        // ...
-
-    //    } catch (error) {
-    //        console.error('Login error:', error.response.data);
-    //    }
-    //};
 
     // Pass isLoggedIn State
     const handleLogin = (formData) => {
@@ -59,10 +49,36 @@ function App() {
     };
 
     return (
-        <div className="background-div">
-        <Router>
-            <div>
-                <h1>Pet + Veterinary Services</h1>
+        <div className={`background-div ${backgroundClasses[currentBackgroundIndex]}`}>
+
+            <Router>
+                <div>
+                    <h1>Pet + Veterinary Services</h1>
+                    {/* Bootstrap Dropdown for Background */}
+                    <div className="dropdown">
+                        <button
+                            className="btn btn-secondary dropdown-toggle"
+                            type="button"
+                            id="backgroundDropdown"
+                            data-bs-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            Change Background
+                        </button>
+                        <div className="dropdown-menu" aria-labelledby="backgroundDropdown">
+                            {backgroundClasses.map((bgClass, index) => (
+                                <button
+                                    key={index}
+                                    className={`dropdown-item ${currentBackgroundIndex === index ? 'active' : ''}`}
+                                    onClick={() => handleBackgroundChange(index)}
+                                >
+                                    {bgClass}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+                    {/* End of Background Dropdown */}
                     <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
                 <Routes>
                     <Route path="/" element={<Home />} />

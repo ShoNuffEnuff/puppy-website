@@ -1,7 +1,25 @@
-.background-div {
+/*.background-div {
     background-image: url('backGround02 (2).jpg');
     background-size: contain;
     background-position: center;
-    height:1500px;
+    height:1500px;*/
     
+/*}*/
+.bg-cat {
+    background-image: url('backGround02 (2).jpg');
+    background-size: contain;
+    background-position: center;
+    height: 1500px;
+}
+.bg-dog {
+    background-image: url('pawPrint.jpg');
+    background-size: contain;
+    background-position: center;
+    height: 1500px;
+}
+.bg-both {
+    background-image: url('image3.webp');
+    background-size: contain;
+    background-position: center;
+    height: 1500px;
 }
