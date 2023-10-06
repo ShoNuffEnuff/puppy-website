@@ -3,6 +3,7 @@ import axios from 'axios';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
+import './RegistrationForm.css';
 
 const RegistrationForm = () => {
     const [formData, setFormData] = useState({
@@ -130,17 +131,18 @@ const RegistrationForm = () => {
     };
 
     return (
-        <div>
+        <div >
 
             <Button variant="primary" onClick={handleShowModal} className='custom-btn-Register'>Register</Button>
 
 
-
-            <Modal show={showModal} onHide={handleCloseModal}>
+            
+            <Modal className="dog-modal" size="sm" show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Registration</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="modal-size" >
+                <div >
                     <form>
                         <div>
                             <input
@@ -249,11 +251,12 @@ const RegistrationForm = () => {
                                 onChange={handlePhotoUpload}
                             />
                         </div>
-                    </form>
+                        </form>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
-                    <Button variant="primary" onClick={handleRegistration}>Register</Button>
+                    <Button className="register-color" variant="primary" onClick={handleRegistration}>Register</Button>
                 </Modal.Footer>
             </Modal>
 

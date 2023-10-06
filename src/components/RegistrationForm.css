@@ -1,0 +1,22 @@
+/*.background-div {
+    background-image: url('backGround02 (2).jpg');
+    background-size: contain;
+    background-position: center;
+    height:1500px;*/
+
+/*}*/
+.dog-modal {
+    background: url('dogs-transparent-background-8.png');
+    background-size: contain;
+    background-position: right;
+    background-repeat: no-repeat;
+    height: 100%;
+}
+
+.modal-size {
+    max-height: fit-content;
+    background-image: url('bg2.jpg');
+}
+.register-color {
+    background-color: #00bf63 !important;
+}
