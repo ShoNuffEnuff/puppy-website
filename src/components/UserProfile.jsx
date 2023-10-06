@@ -4,6 +4,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
+import  './UserProfile.css';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
@@ -142,7 +143,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 <Offcanvas.Header closeButton>
                     <Offcanvas.Title>User Profile</Offcanvas.Title>
                 </Offcanvas.Header>
-                <Offcanvas.Body>
+                <Offcanvas.Body className="user-bg">
                     <h2>Welcome, {user.username}</h2>
                     <h3>Your Pets</h3>
                     <div className="d-flex flex-wrap">
