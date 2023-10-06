@@ -125,7 +125,7 @@ const PetGroupCard = () => {
                 <Modal.Header closeButton>
                     <Modal.Title>{selectedPet ? 'Select a Date and Time' : 'All Pets'}</Modal.Title>
                 </Modal.Header>
-                <Modal.Body>
+                <Modal.Body className="play-date">
                     {selectedPet ? (
                         <Datepicker selectedPet={selectedPet} clearSelectedPet={clearSelectedPet} />
                     ) : (
