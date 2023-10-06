@@ -131,11 +131,10 @@ const RegistrationForm = () => {
 
     return (
         <div>
-<<<<<<< HEAD
+
             <Button variant="primary" onClick={handleShowModal} className='custom-btn-Register'>Register</Button>
-=======
-            <Button variant="primary" onClick={handleShowModal} className="custom-btn-Register">Register</Button>
->>>>>>> 2ed1687d94672974c60990a458e27f3af19a8ee3
+
+
 
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>

@@ -52,9 +52,9 @@ function NaviBar({
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleShowToast = (message) => {
+    const handleShowToast = (message, type) => {
         setToastMessage(message);
-        setShowToast(true);
+        setShowToast(type);
         setTimeout(() => {
             setShowToast(false);
             setToastMessage('');
@@ -63,6 +63,12 @@ function NaviBar({
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Check if username or password is empty
+        if (!formData.username || !formData.password) {
+            handleShowToast('Username and password are required.', 'error');
+            return;
+        }
 
         try {
             const response = await axios.post('http://localhost:5000/login', formData, {
@@ -83,12 +89,11 @@ function NaviBar({
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('idUsername', idUsername);
 
-            handleShowToast('Login successful.');
-            setShowToast(true);
+            handleShowToast('Login successful.', 'success');
             onLogin();
         } catch (error) {
             console.error('Login error:', error);
-            handleShowToast('Login failed.');
+            handleShowToast('Login failed.', 'error');
         }
     };
 
@@ -106,7 +111,7 @@ function NaviBar({
 
     return (
         <div>
-            <Navbar expand="sm" className= 'custom-nav-bar'>
+            <Navbar expand="sm" className='custom-nav-bar'>
                 <Container>
                     <Navbar.Brand as={Link} to="/">
                         <Image src={petplusLogo} className="custom-logo" alt="Logo" />
@@ -162,11 +167,11 @@ function NaviBar({
                                         value={formData.password}
                                         onChange={handleChange}
                                     />
-                                        <Button type="submit" className="custom-btn-Login">
+                                    <Button type="submit" className="custom-btn-Login">
                                         Login
                                     </Button>
                                 </InputGroup>
-                                    <RegistrationForm />
+                                <RegistrationForm />
                             </Form>
                         )}
                     </Navbar.Collapse>
@@ -174,9 +179,9 @@ function NaviBar({
             </Navbar>
             <ToastContainer position="top-end">
                 {showToast && (
-                    <Toast bg="success" onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast bg={showToast === 'success' ? 'success' : 'danger'} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
                         <Toast.Header closeButton={false}>
-                            <strong className="me-auto">Success</strong>
+                            <strong className="me-auto">{showToast === 'success' ? 'Success' : 'Error'}</strong>
                         </Toast.Header>
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>

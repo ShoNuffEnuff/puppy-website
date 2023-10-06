@@ -6,7 +6,7 @@ const Home = () => {
     return (
         <div> 
             <h4>Home Page</h4>
-            <body>
+            <div>
                 <Container className='homePageItems'>
                     <div className= 'flexItem01'>
                     <h4>Staff</h4>
@@ -21,7 +21,7 @@ const Home = () => {
                     <p className= 'contactInfo'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla sed risus eu lacus consequat condimentum. Cras nec volutpat libero. Pellentesque placerat eu libero sed placerat. Curabitur mollis ante at lacus hendrerit ullamcorper. In porttitor justo id orci tempus, eu porttitor odio dapibus. Curabitur accumsan sem massa, in efficitur arcu sodales sit amet. Sed enim augue, ultrices quis elit sed, suscipit suscipit leo.</p>
                     </div>
                 </Container>
-            </body>
+            </div>
         </div>
     );
 }
