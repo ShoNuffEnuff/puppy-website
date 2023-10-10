@@ -44,6 +44,7 @@ class Customer(db.Model):
     phone = db.Column(db.Integer, nullable=False)
     email = db.Column(db.String(45), nullable=False)
     postcode = db.Column(db.Integer, nullable=False)
+    suburb = db.Column(db.String(45), nullable=False)
 
 class Pets(db.Model):
     __tablename__ = 'pets'
@@ -144,6 +145,7 @@ class CustomerRegistration(Resource):
             phone = data['phone']
             email = data['email']
             postcode = data['postcode']
+            suburb = data['suburb']
 
             new_customer = Customer(
                 idusername=user_id,
@@ -151,7 +153,8 @@ class CustomerRegistration(Resource):
                 surname=surname,
                 phone=phone,
                 email=email,
-                postcode=postcode
+                postcode=postcode,
+                suburb=suburb
             )
 
             db.session.add(new_customer)

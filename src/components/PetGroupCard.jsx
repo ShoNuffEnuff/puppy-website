@@ -17,7 +17,7 @@ const dogBreeds = [
     'Cavalier King Charles Spaniel',
     'Chihuahua',
     'Dachshund',
-    'Dobermann',
+    'Doberman',
     'English Cocker Spaniel',
     'English Setter',
     'English Springer Spaniel',

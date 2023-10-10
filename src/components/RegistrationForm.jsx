@@ -13,6 +13,7 @@ const RegistrationForm = () => {
         surname: '',
         phone: '',
         email: '',
+        suburb: '',
         postcode: '',
         pet_name: '',
         pet_breed: '',
@@ -67,7 +68,10 @@ const RegistrationForm = () => {
             !formData.password ||
             !formData.first_name ||
             !formData.surname ||
-            !formData.email
+            !formData.email ||
+            !formData.suburb ||
+            !formData.phone ||
+            !formData.postcode
         ) {
             showErrorToast('Please fill in all required user fields.');
             return; // Prevent registration if required fields are empty
@@ -96,6 +100,7 @@ const RegistrationForm = () => {
                 phone: formData.phone,
                 email: formData.email,
                 postcode: formData.postcode,
+                suburb: formData.suburb,
                 user_id: user_id,
             };
 
@@ -206,7 +211,16 @@ const RegistrationForm = () => {
                                 value={formData.postcode}
                                 onChange={handleChange}
                             />
-                        </div>
+                            </div>
+                            <div>
+                                <input
+                                    type="text"
+                                    name="suburb"
+                                    placeholder="Suburb"
+                                    value={formData.suburb}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         <div>
                             <input
                                 type="text"
