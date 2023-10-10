@@ -1,12 +1,12 @@
 import React from 'react';
 import './Staff.css';
 import Image from 'react-bootstrap/Image';
-import Stirling from './page_Images/Stirling01.jpg';
-import EdAPoe from './page_Images/EdgarAPoe.jpg';
-import Amy from './page_Images/gone-girl-1.jpeg';
-import Randy from './page_Images/RandyandSharon.jpg';
-import Roger from './page_Images/Rodger.jpg';
-import Charlie from './page_Images/charlieDay.jpg';
+import staffPic01 from './page_Images/vetStaff02.jpg';
+import staffPic02 from './page_Images/vetStaff05.png';
+import staffPic03 from './page_Images/vetStaff07.jpg';
+import staffPic04 from './page_Images/vetStaff01.jpg';
+import staffPic05 from './page_Images/vetStaff03.jpg';
+import staffPic06 from './page_Images/vetStaff06.jpg';
 
 const About = () => {
     return (
@@ -17,7 +17,7 @@ const About = () => {
             <body className='staffBackground'>
                 <div className= 'Staff01'>
                     <div className='img-container'>
-                        <Image src={Stirling} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic01} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Sarah Rodriguez</h5>
@@ -28,7 +28,7 @@ const About = () => {
                 </div>
                 <div className= 'Staff02'>
                     <div className='img-container'>
-                        <Image src={EdAPoe} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic02} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Dr James Mitchell,DVM</h5>
@@ -39,7 +39,7 @@ const About = () => {
                 </div>
                 <div className= 'Staff03'>
                     <div className='img-container'>
-                        <Image src={Amy} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic03} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Amy Martinez, Vet Nurse</h5>
@@ -51,7 +51,7 @@ const About = () => {
                 </div>
                 <div className= 'Staff04'>
                 <div className='img-container'>
-                        <Image src={Randy} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic04} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Mark Davis, Vet Nurse</h5>
@@ -62,7 +62,7 @@ const About = () => {
                 </div>
                 <div className= 'Staff05'>
                 <div className='img-container'>
-                        <Image src={Roger} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic05} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Olivia Foster, Vet Nurse</h5>
@@ -73,7 +73,7 @@ const About = () => {
                 </div>
                 <div className= 'Staff06'>
                 <div className='img-container'>
-                        <Image src={Charlie} roundedCircle height={200} width={200} className='staff-pic'/>
+                        <Image src={staffPic06} roundedCircle height={200} width={200} className='staff-pic'/>
                     </div>
                     <div className='staff-profile'>
                         <h5>Linda Harrison, Pet Behaviorist</h5>

@@ -1,5 +1,7 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
+import Carousel from 'react-bootstrap/Carousel';
+import Example from './page_Images/servicesPic.jpg';
 import './Services.css';
 
 const Services = () => {
@@ -7,6 +9,33 @@ const Services = () => {
         <div>
             <div className='title-container'>
                 <h2>What We Do</h2>
+            </div>
+            <div>
+                <Carousel>
+                    <Carousel.Item>
+                        <Example text="First slide" />
+                        <Carousel.Caption>
+                            <h3>First slide label</h3>
+                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <Example text="Second slide" />
+                        <Carousel.Caption>
+                            <h3>Second slide label</h3>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item>
+                        <Example text="Third slide" />
+                        <Carousel.Caption>
+                            <h3>Third slide label</h3>
+                            <p>
+                                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+                            </p>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                </Carousel>
             </div>
             <body className="Services">
 
