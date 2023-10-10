@@ -4,7 +4,9 @@
     "\\Backend",
     "\\Backend\\controller-backend",
     "\\Backend\\controller-backend\\venv",
-    "\\public",
+    "\\Backend\\controller-backend\\venv\\Lib",
+    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\jwt",
+    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\passlib",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
