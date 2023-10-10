@@ -6,20 +6,38 @@
     
 /*}*/
 .bg-cat {
-    background-image: url('backGround02 (2).jpg');
-    background-size: contain;
+    background-image: url('catBG.jpg');
+    background-size: cover;
     background-position: center;
-    height: 1500px;
+    height: 1300px;
 }
 .bg-dog {
+    background-image: url('dogBG.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 1300px;
+}
+.bg-both {
+    background-image: url('pup_cat_01.jpg');
+    background-size: contain;
+    background-position: center;
+    height: 1300px;
+}
+.bg-default{
     background-image: url('pawPrint.jpg');
     background-size: contain;
     background-position: center;
-    height: 1500px;
+    height: 1300px;
 }
-.bg-both {
-    background-image: url('image3.webp');
-    background-size: contain;
-    background-position: center;
-    height: 1500px;
+.navbarStyle{
+    z-index: 2;
+}
+.custom-logo{
+    width: 4cm;
+    height: auto;
+    margin-left: 10%;
+    Margin-top:.5%;
+    position: absolute;
+    z-index: 4;
+    
 }

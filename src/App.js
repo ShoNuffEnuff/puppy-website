@@ -12,6 +12,8 @@ import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
 import DatePicker from './components/DatePicker';
 import './App.css';
+import petplusLogo from './pages/petplus_logo.png';
+import Image from 'react-bootstrap/Image';
 
 function App() {
     // State Variable for Login Status
@@ -49,11 +51,13 @@ function App() {
     };
 
     return (
-        <div className={`background-div ${backgroundClasses[currentBackgroundIndex]}`}>
 
+        <div className={`background-div ${backgroundClasses[currentBackgroundIndex]}`}>
+            <div>
+                <Image src={petplusLogo} className="custom-logo" alt="Logo" />
+            </div>
             <Router>
                 <div>
-                    <h1>Pet + Veterinary Services</h1>
                     {/* Bootstrap Dropdown for Background */}
                     <div className="dropdown">
                         <button
@@ -79,7 +83,9 @@ function App() {
                         </div>
                     </div>
                     {/* End of Background Dropdown */}
-                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
+                    <NaviBar className='n
+                    ' isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
+
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/staff" element={<Staff />} />
@@ -92,6 +98,7 @@ function App() {
                 {/*<PetGroupCard />*/}
                     {/*<LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />*/}
                 </div>
+
             </div>
         </Router>
         </div>

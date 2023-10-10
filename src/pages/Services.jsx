@@ -4,12 +4,14 @@ import './Services.css';
 
 const Services = () => {
     return (
-        <body className="Services">
-            <div className='services-div'>
-                <h4>Services</h4>
+        <div>
+            <div className='title-container'>
+                <h2>What We Do</h2>
             </div>
-            <div className='listofServices'>
-                    <ListGroup>
+            <body className="Services">
+
+                <div className='listofServices'>
+                    <ListGroup style={{ fontSize: 24 }}>
                         <ListGroup.Item>Surgical</ListGroup.Item>
                         <ListGroup.Item>Vaccinations</ListGroup.Item>
                         <ListGroup.Item>Microchipping</ListGroup.Item>
@@ -20,7 +22,8 @@ const Services = () => {
                         <ListGroup.Item>Pathology</ListGroup.Item>
                     </ListGroup>
                 </div>    
-        </body>
+            </body>
+        </div>
     );
 }
 

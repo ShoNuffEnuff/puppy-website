@@ -7,11 +7,11 @@
     margin-top: 50px;
     margin-left: 350px;
     background-color:transparent;
-
     justify-content: center;
 }
 
 .Staff01 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
@@ -19,66 +19,78 @@
     width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }
-.staff01Info{
+.img-container {
+    width: 50%; 
+    height: 100%; 
+    overflow:visible; 
+    position: relative;  
+}
+.staff-pic {
+    position: absolute; 
+    left: -50%; 
+    border: 1px black;
+}
+.staff-profile{
     display:flex;
-    justify-content:flex-end;
-    width:50%;
+    flex-direction: column;
+    justify-content:center;
+    align-items: flex-start;
+    width:100%;
 }
 .Staff02 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
-    height: 200px;
-    width: 500px;
+    height:200px;
+    width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }
 .Staff03 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
-    height: 200px;
-    width: 500px;
+    height:200px;
+    width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }
 .Staff04 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
-    height: 200px;
-    width: 500px;
+    height:200px;
+    width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }
 .Staff05 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
-    height: 200px;
-    width: 500px;
+    height:200px;
+    width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }
 .Staff06 {
+    position: relative;
     border-radius: 25px;
     border: 2px #999999;
     background: #00bf63;
-    height: 200px;
-    width: 500px;
+    height:200px;
+    width:500px;
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 1px 1px 10px 1px gray;
 }

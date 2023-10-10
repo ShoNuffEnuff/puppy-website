@@ -110,7 +110,7 @@ function NaviBar({
     return (
         <div>
             <Navbar expand="sm" className='custom-nav-bar'>
-                <Container>
+                <Container className= 'custNavTest'>
                     {/*<Navbar.Brand as={Link} to="/">
                         <Image src={petplusLogo} className="custom-logo" alt="Logo" />}
     </Navbar.Brand>*/}
