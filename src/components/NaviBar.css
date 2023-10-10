@@ -1,6 +1,8 @@
 .custom-nav-bar {
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-end;
     border-top: 2px solid black;
 }
 
@@ -19,7 +21,12 @@
     margin-top: 0;
     height: 0;
     top: 0px;
+    margin-right:10px;
+}
 
+.passwordStyle{
+    margin-right:10px; 
+    width: 300px; 
 }
 
 .custom-btn-Login {
@@ -27,25 +34,25 @@
     border-color: #00bf63;
     width: 100px;
     height: 40px;
+    margin-right:10px;
 }
 
     
     .custom-btn-Login:hover {
         background-color: #01592f; 
-        
+        border-color:#01592f;
     }
 
     
-
 .custom-btn-Logout {
     background-color: #00bf63;
     border-color: #00bf63;
     width: 100px;
     height: 40px;
 }
-
     .custom-btn-Logout:hover {
         background-color: #01592f;
+        border-color:#01592f;
     }
 
 .custom-btn-Register {
@@ -55,9 +62,9 @@
     height: 40px;
     margin-top: 0;
 }
-
     .custom-btn-Register:hover {
         background-color: #01592f;
+        border-color:#01592f;
     }
 
 .custom-btn-Profile {
@@ -66,9 +73,9 @@
     width: 100px;
     height: 40px;
 }
-
     .custom-btn-Profile:hover {
         background-color: #01592f;
+        border-color:#01592f;
     }
 
 .custom-btn-Playdate {
@@ -77,17 +84,7 @@
     width: 100px;
     height: 40px;
 }
-
     .custom-btn-Playdate:hover {
         background-color: #01592f;
+        border-color:#01592f;
     }
-
-/*.usernameForm {
-    width: 100px;
-}
-
-.passwordForm {
-    width: 100px;
-}
-*/
-

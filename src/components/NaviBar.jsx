@@ -5,8 +5,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
 import petplusLogo from './petplus_logo.png';
@@ -113,9 +111,9 @@ function NaviBar({
         <div>
             <Navbar expand="sm" className='custom-nav-bar'>
                 <Container>
-                    <Navbar.Brand as={Link} to="/">
-                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />
-                    </Navbar.Brand>
+                    {/*<Navbar.Brand as={Link} to="/">
+                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />}
+    </Navbar.Brand>*/}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <Nav className="mr-auto">
@@ -162,7 +160,7 @@ function NaviBar({
                                     <Form.Control
                                         type="password"
                                         placeholder="Password"
-                                        className="mr-sm-2"
+                                        className="passwordStyle"
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
