@@ -150,6 +150,7 @@ function NaviBar({
                         ) : (
                             <Form onSubmit={handleSubmit} className="d-flex">
                                 <InputGroup>
+                                    <div className='usernameContainer'>
                                     <Form.Control
                                         placeholder="Username"
                                         aria-label="Username"
@@ -158,19 +159,24 @@ function NaviBar({
                                         value={formData.username}
                                         onChange={handleChange}
                                     />
+                                    </div>
                                 </InputGroup>
-                                        <InputGroup className="passwordStyle">
-                                    <Form.Control
-                                        type="password"
-                                        placeholder="Password"
-                                        className="passwordStyle"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                    />
-                                    <Button type="submit" className="custom-btn-Login">
-                                        Login
-                                    </Button>
+                                        <InputGroup>
+                                            <div className= 'passwordContainer'>
+                                                <Form.Control
+                                                    type="password"
+                                                    placeholder="Password"
+                                                    className="passwordStyle"
+                                                    name="password"
+                                                    value={formData.password}
+                                                    onChange={handleChange}
+                                                />
+                                            </div>
+                                    <div className='loginContainer'>
+                                        <Button type="submit" className="custom-btn-Login">
+                                            Login
+                                        </Button>
+                                    </div>
                                 </InputGroup>
                                 <RegistrationForm />
                                     </Form>

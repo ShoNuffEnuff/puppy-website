@@ -28,12 +28,13 @@
     height: 0;
     top: 0%;
 }
-
-.passwordStyle{
-    width: 180%; 
-    margin: 0%;
+.passwordContainer{
+    width: 4cm;
 }
 
+.loginContainer{
+    margin-left: 5px;
+}
 .custom-btn-Login {
     background-color: #00bf63;
     border-color: #00bf63;
