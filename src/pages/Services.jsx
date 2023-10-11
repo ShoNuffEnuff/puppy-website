@@ -1,7 +1,13 @@
 import React from 'react';
 import { ListGroup } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
-import Example from './page_Images/servicesPic.jpg';
+import pathologyImg from './page_Images/servicesPic.jpg';
+import consultImg from './page_Images/consultationPic.webp'
+import behaviourImg from'./page_Images/behaviourPic.jpg'
+import desexingImg from './page_Images/desexingPic.jpg'
+import microchipImg from './page_Images/microchippingPic.jpg'
+import surgeryImg from './page_Images/surgeryPic.jpg'
+import vaccImg from './page_Images/vaccinationPic.jpg'
 import './Services.css';
 
 const Services = () => {
@@ -10,47 +16,54 @@ const Services = () => {
             <div className='title-container'>
                 <h2>What We Do</h2>
             </div>
-            <div>
+
+            <body className="Services">
+            <div className= 'serviceCarousel'>
                 <Carousel>
-                    <Carousel.Item>
-                        <Example text="First slide" />
+                    <Carousel.Item className='vac'>
+                        <img src={vaccImg} alt="First slide" />
                         <Carousel.Caption>
-                            <h3>First slide label</h3>
-                            <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
+                            <h3>Vaccinations</h3>
                         </Carousel.Caption>
                     </Carousel.Item>
-                    <Carousel.Item>
-                        <Example text="Second slide" />
+                    <Carousel.Item className='vac'>
+                        <img src={surgeryImg} alt="Second slide" />
                         <Carousel.Caption>
-                            <h3>Second slide label</h3>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                            <h3>Surgical</h3>
                         </Carousel.Caption>
                     </Carousel.Item>
-                    <Carousel.Item>
-                        <Example text="Third slide" />
+                    <Carousel.Item className='vac'>
+                        <img src={microchipImg} alt="Third slide" />
                         <Carousel.Caption>
-                            <h3>Third slide label</h3>
-                            <p>
-                                Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-                            </p>
+                            <h3>Microchipping</h3>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item className='vac'>
+                        <img src={desexingImg} alt="fourth slide" />
+                        <Carousel.Caption>
+                            <h3>Desexing</h3>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item className='vac'>
+                        <img src={consultImg} alt="fifth slide" />
+                        <Carousel.Caption>
+                            <h3>Consultaions</h3>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item className='vac'>
+                        <img src={behaviourImg} alt="sixth slide" />
+                        <Carousel.Caption>
+                            <h3>Behaviour Consultations</h3>
+                        </Carousel.Caption>
+                    </Carousel.Item>
+                    <Carousel.Item className='vac'>
+                        <img src={pathologyImg} alt="seventh slide" />
+                        <Carousel.Caption>
+                            <h3>Pathology</h3>
                         </Carousel.Caption>
                     </Carousel.Item>
                 </Carousel>
             </div>
-            <body className="Services">
-
-                <div className='listofServices'>
-                    <ListGroup style={{ fontSize: 24 }}>
-                        <ListGroup.Item>Surgical</ListGroup.Item>
-                        <ListGroup.Item>Vaccinations</ListGroup.Item>
-                        <ListGroup.Item>Microchipping</ListGroup.Item>
-                        <ListGroup.Item>Desexing</ListGroup.Item>
-                        <ListGroup.Item>Consultations</ListGroup.Item>
-                        <ListGroup.Item>Behavior Consultations</ListGroup.Item>
-                        <ListGroup.Item>Dietary Management</ListGroup.Item>
-                        <ListGroup.Item>Pathology</ListGroup.Item>
-                    </ListGroup>
-                </div>    
             </body>
         </div>
     );

@@ -158,6 +158,7 @@ function NaviBar({
                                         value={formData.username}
                                         onChange={handleChange}
                                     />
+                                    </div>
                                 </InputGroup>
                                         <InputGroup >  
                                             <Form.Control className='passwordStyle'

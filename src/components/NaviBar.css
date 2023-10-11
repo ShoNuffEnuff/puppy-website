@@ -30,6 +30,9 @@
     height: 0;
     top: 0%;
 }
+.passwordContainer{
+    width: 4cm;
+}
 
 .passwordStyle{
     width: 120%; 
