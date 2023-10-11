@@ -2,15 +2,12 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\controller-backend",
-    "\\Backend\\controller-backend\\venv",
     "\\Backend\\controller-backend\\venv\\Lib",
-    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\jwt",
     "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\passlib",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\Backend\\App.py",
+  "SelectedNode": "\\src\\image3.webp",
   "PreviewInSolutionExplorer": false
 }

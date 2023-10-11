@@ -19,4 +19,13 @@
 }
 .register-color {
     background-color: #00bf63 !important;
+    border-color: #00bf63 !important;
 }
+    .register-color:hover {
+        background-color: #01592f !important;
+        border-color: #01592f !important;
+    }
+    .register-color:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
+    }

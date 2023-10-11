@@ -30,9 +30,9 @@
     height: 0;
     top: 0%;
 }
-.passwordContainer{
+/*.passwordContainer{
     width: 4cm;
-}
+}*/
 
 .passwordStyle{
     width: 120%; 
@@ -49,11 +49,15 @@
     width: 50%;
     height: 40px;
     margin: 2px;
-      padding:5px;
+    padding:5px;
 }
     .custom-btn-Login:hover {
         background-color: #01592f; 
         border-color:#01592f;
+    }
+    .custom-btn-Login:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
     }
 
     
@@ -62,13 +66,17 @@
     border-color: #00bf63;
     width: 100%;
     height: 40px;
-    /*margin: 5px;*/
-    padding:10px;
+    margin: 2px;
+    /*padding:10px;*/
     
 }
     .custom-btn-Logout:hover {
         background-color: #01592f;
         border-color:#01592f;
+    }
+    .custom-btn-Logout:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
     }
 
 .custom-btn-Register {
@@ -82,26 +90,38 @@
         background-color: #01592f;
         border-color:#01592f;
     }
+    .custom-btn-Register:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
+    }
 
 .custom-btn-Profile {
     background-color: #00bf63;
     border-color: #00bf63;
     width: 100px;
     height: 40px;
-    margin: 0;
+    margin: 2px;
 }
     .custom-btn-Profile:hover {
         background-color: #01592f;
         border-color:#01592f;
-    }er
+    }
+    .custom-btn-Profile:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
+    }
 .custom-btn-Playdate {
     background-color: #00bf63;
     border-color: #00bf63;
     width: 100px;
     height: 40px;
-    margin: 0;
+    margin: 2px;
 }
     .custom-btn-Playdate:hover {
         background-color: #01592f;
         border-color:#01592f;
+    }
+    .custom-btn-Playdate:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
     }
