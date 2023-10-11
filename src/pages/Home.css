@@ -18,7 +18,10 @@
     justify-content: center;
     margin-top:2%;
     font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    color:#898989;
+    color:white;
+    background-color: #00bf63;
+    box-shadow: 1px 1px 10px 1px gray;
+    border-top: 2px solid black;
 }
 .plus{
     margin-right:6px;
@@ -63,27 +66,33 @@
 .staffInfo {
     background-color: #00bf63;
     width:98%;
+    font-size: 20px;
 }
 .servicesInfo {
     background-color: #00bf63;
     width: 98%;
+    font-size: 20px;
 }
 .contactInfo {
     background-color: #00bf63;
     width: 98%;
+    font-size: 20px;
 }
 .staffImg{
     width: 30%;
     margin-right: 20px;
     margin-bottom: 20px;
+    border-radius: 25px;
 }
 .serviceImg{
     width: 30%;
     margin-right: 20px;
     margin-bottom: 20px;
+    border-radius: 25px;
 }
 .contactsImg{
     width: 30%;
     margin-right: 20px;
     margin-bottom: 20px;
+    border-radius: 25px;
 }
