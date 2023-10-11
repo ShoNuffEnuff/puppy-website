@@ -18,10 +18,12 @@
     justify-content: flex-end /*!important*/;
     flex-direction: row /*!important*/;
     display: flex;
-    margin-right:0%;
-    
-    
+    /*margin-right:0%;*/
+    padding:0%;
+    /*padding:1px*//*;*/
+    justify-content:space-between;
 }   
+
 
 .custom-navlinks {
     margin: 0;
@@ -30,16 +32,21 @@
 }
 
 .passwordStyle{
-    width: 180%; 
-    margin: 0%;
+    width: 120%; 
+    margin: 2px;
+    /*padding:1px;*/
 }
-
+.usernameContainer {
+    width: 120%;
+    margin: 2px;
+}
 .custom-btn-Login {
     background-color: #00bf63;
     border-color: #00bf63;
-    width: 100px;
+    width: 50%;
     height: 40px;
-    margin: 0;
+    margin: 2px;
+      padding:5px;
 }
     .custom-btn-Login:hover {
         background-color: #01592f; 
@@ -50,9 +57,11 @@
 .custom-btn-Logout {
     background-color: #00bf63;
     border-color: #00bf63;
-    width: 100px;
+    width: 100%;
     height: 40px;
-    margin: 0;
+    /*margin: 5px;*/
+    padding:10px;
+    
 }
     .custom-btn-Logout:hover {
         background-color: #01592f;
@@ -62,9 +71,9 @@
 .custom-btn-Register {
     background-color: #00bf63;
     border-color: #00bf63;
-    width: 100px;
+    width: 100%;
     height: 40px;
-    margin: 0;
+    margin: 2px;
 }
     .custom-btn-Register:hover {
         background-color: #01592f;
@@ -81,8 +90,7 @@
     .custom-btn-Profile:hover {
         background-color: #01592f;
         border-color:#01592f;
-    }
-
+    }er
 .custom-btn-Playdate {
     background-color: #00bf63;
     border-color: #00bf63;

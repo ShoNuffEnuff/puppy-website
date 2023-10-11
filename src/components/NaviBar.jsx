@@ -150,7 +150,7 @@ function NaviBar({
                         ) : (
                             <Form onSubmit={handleSubmit} className="d-flex">
                                 <InputGroup>
-                                    <Form.Control
+                                    <Form.Control className="usernameContainer"
                                         placeholder="Username"
                                         aria-label="Username"
                                         aria-describedby="basic-addon1"
@@ -159,19 +159,19 @@ function NaviBar({
                                         onChange={handleChange}
                                     />
                                 </InputGroup>
-                                        <InputGroup className="passwordStyle">
-                                    <Form.Control
+                                        <InputGroup >  
+                                            <Form.Control className='passwordStyle'
                                         type="password"
                                         placeholder="Password"
-                                        className="passwordStyle"
                                         name="password"
                                         value={formData.password}
                                         onChange={handleChange}
-                                    />
+                                            />
+                                        </InputGroup>
                                     <Button type="submit" className="custom-btn-Login">
                                         Login
                                     </Button>
-                                </InputGroup>
+                                
                                 <RegistrationForm />
                                     </Form>
                             
