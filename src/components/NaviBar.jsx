@@ -116,6 +116,7 @@ function NaviBar({
     </Navbar.Brand>*/}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
+                        <div className="navbarFixes">
                         <Nav className="mr-auto">
                             <Nav.Link as={Link} to="/">
                                 Home
@@ -128,8 +129,10 @@ function NaviBar({
                             </Nav.Link>
                             <Nav.Link as={Link} to="/contacts">
                                 Contacts
-                            </Nav.Link>
-                        </Nav>
+                                </Nav.Link>
+
+                            </Nav>
+                        
                         {isLoggedIn ? (
                             <div className="d-flex">
                                 <UserProfile
@@ -156,7 +159,7 @@ function NaviBar({
                                         onChange={handleChange}
                                     />
                                 </InputGroup>
-                                <InputGroup>
+                                        <InputGroup className="passwordStyle">
                                     <Form.Control
                                         type="password"
                                         placeholder="Password"
@@ -170,8 +173,10 @@ function NaviBar({
                                     </Button>
                                 </InputGroup>
                                 <RegistrationForm />
-                            </Form>
-                        )}
+                                    </Form>
+                            
+                            )}
+                            </div>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>

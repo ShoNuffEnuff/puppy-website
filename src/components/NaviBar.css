@@ -1,17 +1,27 @@
 .custom-nav-bar {
     display: flex;
-    flex-direction: row !important;
-    justify-content: flex-end !important;
+    flex-direction: row /*!important*/;
+    justify-content: flex-end /*!important*/;
     border-top: 2px solid black;
     width:100%;
     margin-top: 100px;
     box-shadow: 1px 1px 10px 1px gray;
     background-color: white;
+    
 }
 .custNavTest{
     width: 100% !important;
     margin:0;
 }
+.navbarFixes {
+    margin-left: 40%;
+    justify-content: flex-end /*!important*/;
+    flex-direction: row /*!important*/;
+    display: flex;
+    margin-right:0%;
+    
+    
+}   
 
 .custom-navlinks {
     margin: 0;
@@ -20,7 +30,7 @@
 }
 
 .passwordStyle{
-    width: 300%; 
+    width: 180%; 
     margin: 0%;
 }
 
