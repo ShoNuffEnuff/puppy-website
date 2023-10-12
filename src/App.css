@@ -19,7 +19,7 @@
 }
 .both-background {
     background-image: url('final_Both copy.jpg');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     height: 1300px;
 }
