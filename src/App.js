@@ -23,7 +23,7 @@ function App() {
     const [userPets, setUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false); 
     const [toastMessage, setToastMessage] = useState('');
-    const [backgroundClasses, setBackgroundClasses] = useState(['bg-cat', 'bg-dog', 'bg-both', 'bg-default']);
+    const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
 

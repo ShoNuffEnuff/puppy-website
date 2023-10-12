@@ -47,7 +47,7 @@ const Services = () => {
                     <Carousel.Item className='vac'>
                         <img src={consultImg} alt="fifth slide" />
                         <Carousel.Caption>
-                            <h3>Consultaions</h3>
+                            <h3>Consultations</h3>
                         </Carousel.Caption>
                     </Carousel.Item>
                     <Carousel.Item className='vac'>
