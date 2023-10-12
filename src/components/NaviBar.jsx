@@ -118,16 +118,16 @@ function NaviBar({
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="navbarFixes">
                         <Nav className="mr-auto">
-                            <Nav.Link as={Link} to="/">
+                            <Nav.Link as={Link} to="/" className="homeLink">
                                 Home
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/staff">
+                            <Nav.Link as={Link} to="/staff" className="staffLink">
                                 Staff
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/services">
+                            <Nav.Link as={Link} to="/services" className="servicesLink">
                                 Services
                             </Nav.Link>
-                            <Nav.Link as={Link} to="/contacts">
+                            <Nav.Link as={Link} to="/contacts" className="contactsLink">
                                 Contacts
                                 </Nav.Link>
 

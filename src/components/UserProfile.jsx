@@ -147,7 +147,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                     <h2>Welcome, {user.username}</h2>
                     <h3>Your Pets</h3>
                     <div className="d-flex flex-wrap">
-                        {userPets.map((pet) => ( // Updated to use userPets
+                        {userPets.map((pet) => ( 
                             <Card key={pet.name} style={{ width: '15rem', margin: '10px' }}>
                                 <Card.Img
                                     variant="top"
@@ -176,7 +176,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                                     <p className="card-text"> {playdate.customer2}'s Pet: {playdate.customer2pet}</p>
                                     <p className="card-text">Time: {playdate.time}</p>
                                     <p className="card-text">Status: {playdate.status}</p>
-                                    <Form.Check
+                                    <Form.Check 
                                         type="switch"
                                         id={`switch-${playdate.id}`}
                                         label={playdate.status}

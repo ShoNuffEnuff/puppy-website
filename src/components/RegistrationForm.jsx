@@ -90,7 +90,10 @@ const RegistrationForm = () => {
 
         try {
             const userResponse = await axios.post(`${registrationUrl}/register`, userData);
-            console.log(userResponse.data);
+            /*if (userResponse.status === 200) {*/
+                console.log(userResponse.data);
+
+
 
             const user_id = userResponse.data.user_id;
 
@@ -123,8 +126,13 @@ const RegistrationForm = () => {
             console.log(petResponse.data);
 
             showToastMessage('Registration Successful!');
-            handleCloseModal();
+            // Delay closing the modal for a few seconds to ensure the user sees the success message
+            setTimeout(() => {
+                handleCloseModal();
+            }, 3000);
 
+
+        /*}*/
         } catch (error) {
             console.error(error.response.data);
             if (error.response.status === 400) {
@@ -272,39 +280,40 @@ const RegistrationForm = () => {
                     <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
                     <Button className="register-color" variant="primary" onClick={handleRegistration}>Register</Button>
                 </Modal.Footer>
+                <Toast
+                    show={showToast}
+                    onClose={() => setShowToast(false)}
+                    style={{
+                        position: 'bottom-left',
+                        bottom: '10px',
+                        right: '10px',
+                        backgroundColor: 'green',
+                        color: 'white',
+                    }}
+                    delay={5000}
+                    autohide
+                >
+                    <Toast.Body>{errorMessage}</Toast.Body>
+                </Toast>
+
+                <Toast
+                    show={errorToast}
+                    onClose={() => setErrorToast(false)}
+                    style={{
+                        position: 'bottom-left',
+                        bottom: '10px',
+                        right: '10px',
+                        backgroundColor: 'red',
+                        color: 'white',
+                    }}
+                    delay={5000}
+                    autohide
+                >
+                    <Toast.Body>{errorMessage}</Toast.Body>
+                </Toast>
             </Modal>
 
-            <Toast
-                show={showToast}
-                onClose={() => setShowToast(false)}
-                style={{
-                    position: 'fixed',
-                    bottom: '10px',
-                    right: '10px',
-                    backgroundColor: 'green',
-                    color: 'white',
-                }}
-                delay={5000}
-                autohide
-            >
-                <Toast.Body>{errorMessage}</Toast.Body>
-            </Toast>
-
-            <Toast
-                show={errorToast}
-                onClose={() => setErrorToast(false)}
-                style={{
-                    position: 'fixed',
-                    bottom: '10px',
-                    right: '10px',
-                    backgroundColor: 'red',
-                    color: 'white',
-                }}
-                delay={5000}
-                autohide
-            >
-                <Toast.Body>{errorMessage}</Toast.Body>
-            </Toast>
+            
         </div>
     );
 };

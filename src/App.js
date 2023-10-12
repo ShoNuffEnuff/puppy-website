@@ -23,7 +23,7 @@ function App() {
     const [userPets, setUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false); 
     const [toastMessage, setToastMessage] = useState('');
-    const [backgroundClasses, setBackgroundClasses] = useState(['bg-cat', 'bg-dog', 'bg-both', 'bg-default', 'bg-warning', 'bg-danger']);
+    const [backgroundClasses, setBackgroundClasses] = useState(['bg-cat', 'bg-dog', 'bg-both', 'bg-default']);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
 
@@ -83,8 +83,7 @@ function App() {
                         </div>
                     </div>
                     {/* End of Background Dropdown */}
-                    <NaviBar className='n
-                    ' isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
+                    <NaviBar  isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
 
                 <Routes>
                     <Route path="/" element={<Home />} />
