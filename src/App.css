@@ -6,19 +6,19 @@
     
 /*}*/
 .cat-background {
-    background-image: url('catBG.jpg');
+    background-image: url('cat-wallpaper.jpg');
     background-size: cover;
     background-position: center;
     height: 1300px;
 }
 .dog-background {
-    background-image: url('dogBG.jpg');
+    background-image: url('dog-wallpaper copy.jpg');
     background-size: cover;
     background-position: center;
     height: 1300px;
 }
 .both-background {
-    background-image: url('pup_cat_01.jpg');
+    background-image: url('final_Both copy.jpg');
     background-size: contain;
     background-position: center;
     height: 1300px;
