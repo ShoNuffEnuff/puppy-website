@@ -12,7 +12,7 @@ import UserProfile from './components/UserProfile';
 import NaviBar from './components/NaviBar';
 import DatePicker from './components/DatePicker';
 import './App.css';
-import petplusLogo from './pages/petplus_logo.png';
+import petplusLogo from './finalLogo.png';
 import Image from 'react-bootstrap/Image';
 
 function App() {
