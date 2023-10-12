@@ -5,25 +5,25 @@
     height:1500px;*/
     
 /*}*/
-.bg-cat {
-    background-image: url('cat-wallpaper.jpg');
+.cat-background {
+    background-image: url('catBG.jpg');
     background-size: cover;
     background-position: center;
     height: 1300px;
 }
-.bg-dog {
-    background-image: url('dog-wallpaper copy.jpg');
+.dog-background {
+    background-image: url('dogBG.jpg');
     background-size: cover;
     background-position: center;
     height: 1300px;
 }
-.bg-both {
-    background-image: url('final_Both copy.jpg');
+.both-background {
+    background-image: url('pup_cat_01.jpg');
     background-size: contain;
     background-position: center;
     height: 1300px;
 }
-.bg-default{
+.default-background {
     background-image: url('pawPrint.jpg');
     background-size: contain;
     background-position: center;
