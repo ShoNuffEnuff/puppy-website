@@ -2,12 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\controller-backend\\venv\\Lib",
-    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\passlib",
+    "\\public",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\image3.webp",
+  "SelectedNode": "\\src\\components\\NaviBar.css",
   "PreviewInSolutionExplorer": false
 }
