@@ -32,7 +32,7 @@ class User(db.Model):
     password = db.Column(db.String(120), nullable=False)
     customer = db.relationship('Customer', backref='user', uselist=False)
     pets = db.relationship('Pets', backref='user', foreign_keys='Pets.idusername')
-    playdatesid = db.Column(db.Integer, db.ForeignKey('playdates.playdatesid'))
+    # playdatesid = db.Column(db.Integer, db.ForeignKey('playdates.playdatesid'))
     # playdates = db.relationship('Playdates', backref='username', foreign_keys=[playdatesid])
 
 class Customer(db.Model):

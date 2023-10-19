@@ -4,13 +4,16 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
-import  './UserProfile.css';
+import Alert from 'react-bootstrap/Alert'; // Import Alert
+import './UserProfile.css';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
     const [userPets, setUserPets] = useState([]);
-    const [playdates, setPlaydates] = useState([]); 
+    const [playdates, setPlaydates] = useState([]);
     const [showProfile, setShowProfile] = useState(false);
+    const [showAlert, setShowAlert] = useState(false); // New state for the alert
+
     // Use a useRef to store the isLoggedIn value
     const isLoggedInRef = useRef(isLoggedIn);
 
@@ -26,11 +29,13 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             const parsedData = JSON.parse(userProfileData);
             setUser(parsedData.user);
             setUserPets(parsedData.pets);
+        }
+    }, []);
 
-            
-            
-            }
-        }, []);
+    // Function to show/hide the alert for pending playdates
+    const toggleAlert = (isVisible) => {
+        setShowAlert(isVisible);
+    };
 
     // Fetch user data from the server and save it to local storage
     const fetchUserData = useCallback(async () => {
@@ -55,7 +60,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             if (response.status === 200) {
                 const userdata = response.data;
                 setUser({ username: userdata.username });
-                setUserPets(userdata.pets); // Updated to setUserPets
+                setUserPets(userdata.pets);
 
                 // Save user profile data in local storage with the same key
                 const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
@@ -76,7 +81,11 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             axios.get(`http://localhost:5000/api/get_playdates/${idusername}`)
                 .then((response) => {
                     console.log('Fetched Playdates:', response.data);
-                    setPlaydates(response.data); // Replace with the fetched data
+                    setPlaydates(response.data);
+
+                    // Check for pending playdates and show/hide the alert
+                    const hasPendingPlaydates = response.data.some(playdate => playdate.status !== 'accepted' && playdate.status !== 'declined');
+                    toggleAlert(hasPendingPlaydates);
                 })
                 .catch((error) => {
                     console.error('Error fetching playdates:', error);
@@ -87,14 +96,14 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     useEffect(() => {
         if (isLoggedIn) {
             fetchUserData();
-            fetchPlaydates(); // Fetch playdates when component mounts
+            fetchPlaydates(); // Fetch playdates when the component mounts
         }
     }, [showProfile, isLoggedIn, fetchUserData, fetchPlaydates]);
 
     // Reset user, userPets, and playdates state when keyProp changes
     useEffect(() => {
         setUser({ username: '' });
-        setUserPets([]); // Updated to setUserPets
+        setUserPets([]);
         setPlaydates([]);
     }, [keyProp]);
 
@@ -147,7 +156,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                     <h2>Welcome, {user.username}</h2>
                     <h3>Your Pets</h3>
                     <div className="d-flex flex-wrap">
-                        {userPets.map((pet) => ( 
+                        {userPets.map((pet) => (
                             <Card key={pet.name} style={{ width: '15rem', margin: '10px' }}>
                                 <Card.Img
                                     variant="top"
@@ -176,7 +185,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                                     <p className="card-text"> {playdate.customer2}'s Pet: {playdate.customer2pet}</p>
                                     <p className="card-text">Time: {playdate.time}</p>
                                     <p className="card-text">Status: {playdate.status}</p>
-                                    <Form.Check 
+                                    <Form.Check
                                         type="switch"
                                         id={`switch-${playdate.id}`}
                                         label={playdate.status}
@@ -199,6 +208,12 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                     </div>
                 </Offcanvas.Body>
             </Offcanvas>
+
+            {showAlert && (
+                <Alert variant="success" className="user-alert" onClose={() => toggleAlert(false)} dismissible>
+                    You have pending playdates in your profile
+                </Alert>
+            )}
         </div>
     );
 };

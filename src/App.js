@@ -28,12 +28,7 @@ function App() {
     const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
     
-    const backgroundImages = {
-        "default-background": "url_to_default_image.jpg",
-        "cat-background": "cat-modal",
-        "dog-background": "dog-modal",
-        "both-background": "url_to_both_image.jpg",
-    };
+    
 
 
     // Function to handle background change
@@ -49,7 +44,7 @@ function App() {
         setIsLoggedIn(true);
     };
 
-    // Pass isLoggedIn State
+    
     const handleLogout = () => {
         setIsLoggedIn(false);
     };
@@ -92,7 +87,7 @@ function App() {
                         </div>
                     </div>
                     {/* End of Background Dropdown */}
-                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets} backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex} backgroundImages={backgroundImages} />
+                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets} backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex}  />
 
                 <Routes>
                     <Route path="/" element={<Home />} />

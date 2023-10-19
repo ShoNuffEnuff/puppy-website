@@ -35,7 +35,7 @@ function NaviBar({
     token,
     backgroundClasses,
     currentBackgroundIndex,
-    backgroundImages,
+    
     /*handleBookPlaydate,*/
 }) {
     const [formData, setFormData] = useState({
@@ -178,7 +178,7 @@ function NaviBar({
                                         Login
                                     </Button>
                                 
-                                        <RegistrationForm backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex} backgroundImages={backgroundImages} />
+                                        <RegistrationForm backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex}  />
                                     </Form>
                             
                             )}

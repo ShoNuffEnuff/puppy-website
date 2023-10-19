@@ -2,11 +2,15 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\public",
+    "\\Backend\\controller-backend",
+    "\\Backend\\controller-backend\\venv",
+    "\\Backend\\controller-backend\\venv\\Lib",
+    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\werkzeug",
+    "\\Backend\\controller-backend\\venv\\Lib\\site-packages\\werkzeug\\datastructures",
     "\\src",
     "\\src\\components",
     "\\src\\pages"
   ],
-  "SelectedNode": "\\src\\components\\NaviBar.css",
+  "SelectedNode": "\\Backend\\App.py",
   "PreviewInSolutionExplorer": false
 }

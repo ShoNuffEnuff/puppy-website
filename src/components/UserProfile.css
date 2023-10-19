@@ -2,4 +2,14 @@
     background-image: url('bg2.jpg');
 }
 
-
+.user-alert {
+    height: 10%;
+    position: fixed;
+    background-color: mediumseagreen;
+    margin-top:0px;
+    border-color:whitesmoke;
+    color:whitesmoke;
+    font-family:Cambria;
+    font-weight:bold;
+    font-size:20px;
+}

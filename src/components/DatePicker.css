@@ -1,4 +1,16 @@
 .finalise-button {
-    /*margin-top: 100%;*/
+    /*margin-left: 0%;*/
+    margin-top: 10px;
     background-color: #00bf63 !important;
+    border-color: #00bf63;
 }
+
+    .finalise-button:hover {
+        background-color: #01592f !important;
+        border-color: #01592f !important;
+    }
+
+    .finalise-button:active {
+        background-color: lawngreen !important;
+        border-color: lawngreen !important;
+    }
