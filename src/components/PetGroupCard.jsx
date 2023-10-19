@@ -1,11 +1,13 @@
 // PetGroupCard.js
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import axios from 'axios';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import './PetGroupCard.css';
 import Datepicker from './DatePicker';
+/*import { handleBookPlaydate } from './DatePicker';*/
+import './DatePicker.css';
 
 const dogBreeds = [
     'Beagle',
@@ -40,7 +42,15 @@ const dogBreeds = [
     'Yorkshire Terrier',
 ];
 
+
+
 const PetGroupCard = () => {
+    const handleFinalisePlaydate = () => {
+        //console.log('Finalize Playdate button clicked');
+        /*handleBookPlaydate();*/
+    };
+
+    
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -49,6 +59,10 @@ const PetGroupCard = () => {
     const [selectedBreed, setSelectedBreed] = useState('all');
     const [showModal, setShowModal] = useState(false);
     const [selectedPet, setSelectedPet] = useState(null);
+    const [showButton, setShowButton] = useState(false);
+    
+   
+
 
     useEffect(() => {
         let url = 'http://localhost:5000/pets';
@@ -83,6 +97,8 @@ const PetGroupCard = () => {
             });
     }, [selectedGender, selectedAge, selectedBreed]);
 
+
+
     const handleGenderChange = (event) => {
         setSelectedGender(event.target.value);
     };
@@ -108,6 +124,7 @@ const PetGroupCard = () => {
 
     };
 
+    
 
     if (loading) {
         return <p>Loading...</p>;
@@ -123,37 +140,64 @@ const PetGroupCard = () => {
 
             <Modal show={showModal} onHide={() => setShowModal(false)} size="xl">
                 <Modal.Header closeButton>
-                    <Modal.Title>{selectedPet ? 'Select a Date and Time' : 'All Pets'}</Modal.Title>
+                    <Modal.Title>{selectedPet ? '' : <div>
+                        <label htmlFor="genderSelect">Select Gender:</label>
+                        <select id="genderSelect" value={selectedGender} onChange={handleGenderChange}>
+                            <option value="all">All</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <label htmlFor="ageSelect">Select Age:</label>
+                        <select id="ageSelect" value={selectedAge} onChange={handleAgeChange}>
+                            <option value="all">All</option>
+                            {Array.from({ length: 15 }, (_, i) => (
+                                <option key={i + 1} value={(i + 1).toString()}>
+                                    {(i + 1).toString()} year{((i + 1) !== 1) ? 's' : ''}
+                                </option>
+                            ))}
+                        </select>
+                        <label htmlFor="breedSelect">Select Breed:</label>
+                        <select id="breedSelect" value={selectedBreed} onChange={handleBreedChange}>
+                            <option value="all">All</option>
+                            {dogBreeds.map((breed) => (
+                                <option key={breed} value={breed}>
+                                    {breed}
+                                </option>
+                            ))}
+                        </select>
+                        </div>
+                    }</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="play-date">
                     {selectedPet ? (
-                        <Datepicker selectedPet={selectedPet} clearSelectedPet={clearSelectedPet} />
+                        <Datepicker selectedPet={selectedPet} clearSelectedPet={clearSelectedPet} showButton={showButton} handleBookPlaydate={handleFinalisePlaydate} />
                     ) : (
-                        <div>
-                            <label htmlFor="genderSelect">Select Gender:</label>
-                            <select id="genderSelect" value={selectedGender} onChange={handleGenderChange}>
-                                <option value="all">All</option>
-                                <option value="male">Male</option>
-                                <option value="female">Female</option>
-                            </select>
-                            <label htmlFor="ageSelect">Select Age:</label>
-                            <select id="ageSelect" value={selectedAge} onChange={handleAgeChange}>
-                                <option value="all">All</option>
-                                {Array.from({ length: 15 }, (_, i) => (
-                                    <option key={i + 1} value={(i + 1).toString()}>
-                                        {(i + 1).toString()} year{((i + 1) !== 1) ? 's' : ''}
-                                    </option>
-                                ))}
-                            </select>
-                            <label htmlFor="breedSelect">Select Breed:</label>
-                            <select id="breedSelect" value={selectedBreed} onChange={handleBreedChange}>
-                                <option value="all">All</option>
-                                {dogBreeds.map((breed) => (
-                                    <option key={breed} value={breed}>
-                                        {breed}
-                                    </option>
-                                ))}
-                            </select>
+                            <div>
+                        
+                            {/*<label htmlFor="genderSelect">Select Gender:</label>*/}
+                            {/*<select id="genderSelect" value={selectedGender} onChange={handleGenderChange}>*/}
+                            {/*    <option value="all">All</option>*/}
+                            {/*    <option value="male">Male</option>*/}
+                            {/*    <option value="female">Female</option>*/}
+                            {/*</select>*/}
+                            {/*<label htmlFor="ageSelect">Select Age:</label>*/}
+                            {/*<select id="ageSelect" value={selectedAge} onChange={handleAgeChange}>*/}
+                            {/*    <option value="all">All</option>*/}
+                            {/*    {Array.from({ length: 15 }, (_, i) => (*/}
+                            {/*        <option key={i + 1} value={(i + 1).toString()}>*/}
+                            {/*            {(i + 1).toString()} year{((i + 1) !== 1) ? 's' : ''}*/}
+                            {/*        </option>*/}
+                            {/*    ))}*/}
+                            {/*</select>*/}
+                            {/*<label htmlFor="breedSelect">Select Breed:</label>*/}
+                            {/*<select id="breedSelect" value={selectedBreed} onChange={handleBreedChange}>*/}
+                            {/*    <option value="all">All</option>*/}
+                            {/*    {dogBreeds.map((breed) => (*/}
+                            {/*        <option key={breed} value={breed}>*/}
+                            {/*            {breed}*/}
+                            {/*        </option>*/}
+                            {/*    ))}*/}
+                            {/*</select>*/}
                             <div className="row">
                                 {pets.map((pet) => (
                                     <div key={pet.petid} className="col-sm-6 col-md-4 col-lg-3 mb-3">
@@ -190,11 +234,15 @@ const PetGroupCard = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
+                    {/*<Button className="finalise-button" onClick={handleFinalisePlaydate}>Finalise Playdate</Button>*/}
                     {selectedPet ? (
                         <Button variant="secondary" onClick={clearSelectedPet}>
                             Back to All Pets
                         </Button>
                     ) : null}
+                    <div id="finalise-playdate-container">
+        {/*<Button className="finalise-button" onClick={Datepicker.handleBookPlaydate}>Finalise Playdate</Button>*/}
+    </div>
                     <Button variant="secondary" onClick={(_clearSelectedPet) => setShowModal(false)}>
                         Close
                     </Button>

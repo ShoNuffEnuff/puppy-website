@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import './RegistrationForm.css';
 
-const RegistrationForm = () => {
+const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroundImages }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -142,6 +142,8 @@ const RegistrationForm = () => {
             }
         }
     };
+
+  
 
     return (
         <div >

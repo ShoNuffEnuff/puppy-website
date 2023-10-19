@@ -14,6 +14,8 @@ import DatePicker from './components/DatePicker';
 import './App.css';
 import petplusLogo from './finalLogo.png';
 import Image from 'react-bootstrap/Image';
+import './components/RegistrationForm.css';
+
 
 function App() {
     // State Variable for Login Status
@@ -25,6 +27,13 @@ function App() {
     const [toastMessage, setToastMessage] = useState('');
     const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
+    
+    const backgroundImages = {
+        "default-background": "url_to_default_image.jpg",
+        "cat-background": "cat-modal",
+        "dog-background": "dog-modal",
+        "both-background": "url_to_both_image.jpg",
+    };
 
 
     // Function to handle background change
@@ -83,7 +92,7 @@ function App() {
                         </div>
                     </div>
                     {/* End of Background Dropdown */}
-                    <NaviBar  isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets } />
+                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets} backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex} backgroundImages={backgroundImages} />
 
                 <Routes>
                     <Route path="/" element={<Home />} />
@@ -92,10 +101,7 @@ function App() {
                     <Route path="/contacts" element={<Contacts />} />
                 </Routes>
                 <div>
-                {/*<RegistrationForm />*/}
-                {/*<UserProfile isLoggedIn={isLoggedIn} idusername={idusername} setIdUsername={setIdUsername} keyProp={keyProp} userPets={userPets} />*/}
-                {/*<PetGroupCard />*/}
-                    {/*<LoginForm onLogin={handleLogin} isLoggedIn={isLoggedIn} setIdUsername={setIdUsername} onLogout={handleLogout} changeKey={changeKey} />*/}
+              
                 </div>
 
             </div>

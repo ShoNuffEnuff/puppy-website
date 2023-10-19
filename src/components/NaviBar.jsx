@@ -15,6 +15,7 @@ import RegistrationForm from './RegistrationForm';
 import UserProfile from './UserProfile';
 import PetGroupCard from './PetGroupCard';
 import './NaviBar.css';
+/*import { handleBookPlaydate } from './DatePicker';*/
 
 function NaviBar({
     isLoggedIn,
@@ -32,6 +33,10 @@ function NaviBar({
     userPets,
     userProfileData,
     token,
+    backgroundClasses,
+    currentBackgroundIndex,
+    backgroundImages,
+    /*handleBookPlaydate,*/
 }) {
     const [formData, setFormData] = useState({
         username: '',
@@ -144,7 +149,7 @@ function NaviBar({
                                     userProfileData={userProfileData}
                                     token={token}
                                 />
-                                <PetGroupCard />
+                                    <PetGroupCard  />
                                 <Button onClick={handleLogoutClick} className="custom-btn-Logout">Logout</Button>
                             </div>
                         ) : (
@@ -173,7 +178,7 @@ function NaviBar({
                                         Login
                                     </Button>
                                 
-                                <RegistrationForm />
+                                        <RegistrationForm backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex} backgroundImages={backgroundImages} />
                                     </Form>
                             
                             )}

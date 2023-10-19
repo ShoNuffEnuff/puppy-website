@@ -3,16 +3,35 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
+import './DatePicker.css';
+import Button from 'react-bootstrap/Button';
 
-function Datepicker({ selectedPet, clearSelectedPet,  }) {
+
+
+
+function Datepicker({ selectedPet, clearSelectedPet, }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
 
-    // Define the handleBookPlaydate function
+
+    // Define a function to display a toast error message
+    const showToastError = (message) => {
+        setToastMessage(message);
+        setShowToast(true);
+    };
+
+
+
+    /*Define the handleBookPlaydate function*/
     const handleBookPlaydate = () => {
+
+        if (!selectedUserPet) {
+            showToastError('Please select a pet before finalising the playdate.');
+            return;
+        }
         // Retrieve customer1Id and customer2Id from local storage
         const customer1Id = localStorage.getItem('idUsername');
         const customer2Id = localStorage.getItem('selectedPetIdusername');
@@ -114,16 +133,16 @@ function Datepicker({ selectedPet, clearSelectedPet,  }) {
         <div className="datepicker-container">
             <ToastContainer position="top-end" className="p-3">
                 {showToast && (
-                    <Toast bg="success" onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast bg={toastMessage === 'success' ? 'success' : 'danger'} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
                         <Toast.Header closeButton={false}>
-                            <strong className="me-auto">Success</strong>
+                            <strong className="me-auto">{toastMessage === 'success' ? 'Success' : 'Error'}</strong>
                         </Toast.Header>
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>
                 )}
             </ToastContainer>
 
-            <h2>Select a Date and Time</h2>
+            <h2>Select a Date, Time, and your Pet</h2>
             <DatePicker
                 selected={selectedDate}
                 onChange={handleDateChange}
@@ -133,6 +152,7 @@ function Datepicker({ selectedPet, clearSelectedPet,  }) {
                 timeIntervals={15}
                 timeCaption="Time"
                 placeholderText="Select a date and time"
+
             />
             {selectedDate && selectedPet && (
                 <div>
@@ -143,7 +163,7 @@ function Datepicker({ selectedPet, clearSelectedPet,  }) {
                     <p>Gender: {selectedPet.gender}</p>
                 </div>
             )}
-            <button onClick={clearSelectedPet}>Back to All Pets</button>
+            {/*<button onClick={clearSelectedPet}>Back to All Pets</button>*/}
 
             {datepickerUserPets && datepickerUserPets.length > 0 && (
                 <div>
@@ -159,8 +179,12 @@ function Datepicker({ selectedPet, clearSelectedPet,  }) {
                 </div>
             )}
 
-            <button onClick={handleBookPlaydate}>Finalise Playdate</button>
+            <div id="finalise-playdate-container">
+                <Button className="finalise-button" onClick={handleBookPlaydate}>Finalise Playdate</Button>
+            </div>
         </div>
+
+
     );
 }
 
