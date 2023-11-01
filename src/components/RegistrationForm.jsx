@@ -157,7 +157,8 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
                     <Modal.Title>Registration</Modal.Title>
                 </Modal.Header>
                 <Modal.Body className="modal-size" >
-                <div >
+                    <div >
+
                     <form>
                         <div>
                             <input

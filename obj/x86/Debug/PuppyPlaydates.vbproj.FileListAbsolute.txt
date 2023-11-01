@@ -1,0 +1,2 @@
+C:\Users\Sho\my-react-app\obj\x86\Debug\PuppyPlaydates.vbproj.AssemblyReference.cache
+C:\Users\Sho\my-react-app\obj\x86\Debug\PuppyPlaydates.vbproj.CoreCompileInputs.cache
