@@ -58,5 +58,5 @@ jobs:
         with:
           app-name: 'PuppyPlay'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F6F281FDBFB94E4DB4D64B8B54634C7C }}
+          publish-profile: ${{ secrets.Azure_Public_Profile }}
           package: .
