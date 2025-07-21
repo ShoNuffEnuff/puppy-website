@@ -1,3 +1,5 @@
+import os
+from dotenv import load_dotenv
 import base64
 import io
 import logging
@@ -13,13 +15,16 @@ from flask_jwt_extended import JWTManager, jwt_required, create_access_token, ge
 from datetime import timedelta
 from datetime import datetime
 
+# Load environment variables from .env file
+load_dotenv()
+
 app = Flask(__name__)
 CORS(app, origins=["*"], supports_credentials=True, headers="*")
 api = Api(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://root:Hadok3ns77!!@localhost/pet_care'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'postgresql+psycopg2://neondb_owner:npg_QdG5nVDJl0PZ@ep-lingering-cloud-a7h29p4l-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this to your secret key
+app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-secret-key')  # Use env var, fallback default
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)  # Set token expiration to 24 hours
 
 db = SQLAlchemy(app)
@@ -27,6 +32,7 @@ jwt = JWTManager(app)
 
 class User(db.Model):
     __tablename__ = 'username'
+    __table_args__ = {'schema': 'public'}
     idusername = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
     password = db.Column(db.String(120), nullable=False)
@@ -37,8 +43,9 @@ class User(db.Model):
 
 class Customer(db.Model):
     __tablename__ = 'customer'
+    __table_args__ = {'schema': 'public'}
     idcustomer = db.Column(db.Integer, primary_key=True)
-    idusername = db.Column(db.Integer, db.ForeignKey('username.idusername'), unique=True)
+    idusername = db.Column(db.Integer, db.ForeignKey('public.username.idusername'), unique=True)
     first_name = db.Column(db.String(45), nullable=False)
     surname = db.Column(db.String(45), nullable=False)
     phone = db.Column(db.Integer, nullable=False)
@@ -48,8 +55,9 @@ class Customer(db.Model):
 
 class Pets(db.Model):
     __tablename__ = 'pets'
+    __table_args__ = {'schema': 'public'}
     petid = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    idusername = db.Column(db.Integer, db.ForeignKey('username.idusername'))
+    idusername = db.Column(db.Integer, db.ForeignKey('public.username.idusername'))
     name = db.Column(db.String(45), nullable=False)
     breed = db.Column(db.String(45), nullable=False)
     age = db.Column(db.Integer, nullable=False)
@@ -60,6 +68,7 @@ class Pets(db.Model):
     
 class Playdates(db.Model):
     __tablename__ = 'playdates'
+    __table_args__ = {'schema': 'public'}
     playdatesid = db.Column(db.Integer, primary_key=True)
     customer1 = db.Column(db.String(45))
     c1id = db.Column(db.Integer)
@@ -603,4 +612,4 @@ if __name__ == '__main__':
         except Exception as e:
             print(f'Database connection error: {str(e)}')
 
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=False)

@@ -7,7 +7,10 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'; // Import Alert
 import './UserProfile.css';
 
+
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
+    
+       
     const [user, setUser] = useState({ username: '' });
     const [userPets, setUserPets] = useState([]);
     const [playdates, setPlaydates] = useState([]);
@@ -51,7 +54,9 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 return;
             }
 
-            const response = await axios.get(`http://localhost:5000/user-profile/${idusername}`, {
+            
+
+            const response = await axios.get(`http://20.211.223.142:5000/user-profile/${idusername}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -78,7 +83,8 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     // Fetch playdates data from the server when the component mounts
     const fetchPlaydates = useCallback(() => {
         if (isLoggedIn) {
-            axios.get(`http://localhost:5000/api/get_playdates/${idusername}`)
+            
+            axios.get(`http://20.211.223.142:5000/get_playdates/${idusername}`)
                 .then((response) => {
                     console.log('Fetched Playdates:', response.data);
                     setPlaydates(response.data);
@@ -122,7 +128,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             return;
         }
 
-        axios.put(`http://localhost:5000/update_playdate_status/${playdateId}`, { status: newStatus }, {
+        axios.put(`http://20.211.223.142:5000/update_playdate_status/${playdateId}`, { status: newStatus }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

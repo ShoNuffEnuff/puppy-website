@@ -9,6 +9,7 @@ import Button from 'react-bootstrap/Button';
 
 
 
+
 function Datepicker({ selectedPet, clearSelectedPet, }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
@@ -41,16 +42,18 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
             return;
         }
 
+        
+
         // Fetch data for customer 1
         axios
-            .get(`http://localhost:5000/get_customer_data/${customer1Id}`)
+            .get(`http://20.211.223.142:5000/get_customer_data/${customer1Id}`)
             .then((response1) => {
                 const customer1Data = response1.data;
                 console.log(customer1Data);
 
                 // Fetch data for customer 2
                 axios
-                    .get(`http://localhost:5000/get_customer_data2/${customer2Id}`)
+                    .get(`http://20.211.223.142:5000/get_customer_data2/${customer2Id}`)
                     .then((response2) => {
                         const customer2Data = response2.data;
                         console.log(customer2Data);
@@ -83,7 +86,7 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
 
                         // Create the playdate via POST request
                         axios
-                            .post(`http://localhost:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
+                            .post(`http://20.211.223.142:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
                             .then((response3) => {
                                 console.log('Playdate created successfully:', response3.data);
 

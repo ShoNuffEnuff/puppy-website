@@ -2,12 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Backend",
-    "\\Backend\\controller-backend",
-    "\\Backend\\controller-backend\\venv",
-    "\\Backend\\controller-backend\\venv\\Lib",
+    "\\public",
     "\\src",
-    "\\src\\components",
-    "\\src\\pages"
+    "\\src\\components"
   ],
+  "SelectedNode": "\\Backend\\App.py",
   "PreviewInSolutionExplorer": false
 }

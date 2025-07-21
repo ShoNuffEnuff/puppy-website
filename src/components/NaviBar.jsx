@@ -15,6 +15,7 @@ import RegistrationForm from './RegistrationForm';
 import UserProfile from './UserProfile';
 import PetGroupCard from './PetGroupCard';
 import './NaviBar.css';
+
 /*import { handleBookPlaydate } from './DatePicker';*/
 
 function NaviBar({
@@ -64,6 +65,7 @@ function NaviBar({
         }, 3000);
     };
 
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -74,7 +76,7 @@ function NaviBar({
         }
 
         try {
-            const response = await axios.post('http://localhost:5000/login', formData, {
+            const response = await axios.post('http://20.211.223.142:5000/login', formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },

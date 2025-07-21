@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: your-backend-name
+    env: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app
+    envVars:
+      - key: DATABASE_URL
+        fromSecret: your-db-url-secret
+      - key: JWT_SECRET_KEY
+        fromSecret: your-jwt-secret

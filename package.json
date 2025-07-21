@@ -2,8 +2,8 @@
   "name": "my-react-app",
   "version": "0.1.0",
   "private": false,
-  "proxy": "http://localhost:5000",
-  "homepage": "https://puppyplay.azurewebsites.net/",
+  
+  "homepage": "https://puppywebappstorage.z26.web.core.windows.net/",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",

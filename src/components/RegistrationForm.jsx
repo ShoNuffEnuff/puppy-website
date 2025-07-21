@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import './RegistrationForm.css';
 
+
 const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroundImages }) => {
     const [formData, setFormData] = useState({
         username: '',
@@ -36,7 +37,9 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
 
     const handleShowModal = () => setShowModal(true);
 
-    const registrationUrl = 'http://localhost:5000';
+   
+
+    const registrationUrl = 'https://20.211.223.142:5000';
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

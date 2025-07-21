@@ -9,6 +9,7 @@ import Datepicker from './DatePicker';
 /*import { handleBookPlaydate } from './DatePicker';*/
 import './DatePicker.css';
 
+
 const dogBreeds = [
     'Beagle',
     'Bernese Mountain Dog',
@@ -45,12 +46,7 @@ const dogBreeds = [
 
 
 const PetGroupCard = () => {
-    const handleFinalisePlaydate = () => {
-        //console.log('Finalize Playdate button clicked');
-        /*handleBookPlaydate();*/
-    };
-
-    
+    const handleFinalisePlaydate = () => { }
     const [pets, setPets] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -60,12 +56,14 @@ const PetGroupCard = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedPet, setSelectedPet] = useState(null);
     const [showButton, setShowButton] = useState(false);
-    
+
+
    
 
 
     useEffect(() => {
-        let url = 'http://localhost:5000/pets';
+       
+        let url = 'http://20.211.223.142:5000/pets';
         const params = [];
 
         if (selectedGender !== 'all') {
