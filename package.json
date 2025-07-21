@@ -2,8 +2,8 @@
   "name": "my-react-app",
   "version": "0.1.0",
   "private": false,
-  
-  "homepage": "https://puppywebappstorage.z26.web.core.windows.net/",
+
+  "homepage": "https://shonuffenuff.github.io/puppy-website/",
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
