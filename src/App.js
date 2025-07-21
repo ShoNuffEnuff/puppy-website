@@ -16,8 +16,10 @@ import petplusLogo from './finalLogo.png';
 import Image from 'react-bootstrap/Image';
 import './components/RegistrationForm.css';
 
-
 function App() {
+    // Read backend URL from environment variable
+    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'; // fallback for local dev
+
     // State Variable for Login Status
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [idusername, setIdUsername] = useState(null);
@@ -27,26 +29,41 @@ function App() {
     const [toastMessage, setToastMessage] = useState('');
     const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
-    
-    
 
+    // Example API call function (you can adapt or move to components)
+    const fetchUserPets = async (username) => {
+      try {
+        const res = await fetch(`${backendUrl}/api/userpets?username=${username}`);
+        if (res.ok) {
+          const data = await res.json();
+          setUserPets(data.pets);
+        } else {
+          console.error('Failed to fetch user pets');
+        }
+      } catch (error) {
+        console.error('Error fetching user pets:', error);
+      }
+    };
 
     // Function to handle background change
     const handleBackgroundChange = (index) => {
         setCurrentBackgroundIndex(index);
     };
 
-
-
     // Pass isLoggedIn State
     const handleLogin = (formData) => {
         /*handleLoginAPI(formData);*/
         setIsLoggedIn(true);
+        if(formData.username) {
+          setIdUsername(formData.username);
+          fetchUserPets(formData.username);
+        }
     };
 
-    
     const handleLogout = () => {
         setIsLoggedIn(false);
+        setIdUsername(null);
+        setUserPets([]);
     };
 
     // Pass the key
@@ -55,7 +72,6 @@ function App() {
     };
 
     return (
-
         <div className={`background-div ${backgroundClasses[currentBackgroundIndex]}`}>
             <div>
                 <Image src={petplusLogo} className="custom-logo" alt="Logo" />
@@ -87,20 +103,35 @@ function App() {
                         </div>
                     </div>
                     {/* End of Background Dropdown */}
-                    <NaviBar isLoggedIn={isLoggedIn} onLogin={handleLogin} onLogout={handleLogout} setIdUsername={setIdUsername} setShowToast={setShowToast} setToastMessage={setToastMessage} changeKey={changeKey} setIsLoggedIn={setIsLoggedIn} showToast={showToast} toastMessage={toastMessage} idusername={idusername} keyProp={keyProp} userPets={userPets} setUserPets={setUserPets} backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex}  />
+                    <NaviBar
+                      isLoggedIn={isLoggedIn}
+                      onLogin={handleLogin}
+                      onLogout={handleLogout}
+                      setIdUsername={setIdUsername}
+                      setShowToast={setShowToast}
+                      setToastMessage={setToastMessage}
+                      changeKey={changeKey}
+                      setIsLoggedIn={setIsLoggedIn}
+                      showToast={showToast}
+                      toastMessage={toastMessage}
+                      idusername={idusername}
+                      keyProp={keyProp}
+                      userPets={userPets}
+                      setUserPets={setUserPets}
+                      backgroundClasses={backgroundClasses}
+                      currentBackgroundIndex={currentBackgroundIndex}
+                      backendUrl={backendUrl} // pass backendUrl prop if needed
+                    />
 
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/staff" element={<Staff />} />
-                    <Route path="/services" element={<Services />} />
-                    <Route path="/contacts" element={<Contacts />} />
-                </Routes>
-                <div>
-              
+                    <Routes>
+                        <Route path="/" element={<Home backendUrl={backendUrl} />} />
+                        <Route path="/staff" element={<Staff backendUrl={backendUrl} />} />
+                        <Route path="/services" element={<Services backendUrl={backendUrl} />} />
+                        <Route path="/contacts" element={<Contacts backendUrl={backendUrl} />} />
+                    </Routes>
+
                 </div>
-
-            </div>
-        </Router>
+            </Router>
         </div>
     );
 }

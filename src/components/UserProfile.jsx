@@ -7,25 +7,22 @@ import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert'; // Import Alert
 import './UserProfile.css';
 
+// Set backend URL from env or fallback to Render backend
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://puppy-website.onrender.com';
 
 const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
-    
-       
     const [user, setUser] = useState({ username: '' });
     const [userPets, setUserPets] = useState([]);
     const [playdates, setPlaydates] = useState([]);
     const [showProfile, setShowProfile] = useState(false);
     const [showAlert, setShowAlert] = useState(false); // New state for the alert
 
-    // Use a useRef to store the isLoggedIn value
     const isLoggedInRef = useRef(isLoggedIn);
 
-    // Update the ref whenever isLoggedIn changes
     useEffect(() => {
         isLoggedInRef.current = isLoggedIn;
     }, [isLoggedIn]);
 
-    // Retrieve user profile data from local storage on component mount
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
@@ -35,14 +32,11 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         }
     }, []);
 
-    // Function to show/hide the alert for pending playdates
     const toggleAlert = (isVisible) => {
         setShowAlert(isVisible);
     };
 
-    // Fetch user data from the server and save it to local storage
     const fetchUserData = useCallback(async () => {
-        // Use the ref instead of directly using isLoggedIn
         if (!isLoggedInRef.current || !idusername) {
             return;
         }
@@ -54,9 +48,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 return;
             }
 
-            
-
-            const response = await axios.get(`http://20.211.223.142:5000/user-profile/${idusername}`, {
+            const response = await axios.get(`${backendUrl}/user-profile/${idusername}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -67,7 +59,6 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 setUser({ username: userdata.username });
                 setUserPets(userdata.pets);
 
-                // Save user profile data in local storage with the same key
                 const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
                 localStorage.setItem('userProfileData', userProfileData);
             } else if (response.status === 401) {
@@ -80,16 +71,13 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         }
     }, [idusername]);
 
-    // Fetch playdates data from the server when the component mounts
     const fetchPlaydates = useCallback(() => {
         if (isLoggedIn) {
-            
-            axios.get(`http://20.211.223.142:5000/get_playdates/${idusername}`)
+            axios.get(`${backendUrl}/get_playdates/${idusername}`)
                 .then((response) => {
                     console.log('Fetched Playdates:', response.data);
                     setPlaydates(response.data);
 
-                    // Check for pending playdates and show/hide the alert
                     const hasPendingPlaydates = response.data.some(playdate => playdate.status !== 'accepted' && playdate.status !== 'declined');
                     toggleAlert(hasPendingPlaydates);
                 })
@@ -102,11 +90,10 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     useEffect(() => {
         if (isLoggedIn) {
             fetchUserData();
-            fetchPlaydates(); // Fetch playdates when the component mounts
+            fetchPlaydates();
         }
     }, [showProfile, isLoggedIn, fetchUserData, fetchPlaydates]);
 
-    // Reset user, userPets, and playdates state when keyProp changes
     useEffect(() => {
         setUser({ username: '' });
         setUserPets([]);
@@ -119,33 +106,30 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
 
     const handleClose = () => setShowProfile(false);
 
-    // Function to update the playdate status
     const updatePlaydateStatus = (playdateId, newStatus) => {
-        // Send a request to update the playdate status
         const token = localStorage.getItem('access_token');
         if (!token) {
             console.error('Unauthorized access');
             return;
         }
 
-        axios.put(`http://20.211.223.142:5000/update_playdate_status/${playdateId}`, { status: newStatus }, {
+        axios.put(`${backendUrl}/update_playdate_status/${playdateId}`, { status: newStatus }, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
         })
-            .then((response) => {
-                // Update the playdates state with the updated status
-                const updatedPlaydates = playdates.map((playdate) => {
-                    if (playdate.id === playdateId) {
-                        return { ...playdate, status: newStatus };
-                    }
-                    return playdate;
-                });
-                setPlaydates(updatedPlaydates);
-            })
-            .catch((error) => {
-                console.error('Error updating playdate status:', error);
+        .then(() => {
+            const updatedPlaydates = playdates.map((playdate) => {
+                if (playdate.id === playdateId) {
+                    return { ...playdate, status: newStatus };
+                }
+                return playdate;
             });
+            setPlaydates(updatedPlaydates);
+        })
+        .catch((error) => {
+            console.error('Error updating playdate status:', error);
+        });
     };
 
     return (

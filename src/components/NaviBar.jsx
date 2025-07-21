@@ -16,7 +16,8 @@ import UserProfile from './UserProfile';
 import PetGroupCard from './PetGroupCard';
 import './NaviBar.css';
 
-/*import { handleBookPlaydate } from './DatePicker';*/
+// Backend URL config with fallback
+const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://puppy-website.onrender.com';
 
 function NaviBar({
     isLoggedIn,
@@ -36,8 +37,6 @@ function NaviBar({
     token,
     backgroundClasses,
     currentBackgroundIndex,
-    
-    /*handleBookPlaydate,*/
 }) {
     const [formData, setFormData] = useState({
         username: '',
@@ -65,18 +64,16 @@ function NaviBar({
         }, 3000);
     };
 
-
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if username or password is empty
         if (!formData.username || !formData.password) {
             handleShowToast('Username and password are required.', 'error');
             return;
         }
 
         try {
-            const response = await axios.post('http://20.211.223.142:5000/login', formData, {
+            const response = await axios.post(`${backendUrl}/login`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -90,7 +87,6 @@ function NaviBar({
             localStorage.setItem('access_token', response.data.access_token);
             const idUsername = response.data.idusername;
             setIdUsername(idUsername);
-            // Store isLoggedIn and idUsername in local storage
             localStorage.setItem('isLoggedIn', 'true');
             localStorage.setItem('idUsername', idUsername);
 
@@ -116,81 +112,91 @@ function NaviBar({
 
     return (
         <div>
-            <Navbar expand="sm" className='custom-nav-bar'>
-                <Container className= 'custNavTest'>
-                    {/*<Navbar.Brand as={Link} to="/">
-                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />}
-    </Navbar.Brand>*/}
+            <Navbar expand="sm" className="custom-nav-bar">
+                <Container className="custNavTest">
+                    {/* Uncomment and update if you want the logo */}
+                    {/* <Navbar.Brand as={Link} to="/">
+                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />
+                    </Navbar.Brand> */}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="navbarFixes">
-                        <Nav className="mr-auto">
-                            <Nav.Link as={Link} to="/" className="homeLink">
-                                Home
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/staff" className="staffLink">
-                                Staff
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/services" className="servicesLink">
-                                Services
-                            </Nav.Link>
-                            <Nav.Link as={Link} to="/contacts" className="contactsLink">
-                                Contacts
+                            <Nav className="mr-auto">
+                                <Nav.Link as={Link} to="/" className="homeLink">
+                                    Home
                                 </Nav.Link>
-
+                                <Nav.Link as={Link} to="/staff" className="staffLink">
+                                    Staff
+                                </Nav.Link>
+                                <Nav.Link as={Link} to="/services" className="servicesLink">
+                                    Services
+                                </Nav.Link>
+                                <Nav.Link as={Link} to="/contacts" className="contactsLink">
+                                    Contacts
+                                </Nav.Link>
                             </Nav>
-                        
-                        {isLoggedIn ? (
-                            <div className="d-flex">
-                                <UserProfile
-                                    isLoggedIn={isLoggedIn}
-                                    idusername={idusername}
-                                    setIdUsername={setIdUsername}
-                                    keyProp={keyProp}
-                                    userPets={userPets}
-                                    userProfileData={userProfileData}
-                                    token={token}
-                                />
-                                    <PetGroupCard  />
-                                <Button onClick={handleLogoutClick} className="custom-btn-Logout">Logout</Button>
-                            </div>
-                        ) : (
-                            <Form onSubmit={handleSubmit} className="d-flex">
-                                <InputGroup>
-                                    <Form.Control className="usernameContainer"
-                                        placeholder="Username"
-                                        aria-label="Username"
-                                        aria-describedby="basic-addon1"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleChange}
+
+                            {isLoggedIn ? (
+                                <div className="d-flex">
+                                    <UserProfile
+                                        isLoggedIn={isLoggedIn}
+                                        idusername={idusername}
+                                        setIdUsername={setIdUsername}
+                                        keyProp={keyProp}
+                                        userPets={userPets}
+                                        userProfileData={userProfileData}
+                                        token={token}
                                     />
-                                   
-                                </InputGroup>
-                                        <InputGroup >  
-                                            <Form.Control className='passwordStyle'
-                                        type="password"
-                                        placeholder="Password"
-                                        name="password"
-                                        value={formData.password}
-                                        onChange={handleChange}
-                                            />
-                                        </InputGroup>
+                                    <PetGroupCard />
+                                    <Button onClick={handleLogoutClick} className="custom-btn-Logout">
+                                        Logout
+                                    </Button>
+                                </div>
+                            ) : (
+                                <Form onSubmit={handleSubmit} className="d-flex">
+                                    <InputGroup>
+                                        <Form.Control
+                                            className="usernameContainer"
+                                            placeholder="Username"
+                                            aria-label="Username"
+                                            aria-describedby="basic-addon1"
+                                            name="username"
+                                            value={formData.username}
+                                            onChange={handleChange}
+                                        />
+                                    </InputGroup>
+                                    <InputGroup>
+                                        <Form.Control
+                                            className="passwordStyle"
+                                            type="password"
+                                            placeholder="Password"
+                                            name="password"
+                                            value={formData.password}
+                                            onChange={handleChange}
+                                        />
+                                    </InputGroup>
                                     <Button type="submit" className="custom-btn-Login">
                                         Login
                                     </Button>
-                                
-                                        <RegistrationForm backgroundClasses={backgroundClasses} currentBackgroundIndex={currentBackgroundIndex}  />
-                                    </Form>
-                            
+                                    <RegistrationForm
+                                        backgroundClasses={backgroundClasses}
+                                        currentBackgroundIndex={currentBackgroundIndex}
+                                    />
+                                </Form>
                             )}
-                            </div>
+                        </div>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
             <ToastContainer position="top-end">
                 {showToast && (
-                    <Toast bg={showToast === 'success' ? 'success' : 'danger'} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast
+                        bg={showToast === 'success' ? 'success' : 'danger'}
+                        onClose={() => setShowToast(false)}
+                        show={showToast}
+                        delay={3000}
+                        autohide
+                    >
                         <Toast.Header closeButton={false}>
                             <strong className="me-auto">{showToast === 'success' ? 'Success' : 'Error'}</strong>
                         </Toast.Header>
@@ -201,4 +207,5 @@ function NaviBar({
         </div>
     );
 }
+
 export default NaviBar;
