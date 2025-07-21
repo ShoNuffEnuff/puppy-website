@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import PropTypes from 'prop-types';
 import Card from 'react-bootstrap/Card';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
@@ -206,6 +207,17 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
             )}
         </div>
     );
+};
+
+UserProfile.propTypes = {
+    idusername: PropTypes.string,
+    isLoggedIn: PropTypes.bool.isRequired,
+    keyProp: PropTypes.number,
+};
+
+UserProfile.defaultProps = {
+    idusername: '',
+    keyProp: 0,
 };
 
 export default UserProfile;

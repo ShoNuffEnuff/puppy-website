@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
@@ -7,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
-import petplusLogo from './petplus_logo.png';
+// import petplusLogo from './petplus_logo.png'; // unused, so commented out
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -207,5 +208,25 @@ function NaviBar({
         </div>
     );
 }
+
+NaviBar.propTypes = {
+    isLoggedIn: PropTypes.bool.isRequired,
+    onLogin: PropTypes.func.isRequired,
+    onLogout: PropTypes.func.isRequired,
+    setShowToast: PropTypes.func.isRequired,
+    setToastMessage: PropTypes.func.isRequired,
+    setIdUsername: PropTypes.func.isRequired,
+    setIsLoggedIn: PropTypes.func.isRequired,
+    changeKey: PropTypes.func.isRequired,
+    showToast: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
+    toastMessage: PropTypes.string,
+    idusername: PropTypes.string,
+    keyProp: PropTypes.number,
+    userPets: PropTypes.array,
+    userProfileData: PropTypes.object,
+    token: PropTypes.string,
+    backgroundClasses: PropTypes.arrayOf(PropTypes.string),
+    currentBackgroundIndex: PropTypes.number,
+};
 
 export default NaviBar;

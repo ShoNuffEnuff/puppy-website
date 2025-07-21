@@ -1,4 +1,4 @@
-import React from 'react';
+
 import ContactDetails from '../components/ContactDetails';
 import GoogleMap from '../components/GoogleMap';
 import './Contacts.css';

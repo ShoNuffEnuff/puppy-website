@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { ListGroup } from 'react-bootstrap';
 import Carousel from 'react-bootstrap/Carousel';
 import pathologyImg from './page_Images/servicesPic.jpg';

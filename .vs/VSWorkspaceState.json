@@ -1,10 +1,17 @@
 {
   "ExpandedNodes": [
     "",
-    "\\.git",
-    "\\.github",
-    "\\Backend"
+    "\\bin",
+    "\\bin\\Release",
+    "\\node_modules",
+    "\\node_modules\\.cache",
+    "\\node_modules\\.cache\\gh-pages",
+    "\\node_modules\\.cache\\gh-pages\\https!github.com!ShoNuffEnuff!puppy-website",
+    "\\node_modules\\.cache\\gh-pages\\https!github.com!ShoNuffEnuff!puppy-website\\.git",
+    "\\node_modules\\.cache\\gh-pages\\https!github.com!ShoNuffEnuff!puppy-website\\.git\\objects",
+    "\\node_modules\\.cache\\gh-pages\\https!github.com!ShoNuffEnuff!puppy-website\\.git\\objects\\94",
+    "\\node_modules\\.cache\\gh-pages\\https!github.com!ShoNuffEnuff!puppy-website\\.git\\objects\\aa"
   ],
-  "SelectedNode": "\\Backend\\App.py",
+  "SelectedNode": "\\node_modules\\.cache",
   "PreviewInSolutionExplorer": false
 }

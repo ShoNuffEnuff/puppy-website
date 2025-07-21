@@ -1,4 +1,4 @@
-import React from 'react';
+
 import './Staff.css';
 import Image from 'react-bootstrap/Image';
 import staffPic01 from './page_Images/vetStaff02.jpg';
