@@ -143,8 +143,27 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
                 </Modal.Header>
                 <Modal.Body className="modal-size">
                     <form>
-                        {/* All your inputs */}
-                        {/* ... no changes needed here ... */}
+                        <form>
+  <input type="text" name="username" placeholder="Username" onChange={handleChange} />
+  <input type="password" name="password" placeholder="Password" onChange={handleChange} />
+  <input type="text" name="first_name" placeholder="First Name" onChange={handleChange} />
+  <input type="text" name="surname" placeholder="Surname" onChange={handleChange} />
+  <input type="text" name="phone" placeholder="Phone" onChange={handleChange} />
+  <input type="email" name="email" placeholder="Email" onChange={handleChange} />
+  <input type="text" name="suburb" placeholder="Suburb" onChange={handleChange} />
+  <input type="text" name="postcode" placeholder="Postcode" onChange={handleChange} />
+  <input type="text" name="pet_name" placeholder="Pet Name" onChange={handleChange} />
+  <input type="text" name="pet_breed" placeholder="Pet Breed" onChange={handleChange} />
+  <input type="text" name="pet_age" placeholder="Pet Age" onChange={handleChange} />
+  <select name="pet_gender" onChange={handleChange}>
+    <option value="">Select Gender</option>
+    <option value="male">Male</option>
+    <option value="female">Female</option>
+  </select>
+  <input type="file" name="photo" onChange={handlePhotoUpload} />
+</form>
+
+                        
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
