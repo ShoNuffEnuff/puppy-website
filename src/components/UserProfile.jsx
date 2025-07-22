@@ -6,7 +6,7 @@ import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
 import Alert from 'react-bootstrap/Alert';
-import * as jwt_decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import './UserProfile.css';
 
 const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://puppy-website.onrender.com';
@@ -30,7 +30,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const decoded = jwt_decode(token);
+                const decoded = jwtDecode.default(token);
                 if (decoded.idusername) {
                     setIdUsername(decoded.idusername.toString());
                 } else {

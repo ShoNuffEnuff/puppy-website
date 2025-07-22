@@ -10,7 +10,7 @@ import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
-import * as jwt_decode from 'jwt-decode';
+import { jwtDecode } from "jwt-decode";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistrationForm from './RegistrationForm';
 import UserProfile from './UserProfile';
@@ -32,7 +32,7 @@ function NaviBar({
     showToast,
     toastMessage,
     idusername,
-    username,                // <-- Added here
+    username,                
     keyProp,
     userPets,
     userProfileData,
@@ -49,7 +49,7 @@ function NaviBar({
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const decoded = jwt_decode(token);
+                const decoded = jwtDecode.default(token);
                 console.log('Decoded JWT token:', decoded);
                 const idusernameFromToken = decoded.idusername;
                 if (idusernameFromToken) {
@@ -109,7 +109,7 @@ function NaviBar({
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('isLoggedIn', 'true');
 
-            const decoded = jwt_decode(access_token);
+            const decoded = jwtDecode(access_token);
             const idusernameFromToken = decoded.idusername;
             const usernameFromToken = decoded.username;
 
