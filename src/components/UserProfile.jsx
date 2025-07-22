@@ -38,42 +38,31 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     };
 
     const fetchUserData = useCallback(async () => {
-        if (!isLoggedInRef.current || !idusername) {
-            return;
+    if (!isLoggedInRef.current || !idusername) {
+        return;
+    }
+
+    try {
+        // Ensure idusername is a number
+        const userId = Number(idusername);
+
+        const response = await axios.get(`${backendUrl}/user-profile/${userId}`);
+
+        if (response.status === 200) {
+            const userdata = response.data;
+            setUser({ username: userdata.username });
+            setUserPets(userdata.pets);
+
+            const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
+            localStorage.setItem('userProfileData', userProfileData);
+        } else {
+            console.error('Error fetching user data:', response.status);
         }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+}, [idusername]);
 
-        try {
-            const token = localStorage.getItem('access_token');
-            if (!token) {
-                console.error('Unauthorized access');
-                return;
-            }
-
-            // Ensure idusername is a number
-            const userId = Number(idusername);
-
-            const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.status === 200) {
-                const userdata = response.data;
-                setUser({ username: userdata.username });
-                setUserPets(userdata.pets);
-
-                const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
-                localStorage.setItem('userProfileData', userProfileData);
-            } else if (response.status === 401) {
-                console.error('Token expired or invalid');
-            } else {
-                console.error('Error fetching user data:', response.status);
-            }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
-    }, [idusername]);
 
     const fetchPlaydates = useCallback(() => {
         if (isLoggedIn) {
