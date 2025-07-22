@@ -32,6 +32,7 @@ function NaviBar({
     showToast,
     toastMessage,
     idusername,
+    username,                // <-- Added here
     keyProp,
     userPets,
     userProfileData,
@@ -49,6 +50,7 @@ function NaviBar({
         if (token) {
             try {
                 const decoded = jwt_decode(token);
+                console.log('Decoded JWT token:', decoded);
                 const idusernameFromToken = decoded.idusername;
                 if (idusernameFromToken) {
                     setIdUsername(idusernameFromToken);
@@ -168,6 +170,7 @@ function NaviBar({
                                     <UserProfile
                                         isLoggedIn={isLoggedIn}
                                         idusername={idusername}
+                                        username={username}           
                                         setIdUsername={setIdUsername}
                                         keyProp={keyProp}
                                         userPets={userPets}
@@ -249,6 +252,7 @@ NaviBar.propTypes = {
     showToast: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     toastMessage: PropTypes.string,
     idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    username: PropTypes.string,
     keyProp: PropTypes.number,
     userPets: PropTypes.array,
     userProfileData: PropTypes.object,
