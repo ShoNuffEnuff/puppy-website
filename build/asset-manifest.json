@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/puppy-website/static/css/main.019ba772.css",
-    "main.js": "/puppy-website/static/js/main.b7e7cb2c.js",
-    "static/js/453.d8e2a990.chunk.js": "/puppy-website/static/js/453.d8e2a990.chunk.js",
+    "main.css": "/puppy-website/static/css/main.66ffa0ee.css",
+    "main.js": "/puppy-website/static/js/main.dae5f037.js",
+    "static/js/787.bc7d429a.chunk.js": "/puppy-website/static/js/787.bc7d429a.chunk.js",
     "static/media/cat.png": "/puppy-website/static/media/cat.c1302280d9b3ac8352e5.png",
     "static/media/dogs-transparent-background-8.png": "/puppy-website/static/media/dogs-transparent-background-8.b9dfb1547342fe0ebe5d.png",
     "static/media/final_Both copy.jpg": "/puppy-website/static/media/final_Both copy.68a0a4eadfea4555667c.jpg",
@@ -26,12 +26,12 @@
     "static/media/vetStaff07.jpg": "/puppy-website/static/media/vetStaff07.17dab03c7f738f9c1ae3.jpg",
     "static/media/finalLogo.png": "/puppy-website/static/media/finalLogo.ea03b02ddcc7b57642ca.png",
     "index.html": "/puppy-website/index.html",
-    "main.019ba772.css.map": "/puppy-website/static/css/main.019ba772.css.map",
-    "main.b7e7cb2c.js.map": "/puppy-website/static/js/main.b7e7cb2c.js.map",
-    "453.d8e2a990.chunk.js.map": "/puppy-website/static/js/453.d8e2a990.chunk.js.map"
+    "main.66ffa0ee.css.map": "/puppy-website/static/css/main.66ffa0ee.css.map",
+    "main.dae5f037.js.map": "/puppy-website/static/js/main.dae5f037.js.map",
+    "787.bc7d429a.chunk.js.map": "/puppy-website/static/js/787.bc7d429a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.019ba772.css",
-    "static/js/main.b7e7cb2c.js"
+    "static/css/main.66ffa0ee.css",
+    "static/js/main.dae5f037.js"
   ]
 }
