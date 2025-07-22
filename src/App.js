@@ -16,21 +16,18 @@ import Image from 'react-bootstrap/Image';
 import './components/RegistrationForm.css';
 
 function App() {
-    // Read backend URL from environment variable
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
-
-    // State Variable for Login Status
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [idusername, setIdUsername] = useState(null);
+    const [username, setUsername] = useState(''); // NEW LINE
     const [keyProp, setKeyProp] = useState(0);
     const [userPets, setUserPets] = useState([]);
-    const [showToast, setShowToast] = useState(false); 
+    const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
     const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
-    // Example API call function (you can adapt or move to components)
     const fetchUserPets = async (username) => {
       try {
         const res = await fetch(`${backendUrl}/api/userpets?username=${username}`);
@@ -45,17 +42,15 @@ function App() {
       }
     };
 
-    // Function to handle background change
     const handleBackgroundChange = (index) => {
         setCurrentBackgroundIndex(index);
     };
 
-    // Pass isLoggedIn State
     const handleLogin = (formData) => {
-        /*handleLoginAPI(formData);*/
         setIsLoggedIn(true);
-        if(formData.username) {
+        if (formData.username) {
           setIdUsername(formData.username);
+          setUsername(formData.username); // NEW LINE
           fetchUserPets(formData.username);
         }
     };
@@ -63,10 +58,10 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         setIdUsername(null);
+        setUsername(''); // NEW LINE
         setUserPets([]);
     };
 
-    // Pass the key
     const changeKey = () => {
         setKeyProp(prevKey => prevKey + 1);
     };
@@ -78,7 +73,6 @@ function App() {
             </div>
             <Router>
                 <div>
-                    {/* Bootstrap Dropdown for Background */}
                     <div className="dropdown">
                         <button
                             className="btn btn-secondary dropdown-toggle"
@@ -102,7 +96,7 @@ function App() {
                             ))}
                         </div>
                     </div>
-                    {/* End of Background Dropdown */}
+
                     <NaviBar
                       isLoggedIn={isLoggedIn}
                       onLogin={handleLogin}
@@ -115,12 +109,13 @@ function App() {
                       showToast={showToast}
                       toastMessage={toastMessage}
                       idusername={idusername}
+                      username={username} // NEW LINE
                       keyProp={keyProp}
                       userPets={userPets}
                       setUserPets={setUserPets}
                       backgroundClasses={backgroundClasses}
                       currentBackgroundIndex={currentBackgroundIndex}
-                      backendUrl={backendUrl} // pass backendUrl prop if needed
+                      backendUrl={backendUrl}
                     />
 
                     <Routes>
@@ -129,7 +124,6 @@ function App() {
                         <Route path="/services" element={<Services backendUrl={backendUrl} />} />
                         <Route path="/contacts" element={<Contacts backendUrl={backendUrl} />} />
                     </Routes>
-
                 </div>
             </Router>
         </div>
