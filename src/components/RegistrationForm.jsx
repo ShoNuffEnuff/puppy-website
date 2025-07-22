@@ -5,7 +5,7 @@ import Button from 'react-bootstrap/Button';
 import Toast from 'react-bootstrap/Toast';
 import './RegistrationForm.css';
 
-const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroundImages, backendUrl }) => {
+const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroundImages }) => {
     const [formData, setFormData] = useState({
         username: '',
         password: '',
@@ -35,8 +35,8 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
 
     const handleShowModal = () => setShowModal(true);
 
-    // Use backendUrl passed as prop instead of hardcoded URL
-    const registrationUrl = backendUrl;
+    
+    const registrationUrl = process.env.REACT_APP_API_BASE_URL;
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -87,8 +87,6 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
 
         try {
             const userResponse = await axios.post(`${registrationUrl}/register`, userData);
-            console.log(userResponse.data);
-
             const user_id = userResponse.data.user_id;
 
             const customerData = {
@@ -101,8 +99,7 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
                 user_id: user_id,
             };
 
-            const customerResponse = await axios.post(`${registrationUrl}/register_customer`, customerData);
-            console.log(customerResponse.data);
+            await axios.post(`${registrationUrl}/register_customer`, customerData);
 
             const petData = new FormData();
             petData.append('idusername', user_id);
@@ -112,12 +109,11 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
             petData.append('gender', formData.pet_gender);
             petData.append('photo', formData.photo);
 
-            const petResponse = await axios.post(`${registrationUrl}/register_pet`, petData, {
+            await axios.post(`${registrationUrl}/register_pet`, petData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            console.log(petResponse.data);
 
             showToastMessage('Registration Successful!');
             setTimeout(() => {
@@ -143,33 +139,30 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
                 </Modal.Header>
                 <Modal.Body className="modal-size">
                     <form>
-                        <form>
-  <input type="text" name="username" placeholder="Username" onChange={handleChange} />
-  <input type="password" name="password" placeholder="Password" onChange={handleChange} />
-  <input type="text" name="first_name" placeholder="First Name" onChange={handleChange} />
-  <input type="text" name="surname" placeholder="Surname" onChange={handleChange} />
-  <input type="text" name="phone" placeholder="Phone" onChange={handleChange} />
-  <input type="email" name="email" placeholder="Email" onChange={handleChange} />
-  <input type="text" name="suburb" placeholder="Suburb" onChange={handleChange} />
-  <input type="text" name="postcode" placeholder="Postcode" onChange={handleChange} />
-  <input type="text" name="pet_name" placeholder="Pet Name" onChange={handleChange} />
-  <input type="text" name="pet_breed" placeholder="Pet Breed" onChange={handleChange} />
-  <input type="text" name="pet_age" placeholder="Pet Age" onChange={handleChange} />
-  <select name="pet_gender" onChange={handleChange}>
-    <option value="">Select Gender</option>
-    <option value="male">Male</option>
-    <option value="female">Female</option>
-  </select>
-  <input type="file" name="photo" onChange={handlePhotoUpload} />
-</form>
-
-                        
+                        <input type="text" name="username" placeholder="Username" onChange={handleChange} />
+                        <input type="password" name="password" placeholder="Password" onChange={handleChange} autoComplete="current-password" />
+                        <input type="text" name="first_name" placeholder="First Name" onChange={handleChange} />
+                        <input type="text" name="surname" placeholder="Surname" onChange={handleChange} />
+                        <input type="text" name="phone" placeholder="Phone" onChange={handleChange} />
+                        <input type="email" name="email" placeholder="Email" onChange={handleChange} />
+                        <input type="text" name="suburb" placeholder="Suburb" onChange={handleChange} />
+                        <input type="text" name="postcode" placeholder="Postcode" onChange={handleChange} />
+                        <input type="text" name="pet_name" placeholder="Pet Name" onChange={handleChange} />
+                        <input type="text" name="pet_breed" placeholder="Pet Breed" onChange={handleChange} />
+                        <input type="text" name="pet_age" placeholder="Pet Age" onChange={handleChange} />
+                        <select name="pet_gender" onChange={handleChange}>
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                        </select>
+                        <input type="file" name="photo" onChange={handlePhotoUpload} />
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>Close</Button>
                     <Button className="register-color" variant="primary" onClick={handleRegistration}>Register</Button>
                 </Modal.Footer>
+
                 <Toast
                     show={showToast}
                     onClose={() => setShowToast(false)}
