@@ -11,7 +11,7 @@ from flask_restful import Api, Resource, reqparse
 from sqlalchemy import ForeignKey, text
 import werkzeug
 from werkzeug.utils import secure_filename
-from flask_jwt_extended import JWTManager, jwt_required, create_access_token, get_jwt_identity
+from flask_jwt_extended import get_jwt, JWTManager, jwt_required, create_access_token, get_jwt_identity
 from datetime import timedelta, datetime
 
 # Load environment variables from .env file
@@ -33,6 +33,15 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
+
+@jwt.additional_claims_loader
+def add_claims_to_access_token(identity):
+    user = User.query.filter_by(idusername=identity).first()
+    return {
+        "username": user.username if user else None
+    }
+
+
 
 class User(db.Model):
     __tablename__ = 'username'
