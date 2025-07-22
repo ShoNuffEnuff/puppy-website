@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/puppy-website/static/css/main.66ffa0ee.css",
-    "main.js": "/puppy-website/static/js/main.ca823286.js",
+    "main.js": "/puppy-website/static/js/main.e90bc6c1.js",
     "static/js/787.bc7d429a.chunk.js": "/puppy-website/static/js/787.bc7d429a.chunk.js",
     "static/media/cat.png": "/puppy-website/static/media/cat.c1302280d9b3ac8352e5.png",
     "static/media/dogs-transparent-background-8.png": "/puppy-website/static/media/dogs-transparent-background-8.b9dfb1547342fe0ebe5d.png",
@@ -27,11 +27,11 @@
     "static/media/finalLogo.png": "/puppy-website/static/media/finalLogo.ea03b02ddcc7b57642ca.png",
     "index.html": "/puppy-website/index.html",
     "main.66ffa0ee.css.map": "/puppy-website/static/css/main.66ffa0ee.css.map",
-    "main.ca823286.js.map": "/puppy-website/static/js/main.ca823286.js.map",
+    "main.e90bc6c1.js.map": "/puppy-website/static/js/main.e90bc6c1.js.map",
     "787.bc7d429a.chunk.js.map": "/puppy-website/static/js/787.bc7d429a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.66ffa0ee.css",
-    "static/js/main.ca823286.js"
+    "static/js/main.e90bc6c1.js"
   ]
 }
