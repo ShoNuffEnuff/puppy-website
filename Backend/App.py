@@ -429,7 +429,7 @@ def get_playdates_by_idusername(idusername):
     return jsonify(playdates_data)
 
 # Register API resource routes
-api.add_resource(UserProfile, '/user-profile/<string:idusername>', methods=['GET'])
+# api.add_resource(UserProfile, '/user-profile/<string:idusername>', methods=['GET'])
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
 api.add_resource(PetRegistration, '/register_pet', methods=['POST'])
