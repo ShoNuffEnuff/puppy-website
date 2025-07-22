@@ -372,39 +372,41 @@ class UserLogin(Resource):
         }
         return response_data, 200
 
-class UserProfile(Resource):
-    @jwt_required()
-    def get(self, idusername):
-        current_username = get_jwt_identity()  # string
-        user = User.query.filter_by(username=current_username).first()
+@app.route('/user-profile/<int:idusername>', methods=['GET'])
+@jwt_required()
+def user_profile(idusername):
+    # You can optionally verify token or permissions here if needed,
+    # but to fetch pets for idusername, use idusername param directly.
 
-        if not user:
-            return {'message': 'User not found'}, 404
+    user = User.query.filter_by(idusername=idusername).first()
+    if not user:
+        return {'message': 'User not found'}, 404
 
-        pets = Pets.query.filter_by(idusername=user.idusername).all()
+    pets = Pets.query.filter_by(idusername=idusername).all()
 
-        user_data = {
-            'username': user.username,
-            'pets': []
+    user_data = {
+        'username': user.username,
+        'pets': []
+    }
+
+    for pet in pets:
+        pet_dict = {
+            'name': pet.name,
+            'breed': pet.breed,
+            'age': pet.age,
+            'gender': pet.gender,
+            'photo': None,
+            'photo_url': None
         }
+        if pet.photo:
+            with io.BytesIO(pet.photo) as binary_stream:
+                encoded = base64.b64encode(binary_stream.read()).decode()
+                pet_dict['photo'] = encoded
+                pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
+        user_data['pets'].append(pet_dict)
 
-        for pet in pets:
-            pet_dict = {
-                'name': pet.name,
-                'breed': pet.breed,
-                'age': pet.age,
-                'gender': pet.gender,
-                'photo': None,
-                'photo_url': None
-            }
-            if pet.photo:
-                with io.BytesIO(pet.photo) as binary_stream:
-                    encoded = base64.b64encode(binary_stream.read()).decode()
-                    pet_dict['photo'] = encoded
-                    pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
-            user_data['pets'].append(pet_dict)
+    return user_data
 
-        return user_data
 
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 def get_playdates_by_idusername(idusername):
