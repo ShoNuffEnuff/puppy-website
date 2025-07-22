@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/puppy-website/static/css/main.66ffa0ee.css",
+    "main.js": "/puppy-website/static/js/main.10a3646f.js",
+    "static/js/787.bc7d429a.chunk.js": "/puppy-website/static/js/787.bc7d429a.chunk.js",
+    "static/media/cat.png": "/puppy-website/static/media/cat.c1302280d9b3ac8352e5.png",
+    "static/media/dogs-transparent-background-8.png": "/puppy-website/static/media/dogs-transparent-background-8.b9dfb1547342fe0ebe5d.png",
+    "static/media/final_Both copy.jpg": "/puppy-website/static/media/final_Both copy.68a0a4eadfea4555667c.jpg",
+    "static/media/dog-wallpaper copy.jpg": "/puppy-website/static/media/dog-wallpaper copy.19a3524e06c515cbb579.jpg",
+    "static/media/cat-wallpaper.jpg": "/puppy-website/static/media/cat-wallpaper.4b1c382a657ef48b6192.jpg",
+    "static/media/behaviourPic.jpg": "/puppy-website/static/media/behaviourPic.bf242f41cc6ef89e7366.jpg",
+    "static/media/vetStaff05.png": "/puppy-website/static/media/vetStaff05.be3df4f85df539694102.png",
+    "static/media/surgeryPic.jpg": "/puppy-website/static/media/surgeryPic.5002b76b0038a74c84c4.jpg",
+    "static/media/staffPic.jpg": "/puppy-website/static/media/staffPic.22249746df4d15bafcfe.jpg",
+    "static/media/servicesPic.jpg": "/puppy-website/static/media/servicesPic.035f2a710ec0e5c33d0c.jpg",
+    "static/media/vaccinationPic.jpg": "/puppy-website/static/media/vaccinationPic.e41f31ed3a14498f2f07.jpg",
+    "static/media/consultationPic.webp": "/puppy-website/static/media/consultationPic.9cbaed8259cae37edcee.webp",
+    "static/media/microchippingPic.jpg": "/puppy-website/static/media/microchippingPic.549772085911c08bed1b.jpg",
+    "static/media/desexingPic.jpg": "/puppy-website/static/media/desexingPic.e9d455ae566d30a82093.jpg",
+    "static/media/vetStaff01.jpg": "/puppy-website/static/media/vetStaff01.5075f9da5d0976f2656a.jpg",
+    "static/media/vetStaff03.jpg": "/puppy-website/static/media/vetStaff03.406eb42d81fe5bbd87b8.jpg",
+    "static/media/vetStaff02.jpg": "/puppy-website/static/media/vetStaff02.29b2acaf041f3f57d9f2.jpg",
+    "static/media/vetStaff06.jpg": "/puppy-website/static/media/vetStaff06.78e31ccc22a03fa4720b.jpg",
+    "static/media/bg2.jpg": "/puppy-website/static/media/bg2.3fca19dd7abbc6f8dfc0.jpg",
+    "static/media/pawPrint.jpg": "/puppy-website/static/media/pawPrint.0c365309392bfb8bfdcf.jpg",
+    "static/media/vetStaff07.jpg": "/puppy-website/static/media/vetStaff07.17dab03c7f738f9c1ae3.jpg",
+    "static/media/finalLogo.png": "/puppy-website/static/media/finalLogo.ea03b02ddcc7b57642ca.png",
+    "index.html": "/puppy-website/index.html",
+    "main.66ffa0ee.css.map": "/puppy-website/static/css/main.66ffa0ee.css.map",
+    "main.10a3646f.js.map": "/puppy-website/static/js/main.10a3646f.js.map",
+    "787.bc7d429a.chunk.js.map": "/puppy-website/static/js/787.bc7d429a.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.66ffa0ee.css",
+    "static/js/main.10a3646f.js"
+  ]
+}
