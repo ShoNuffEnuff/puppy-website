@@ -31,7 +31,8 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                if (decoded.idusername) {
+                const idFromToken = decoded.sub?.idusername;
+                if (idFromToken) {
                     setIdUsername(decoded.idusername.toString());
                 } else {
                     setIdUsername('');
