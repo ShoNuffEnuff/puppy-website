@@ -46,11 +46,12 @@ function NaviBar({
 
     useEffect(() => {
         const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
-        const storedIdUsername = localStorage.getItem('idUsername');
+        const storedIdUsername = localStorage.getItem('idusername');  // lowercase here
         if (storedIsLoggedIn === 'true') {
             setIdUsername(storedIdUsername);
+            setIsLoggedIn(true);  // restore login state on mount
         }
-    }, [setIdUsername]);
+    }, [setIdUsername, setIsLoggedIn]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -90,10 +91,11 @@ function NaviBar({
 
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('idUsername', idusername);
+            localStorage.setItem('idusername', idusername);  // lowercase here
             localStorage.setItem('username', username);
 
             setIdUsername(idusername);
+            setIsLoggedIn(true);  // <-- important to update login state here
             handleShowToast('Login successful.', 'success');
             onLogin({ idusername, username });
         } catch (error) {
@@ -105,7 +107,7 @@ function NaviBar({
     const handleLogoutClick = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('idUsername');
+        localStorage.removeItem('idusername');  // lowercase here
         localStorage.removeItem('userProfileData');
 
         setIdUsername('');
@@ -165,7 +167,7 @@ function NaviBar({
                                             aria-label="Username"
                                             aria-describedby="basic-addon1"
                                             name="username"
-                                            autoComplete="username"  // <-- added
+                                            autoComplete="username"
                                             value={formData.username}
                                             onChange={handleChange}
                                         />
@@ -176,7 +178,7 @@ function NaviBar({
                                             type="password"
                                             placeholder="Password"
                                             name="password"
-                                            autoComplete="current-password"  // <-- added
+                                            autoComplete="current-password"
                                             value={formData.password}
                                             onChange={handleChange}
                                         />
@@ -225,7 +227,7 @@ NaviBar.propTypes = {
     changeKey: PropTypes.func.isRequired,
     showToast: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     toastMessage: PropTypes.string,
-    idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // <-- fixed type
+    idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     keyProp: PropTypes.number,
     userPets: PropTypes.array,
     userProfileData: PropTypes.object,

@@ -361,16 +361,17 @@ class UserLogin(Resource):
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
 
-        access_token = create_access_token(identity=user)
-        idusername = user.idusername
+        # Use a serializable identity
+        access_token = create_access_token(identity=user.idusername)
 
         response_data = {
             'message': 'Login successful',
             'access_token': access_token,
-            'idusername': idusername,
+            'idusername': user.idusername,
             'username': username
         }
         return response_data, 200
+
 
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
