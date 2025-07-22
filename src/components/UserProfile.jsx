@@ -49,7 +49,10 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 return;
             }
 
-            const response = await axios.get(`${backendUrl}/user-profile/${idusername}`, {
+            // Ensure idusername is a number
+            const userId = Number(idusername);
+
+            const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
@@ -74,7 +77,19 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
 
     const fetchPlaydates = useCallback(() => {
         if (isLoggedIn) {
-            axios.get(`${backendUrl}/get_playdates/${idusername}`)
+            const token = localStorage.getItem('access_token');
+            if (!token) {
+                console.error('Unauthorized access');
+                return;
+            }
+
+            const userId = Number(idusername);
+
+            axios.get(`${backendUrl}/api/get_playdates/${userId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
                 .then((response) => {
                     console.log('Fetched Playdates:', response.data);
                     setPlaydates(response.data);
@@ -151,7 +166,8 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                             <Card key={pet.name} style={{ width: '15rem', margin: '10px' }}>
                                 <Card.Img
                                     variant="top"
-                                    src={`data:image/jpeg;base64,${pet.photo}`}
+                                    src={pet.photo ? `data:image/jpeg;base64,${pet.photo}` : undefined}
+                                    alt={pet.name}
                                 />
                                 <Card.Body>
                                     <Card.Title>{pet.name}</Card.Title>
@@ -210,7 +226,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
 };
 
 UserProfile.propTypes = {
-    idusername: PropTypes.string,
+    idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isLoggedIn: PropTypes.bool.isRequired,
     keyProp: PropTypes.number,
 };

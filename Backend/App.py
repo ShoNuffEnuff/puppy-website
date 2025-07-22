@@ -18,7 +18,9 @@ from datetime import timedelta, datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["*"], supports_credentials=True, headers="*")
+# Configure CORS for your frontend domain; adjust as needed
+CORS(app, origins=["https://shonuffenuff.github.io"], supports_credentials=True, headers="*")
+
 api = Api(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
@@ -87,6 +89,7 @@ customer_parser.add_argument('surname', type=str, required=True, help='Surname i
 customer_parser.add_argument('phone', type=int, required=True, help='Phone number is required')
 customer_parser.add_argument('email', type=str, required=True, help='Email is required')
 customer_parser.add_argument('postcode', type=int, required=True, help='Postcode is required')
+customer_parser.add_argument('suburb', type=str, required=True, help='Suburb is required')
 
 pet_parser = reqparse.RequestParser()
 pet_parser.add_argument('idusername', type=int, required=True, help='User ID is required')
@@ -96,17 +99,10 @@ pet_parser.add_argument('age', type=int, required=True, help='Pet age is require
 pet_parser.add_argument('gender', type=str, required=True, help='Pet gender is required')
 pet_parser.add_argument('photo', type=werkzeug.datastructures.FileStorage, location='files')
 
-@app.after_request
-def after_request(response):
-    response.headers.add("Access-Control-Allow-Origin", "*")
-    response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-    response.headers.add("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,OPTIONS")
-    response.headers.add("Access-Control-Allow-Credentials", "true")
-    return response
-
 @jwt.user_identity_loader
 def add_claims_to_access_token(user):
-    return {'username': user.username}
+    # Return username string, not dict
+    return user.username
 
 class UserRegistration(Resource):
     def post(self):
@@ -319,9 +315,10 @@ def create_playdate(idusername1, idusername2):
         db.session.add(playdate)
         db.session.commit()
 
-        user1.playdatesid = playdate.playdatesid
-        user2.playdatesid = playdate.playdatesid
-        db.session.commit()
+        # These lines may not be needed if User model does not have playdatesid attribute
+        # user1.playdatesid = playdate.playdatesid
+        # user2.playdatesid = playdate.playdatesid
+        # db.session.commit()
 
         response_data = {
             "message": "Playdate created successfully",
@@ -370,15 +367,16 @@ class UserLogin(Resource):
         response_data = {
             'message': 'Login successful',
             'access_token': access_token,
-            'idusername': idusername
+            'idusername': idusername,
+            'username': username
         }
         return response_data, 200
 
 class UserProfile(Resource):
     @jwt_required()
     def get(self, idusername):
-        current_user = get_jwt_identity()
-        user = User.query.filter_by(username=current_user['username']).first()
+        current_username = get_jwt_identity()  # string
+        user = User.query.filter_by(username=current_username).first()
 
         if not user:
             return {'message': 'User not found'}, 404
@@ -387,20 +385,24 @@ class UserProfile(Resource):
 
         user_data = {
             'username': user.username,
-            'pets': [{
+            'pets': []
+        }
+
+        for pet in pets:
+            pet_dict = {
                 'name': pet.name,
                 'breed': pet.breed,
                 'age': pet.age,
                 'gender': pet.gender,
-                'photo': pet.photo  
-            } for pet in pets]
-        }
-
-        for pet_data in user_data['pets']:
-            if pet_data['photo']:
-                with io.BytesIO(pet_data['photo']) as binary_stream:
-                    pet_data['photo'] = base64.b64encode(binary_stream.read()).decode()
-                    pet_data['photo_url'] = f"data:image/jpeg;base64,{pet_data['photo']}"
+                'photo': None,
+                'photo_url': None
+            }
+            if pet.photo:
+                with io.BytesIO(pet.photo) as binary_stream:
+                    encoded = base64.b64encode(binary_stream.read()).decode()
+                    pet_dict['photo'] = encoded
+                    pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
+            user_data['pets'].append(pet_dict)
 
         return user_data
 
@@ -412,7 +414,7 @@ def get_playdates_by_idusername(idusername):
 
     playdates_data = []
     for playdate in playdates:
-        playdate_entry = {
+        playdates_data.append({
             'id': playdate.playdatesid,
             'customer1': playdate.customer1,
             'customer1pet': playdate.customer1pet,
@@ -420,11 +422,11 @@ def get_playdates_by_idusername(idusername):
             'customer2pet': playdate.customer2pet,
             'time': playdate.time.strftime('%Y-%m-%d %H:%M:%S') if playdate.time else None,
             'status': playdate.status
-        }
-        playdates_data.append(playdate_entry)
+        })
 
     return jsonify(playdates_data)
 
+# Register API resource routes
 api.add_resource(UserProfile, '/user-profile/<string:idusername>', methods=['GET'])
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
@@ -437,7 +439,7 @@ if __name__ == '__main__':
         try:
             db.create_all()
             query = text('SELECT 1')
-            result = db.session.execute(query)
+            db.session.execute(query)
             print('Database connection successful')
         except Exception as e:
             print(f'Database connection error: {str(e)}')
