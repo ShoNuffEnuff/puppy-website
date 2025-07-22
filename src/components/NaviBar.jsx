@@ -51,7 +51,7 @@ function NaviBar({
             try {
                 const decoded = jwtDecode.default(token);
                 console.log('Decoded JWT token:', decoded);
-                const idusernameFromToken = decoded.idusername;
+                const idusernameFromToken = decoded.sub?.idusername;
                 if (idusernameFromToken) {
                     setIdUsername(idusernameFromToken);
                     setIsLoggedIn(true);
