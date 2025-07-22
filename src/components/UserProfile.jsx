@@ -30,7 +30,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const decoded = jwtDecode.default(token);
+                const decoded = jwtDecode(token);
                 if (decoded.idusername) {
                     setIdUsername(decoded.idusername.toString());
                 } else {
