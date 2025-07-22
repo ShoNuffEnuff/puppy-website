@@ -20,7 +20,7 @@ function App() {
 
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [idusername, setIdUsername] = useState(null);
-    const [username, setUsername] = useState(''); // NEW LINE
+    const [username, setUsername] = useState('');
     const [keyProp, setKeyProp] = useState(0);
     const [userPets, setUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false);
@@ -30,7 +30,7 @@ function App() {
 
     const fetchUserPets = async (username) => {
       try {
-        const res = await fetch(`${backendUrl}/api/userpets?username=${username}`);
+        const res = await fetch(`${backendUrl}/api/userpets?idusername=${username}`);
         if (res.ok) {
           const data = await res.json();
           setUserPets(data.pets);
@@ -50,7 +50,7 @@ function App() {
         setIsLoggedIn(true);
         if (formData.username) {
           setIdUsername(formData.username);
-          setUsername(formData.username); // NEW LINE
+          setUsername(formData.username);
           fetchUserPets(formData.username);
         }
     };
@@ -58,7 +58,7 @@ function App() {
     const handleLogout = () => {
         setIsLoggedIn(false);
         setIdUsername(null);
-        setUsername(''); // NEW LINE
+        setUsername('');
         setUserPets([]);
     };
 
@@ -109,7 +109,7 @@ function App() {
                       showToast={showToast}
                       toastMessage={toastMessage}
                       idusername={idusername}
-                      username={username} // NEW LINE
+                      username={username}
                       keyProp={keyProp}
                       userPets={userPets}
                       setUserPets={setUserPets}
