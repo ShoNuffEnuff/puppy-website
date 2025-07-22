@@ -30,7 +30,7 @@ function App() {
 
     const fetchUserPets = async (idusername) => {
       try {
-        const res = await fetch(`${backendUrl}/api/userpets?idusername=${username}`);
+        const res = await fetch(`${backendUrl}/api/userpets?idusername=${idusername}`);
         if (res.ok) {
           const data = await res.json();
           setUserPets(data.pets);
