@@ -66,38 +66,42 @@ function NaviBar({
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        if (!formData.username || !formData.password) {
-            handleShowToast('Username and password are required.', 'error');
+    if (!formData.username || !formData.password) {
+        handleShowToast('Username and password are required.', 'error');
+        return;
+    }
+
+    try {
+        const response = await axios.post(`${backendUrl}/login`, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true, 
+        });
+
+        const { access_token, idusername, username } = response.data;
+
+        if (!access_token || !idusername || !username) {
+            console.error('Missing login data from response');
             return;
         }
 
-        try {
-            const response = await axios.post(`${backendUrl}/login`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+        localStorage.setItem('access_token', access_token);
+        localStorage.setItem('isLoggedIn', 'true');
+        localStorage.setItem('idUsername', idusername);
+        localStorage.setItem('username', username); 
 
-            if (!response || !response.data || !response.data.access_token) {
-                console.error('No valid token received in the response');
-                return;
-            }
+        setIdUsername(idusername);
+        handleShowToast('Login successful.', 'success');
+        onLogin();
+    } catch (error) {
+        console.error('Login error:', error);
+        handleShowToast('Login failed.', 'error');
+    }
+};
 
-            localStorage.setItem('access_token', response.data.access_token);
-            const idUsername = response.data.idusername;
-            setIdUsername(idUsername);
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('idUsername', idUsername);
-
-            handleShowToast('Login successful.', 'success');
-            onLogin();
-        } catch (error) {
-            console.error('Login error:', error);
-            handleShowToast('Login failed.', 'error');
-        }
-    };
 
     const handleLogoutClick = () => {
         localStorage.removeItem('access_token');

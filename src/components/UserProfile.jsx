@@ -25,13 +25,19 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
     }, [isLoggedIn]);
 
     useEffect(() => {
-        const userProfileData = localStorage.getItem('userProfileData');
-        if (userProfileData) {
-            const parsedData = JSON.parse(userProfileData);
-            setUser(parsedData.user);
-            setUserPets(parsedData.pets);
-        }
-    }, []);
+    const userProfileData = localStorage.getItem('userProfileData');
+    const usernameFromStorage = localStorage.getItem('username');
+
+    if (userProfileData) {
+        const parsedData = JSON.parse(userProfileData);
+        setUser(parsedData.user || { username: usernameFromStorage || '' });
+        setUserPets(parsedData.pets || []);
+    } else if (usernameFromStorage) {
+        // Fallback: just use stored username even if profile data is not available
+        setUser({ username: usernameFromStorage });
+    }
+}, []);
+
 
     const toggleAlert = (isVisible) => {
         setShowAlert(isVisible);
