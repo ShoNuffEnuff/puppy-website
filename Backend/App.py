@@ -45,14 +45,19 @@ def add_claims_to_access_token(identity):
         "username": identity.get("username")
     }
 
-# JWT user identity loader - store dict in token identity
 @jwt.user_identity_loader
 def user_identity_lookup(user):
-    # Return a dict containing both idusername and username
-    return {
-        "idusername": user.idusername,
-        "username": user.username
-    }
+    if isinstance(user, dict):
+        return {
+            "idusername": user.get("idusername"),
+            "username": user.get("username")
+        }
+    else:
+        return {
+            "idusername": user.idusername,
+            "username": user.username
+        }
+
 
 class User(db.Model):
     __tablename__ = 'username'
