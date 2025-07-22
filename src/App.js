@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { HashRouter as Router, Route, Routes } from 'react-router-dom';
 import RegistrationForm from './components/RegistrationForm';
-import LoginForm from './components/LoginForm';
 import Home from './pages/Home';
 import Staff from './pages/Staff';
 import Services from './pages/Services';
