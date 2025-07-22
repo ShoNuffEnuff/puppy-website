@@ -49,7 +49,7 @@ function NaviBar({
         const token = localStorage.getItem('access_token');
         if (token) {
             try {
-                const decoded = jwtDecode.default(token);
+                const decoded = jwtDecode(token);
                 console.log('Decoded JWT token:', decoded);
                 const idusernameFromToken = decoded.sub?.idusername;
                 if (idusernameFromToken) {
