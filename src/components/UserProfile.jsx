@@ -5,73 +5,90 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Form from 'react-bootstrap/Form';
 import axios from 'axios';
 import Button from 'react-bootstrap/Button';
-import Alert from 'react-bootstrap/Alert'; // Import Alert
+import Alert from 'react-bootstrap/Alert';
+import * as jwt_decode from 'jwt-decode';
 import './UserProfile.css';
 
-// Set backend URL from env or fallback to Render backend
 const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://puppy-website.onrender.com';
 
-const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
+const UserProfile = ({ isLoggedIn, keyProp }) => {
     const [user, setUser] = useState({ username: '' });
     const [userPets, setUserPets] = useState([]);
     const [playdates, setPlaydates] = useState([]);
     const [showProfile, setShowProfile] = useState(false);
-    const [showAlert, setShowAlert] = useState(false); // New state for the alert
+    const [showAlert, setShowAlert] = useState(false);
 
     const isLoggedInRef = useRef(isLoggedIn);
+    const [idusername, setIdUsername] = useState('');
 
     useEffect(() => {
         isLoggedInRef.current = isLoggedIn;
     }, [isLoggedIn]);
 
+    // Decode token and set idusername on mount or when login state changes
     useEffect(() => {
-    const userProfileData = localStorage.getItem('userProfileData');
-    const usernameFromStorage = localStorage.getItem('username');
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                if (decoded.idusername) {
+                    setIdUsername(decoded.idusername.toString());
+                } else {
+                    setIdUsername('');
+                }
+            } catch (error) {
+                console.error('Invalid token:', error);
+                setIdUsername('');
+            }
+        } else {
+            setIdUsername('');
+        }
+    }, [isLoggedIn]);
 
-    if (userProfileData) {
-        const parsedData = JSON.parse(userProfileData);
-        setUser(parsedData.user || { username: usernameFromStorage || '' });
-        setUserPets(parsedData.pets || []);
-    } else if (usernameFromStorage) {
-        // Fallback: just use stored username even if profile data is not available
-        setUser({ username: usernameFromStorage });
-    }
-}, []);
+    // You can keep this block to load cached profile data if you want
+    useEffect(() => {
+        const userProfileData = localStorage.getItem('userProfileData');
+        const usernameFromStorage = localStorage.getItem('username');
 
+        if (userProfileData) {
+            const parsedData = JSON.parse(userProfileData);
+            setUser(parsedData.user || { username: usernameFromStorage || '' });
+            setUserPets(parsedData.pets || []);
+        } else if (usernameFromStorage) {
+            setUser({ username: usernameFromStorage });
+        }
+    }, []);
 
     const toggleAlert = (isVisible) => {
         setShowAlert(isVisible);
     };
 
     const fetchUserData = useCallback(async () => {
-    if (!isLoggedInRef.current || !idusername) {
-        return;
-    }
-
-    try {
-        // Ensure idusername is a number
-        const userId = Number(idusername);
-
-        const response = await axios.get(`${backendUrl}/user-profile/${userId}`);
-
-        if (response.status === 200) {
-            const userdata = response.data;
-            setUser({ username: userdata.username });
-            setUserPets(userdata.pets);
-
-            const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
-            localStorage.setItem('userProfileData', userProfileData);
-        } else {
-            console.error('Error fetching user data:', response.status);
+        if (!isLoggedInRef.current || !idusername) {
+            return;
         }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-    }
-}, [idusername]);
 
+        try {
+            const userId = Number(idusername);
+            const response = await axios.get(`${backendUrl}/user-profile/${userId}`);
+
+            if (response.status === 200) {
+                const userdata = response.data;
+                setUser({ username: userdata.username });
+                setUserPets(userdata.pets);
+
+                const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
+                localStorage.setItem('userProfileData', userProfileData);
+            } else {
+                console.error('Error fetching user data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    }, [idusername]);
 
     const fetchPlaydates = useCallback(() => {
-        if (isLoggedIn) {
+        if (isLoggedInRef.current && idusername) {
             const token = localStorage.getItem('access_token');
             if (!token) {
                 console.error('Unauthorized access');
@@ -86,17 +103,18 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
                 },
             })
                 .then((response) => {
-                    console.log('Fetched Playdates:', response.data);
                     setPlaydates(response.data);
 
-                    const hasPendingPlaydates = response.data.some(playdate => playdate.status !== 'accepted' && playdate.status !== 'declined');
+                    const hasPendingPlaydates = response.data.some(
+                        playdate => playdate.status !== 'accepted' && playdate.status !== 'declined'
+                    );
                     toggleAlert(hasPendingPlaydates);
                 })
                 .catch((error) => {
                     console.error('Error fetching playdates:', error);
                 });
         }
-    }, [idusername, isLoggedIn]);
+    }, [idusername]);
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -111,10 +129,7 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
         setPlaydates([]);
     }, [keyProp]);
 
-    const handleShow = () => {
-        setShowProfile(true);
-    };
-
+    const handleShow = () => setShowProfile(true);
     const handleClose = () => setShowProfile(false);
 
     const updatePlaydateStatus = (playdateId, newStatus) => {
@@ -221,13 +236,11 @@ const UserProfile = ({ idusername, isLoggedIn, keyProp }) => {
 };
 
 UserProfile.propTypes = {
-    idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isLoggedIn: PropTypes.bool.isRequired,
     keyProp: PropTypes.number,
 };
 
 UserProfile.defaultProps = {
-    idusername: '',
     keyProp: 0,
 };
 

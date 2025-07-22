@@ -17,11 +17,9 @@ from flask_jwt_extended import (
 )
 from datetime import timedelta, datetime
 
-# Load environment variables from .env file
 load_dotenv()
 
 app = Flask(__name__)
-# Configure CORS for your frontend domain; adjust as needed
 CORS(app, origins=["https://shonuffenuff.github.io"], supports_credentials=True, headers="*")
 
 api = Api(app)
@@ -37,10 +35,8 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-# JWT additional claims loader
 @jwt.additional_claims_loader
 def add_claims_to_access_token(identity):
-    # identity is now a dict with idusername and username
     return {
         "username": identity.get("username")
     }
@@ -57,7 +53,6 @@ def user_identity_lookup(user):
             "idusername": user.idusername,
             "username": user.username
         }
-
 
 class User(db.Model):
     __tablename__ = 'username'
@@ -304,7 +299,6 @@ def get_customer_data(idusername):
 
 @app.route('/get_customer_data2/<int:idusername>', methods=['GET'])
 def get_customer_data2(idusername):
-    # Same as above, could be removed if not needed
     return get_customer_data(idusername)
 
 @app.route('/create_playdate/<int:idusername1>/<int:idusername2>', methods=['POST'])
@@ -318,12 +312,11 @@ def create_playdate(idusername1, idusername2):
         if not user1 or not user2:
             return jsonify({'error': 'One or both users not found'}), 404
 
-        # Preserve your original variable assignments exactly as you requested:
         customer1_first_name = data.get('customer1', {}).get('first_name', '')
         customer2_first_name = data.get('customer2', {}).get('first_name', '')
 
-        customer1_pet_name = data.get('customer2pet', {}).get('name', '')  # swapped intentionally
-        customer2_pet_name = data.get('customer1pet', {}).get('name', '')  # swapped intentionally
+        customer1_pet_name = data.get('customer2pet', {}).get('name', '')
+        customer2_pet_name = data.get('customer1pet', {}).get('name', '')
 
         playdate = Playdates(
             customer1=customer1_first_name,
@@ -380,7 +373,6 @@ class UserLogin(Resource):
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
 
-        # Create token with dict identity (idusername + username)
         access_token = create_access_token(identity={
             "idusername": user.idusername,
             "username": user.username
@@ -397,11 +389,15 @@ class UserLogin(Resource):
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
-    user = User.query.filter_by(idusername=idusername).first()
+    current_user_id = get_jwt_identity()
+    if idusername != current_user_id:
+        return {'message': 'Unauthorized'}, 403
+
+    user = User.query.filter_by(idusername=current_user_id).first()
     if not user:
         return {'message': 'User not found'}, 404
 
-    pets = Pets.query.filter_by(idusername=idusername).all()
+    pets = Pets.query.filter_by(idusername=current_user_id).all()
 
     user_data = {
         'username': user.username,
@@ -446,7 +442,6 @@ def get_playdates_by_idusername(idusername):
 
     return jsonify(playdates_data)
 
-# Register API resource routes
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
 api.add_resource(PetRegistration, '/register_pet', methods=['POST'])

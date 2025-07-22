@@ -8,9 +8,9 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
-// import petplusLogo from './petplus_logo.png'; // unused, so commented out
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
+import * as jwt_decode from 'jwt-decode';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import RegistrationForm from './RegistrationForm';
 import UserProfile from './UserProfile';
@@ -45,11 +45,26 @@ function NaviBar({
     });
 
     useEffect(() => {
-        const storedIsLoggedIn = localStorage.getItem('isLoggedIn');
-        const storedIdUsername = localStorage.getItem('idusername');  // lowercase here
-        if (storedIsLoggedIn === 'true') {
-            setIdUsername(storedIdUsername);
-            setIsLoggedIn(true);  // restore login state on mount
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            try {
+                const decoded = jwt_decode(token);
+                const idusernameFromToken = decoded.idusername;
+                if (idusernameFromToken) {
+                    setIdUsername(idusernameFromToken);
+                    setIsLoggedIn(true);
+                } else {
+                    setIsLoggedIn(false);
+                    setIdUsername('');
+                }
+            } catch (error) {
+                console.error('Invalid token:', error);
+                setIsLoggedIn(false);
+                setIdUsername('');
+            }
+        } else {
+            setIsLoggedIn(false);
+            setIdUsername('');
         }
     }, [setIdUsername, setIsLoggedIn]);
 
@@ -82,22 +97,28 @@ function NaviBar({
                 withCredentials: true,
             });
 
-            const { access_token, idusername, username } = response.data;
+            const { access_token } = response.data;
 
-            if (!access_token || !idusername || !username) {
-                console.error('Missing login data from response');
+            if (!access_token) {
+                console.error('No token returned from login');
                 return;
             }
 
             localStorage.setItem('access_token', access_token);
             localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('idusername', idusername);  // lowercase here
-            localStorage.setItem('username', username);
 
-            setIdUsername(idusername);
-            setIsLoggedIn(true);  // <-- important to update login state here
+            const decoded = jwt_decode(access_token);
+            const idusernameFromToken = decoded.idusername;
+            const usernameFromToken = decoded.username;
+
+            localStorage.setItem('idusername', idusernameFromToken);
+            localStorage.setItem('username', usernameFromToken);
+
+            setIdUsername(idusernameFromToken);
+            setIsLoggedIn(true);
+
             handleShowToast('Login successful.', 'success');
-            onLogin({ idusername, username });
+            onLogin({ idusername: idusernameFromToken, username: usernameFromToken });
         } catch (error) {
             console.error('Login error:', error);
             handleShowToast('Login failed.', 'error');
@@ -107,8 +128,8 @@ function NaviBar({
     const handleLogoutClick = () => {
         localStorage.removeItem('access_token');
         localStorage.removeItem('isLoggedIn');
-        localStorage.removeItem('idusername');  // lowercase here
-        localStorage.removeItem('userProfileData');
+        localStorage.removeItem('idusername');
+        localStorage.removeItem('username');
 
         setIdUsername('');
         setIsLoggedIn(false);
