@@ -95,7 +95,7 @@ function NaviBar({
 
             setIdUsername(idusername);
             handleShowToast('Login successful.', 'success');
-            onLogin();
+            onLogin({ idusername, username });
         } catch (error) {
             console.error('Login error:', error);
             handleShowToast('Login failed.', 'error');
