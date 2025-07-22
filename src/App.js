@@ -28,7 +28,7 @@ function App() {
     const [backgroundClasses, setBackgroundClasses] = useState(['default-background','cat-background', 'dog-background', 'both-background' ]);
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
-    const fetchUserPets = async (username) => {
+    const fetchUserPets = async (idusername) => {
       try {
         const res = await fetch(`${backendUrl}/api/userpets?idusername=${username}`);
         if (res.ok) {
@@ -51,7 +51,7 @@ function App() {
         if (formData.username) {
           setIdUsername(formData.username);
           setUsername(formData.username);
-          fetchUserPets(formData.username);
+          fetchUserPets(formData.idusername);
         }
     };
 
