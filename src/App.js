@@ -14,6 +14,7 @@ import './App.css';
 import petplusLogo from './finalLogo.png';
 import Image from 'react-bootstrap/Image';
 import './components/RegistrationForm.css';
+import { jwtDecode } from "jwt-decode";
 
 function App() {
     const backendUrl = process.env.REACT_APP_BACKEND_URL;
@@ -46,14 +47,27 @@ function App() {
         setCurrentBackgroundIndex(index);
     };
 
-    const handleLogin = (formData) => {
-        setIsLoggedIn(true);
-        if (formData.username) {
-          setIdUsername(formData.username);
-          setUsername(formData.username);
-          fetchUserPets(formData.idusername);
+    const handleLogin = () => {
+    setIsLoggedIn(true);
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            const id = decoded.sub?.idusername || decoded.idusername;
+            const name = decoded.sub?.username || decoded.username;
+
+            if (id) {
+                setIdUsername(id.toString());
+                fetchUserPets(id.toString());
+            }
+            if (name) {
+                setUsername(name.toString());
+            }
+        } catch (err) {
+            console.error("JWT decode failed on login:", err);
         }
-    };
+    }
+};
 
     const handleLogout = () => {
         setIsLoggedIn(false);
