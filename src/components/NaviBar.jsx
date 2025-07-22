@@ -66,42 +66,41 @@ function NaviBar({
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
+        e.preventDefault();
 
-    if (!formData.username || !formData.password) {
-        handleShowToast('Username and password are required.', 'error');
-        return;
-    }
-
-    try {
-        const response = await axios.post(`${backendUrl}/login`, formData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            withCredentials: true, 
-        });
-
-        const { access_token, idusername, username } = response.data;
-
-        if (!access_token || !idusername || !username) {
-            console.error('Missing login data from response');
+        if (!formData.username || !formData.password) {
+            handleShowToast('Username and password are required.', 'error');
             return;
         }
 
-        localStorage.setItem('access_token', access_token);
-        localStorage.setItem('isLoggedIn', 'true');
-        localStorage.setItem('idUsername', idusername);
-        localStorage.setItem('username', username); 
+        try {
+            const response = await axios.post(`${backendUrl}/login`, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                withCredentials: true,
+            });
 
-        setIdUsername(idusername);
-        handleShowToast('Login successful.', 'success');
-        onLogin();
-    } catch (error) {
-        console.error('Login error:', error);
-        handleShowToast('Login failed.', 'error');
-    }
-};
+            const { access_token, idusername, username } = response.data;
 
+            if (!access_token || !idusername || !username) {
+                console.error('Missing login data from response');
+                return;
+            }
+
+            localStorage.setItem('access_token', access_token);
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('idUsername', idusername);
+            localStorage.setItem('username', username);
+
+            setIdUsername(idusername);
+            handleShowToast('Login successful.', 'success');
+            onLogin();
+        } catch (error) {
+            console.error('Login error:', error);
+            handleShowToast('Login failed.', 'error');
+        }
+    };
 
     const handleLogoutClick = () => {
         localStorage.removeItem('access_token');
@@ -166,6 +165,7 @@ function NaviBar({
                                             aria-label="Username"
                                             aria-describedby="basic-addon1"
                                             name="username"
+                                            autoComplete="username"  // <-- added
                                             value={formData.username}
                                             onChange={handleChange}
                                         />
@@ -176,6 +176,7 @@ function NaviBar({
                                             type="password"
                                             placeholder="Password"
                                             name="password"
+                                            autoComplete="current-password"  // <-- added
                                             value={formData.password}
                                             onChange={handleChange}
                                         />
@@ -224,7 +225,7 @@ NaviBar.propTypes = {
     changeKey: PropTypes.func.isRequired,
     showToast: PropTypes.oneOfType([PropTypes.bool, PropTypes.string]),
     toastMessage: PropTypes.string,
-    idusername: PropTypes.string,
+    idusername: PropTypes.oneOfType([PropTypes.string, PropTypes.number]), // <-- fixed type
     keyProp: PropTypes.number,
     userPets: PropTypes.array,
     userProfileData: PropTypes.object,
