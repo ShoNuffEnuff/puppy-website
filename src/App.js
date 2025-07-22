@@ -17,7 +17,8 @@ import './components/RegistrationForm.css';
 
 function App() {
     // Read backend URL from environment variable
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5000'; // fallback for local dev
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
+
 
     // State Variable for Login Status
     const [isLoggedIn, setIsLoggedIn] = useState(false);
