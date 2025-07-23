@@ -248,16 +248,19 @@ class UserLogin(Resource):
         data = user_parser.parse_args()
         username = data['username']
         password = data['password']
+
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
+
         access_token = create_access_token(
-        identity={"idusername": user.id, "username": user.username}
-    )
+            identity={"idusername": user.id, "username": user.username}
+        )
+
         return {
             'message': 'Login successful',
             'access_token': access_token,
-            'idusername': user.idusername,
+            'idusername': user.id,  # optional, for convenience
             'username': user.username
         }, 200
 
