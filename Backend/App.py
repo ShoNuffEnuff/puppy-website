@@ -21,13 +21,9 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app, origins=["https://shonuffenuff.github.io"], supports_credentials=True, headers="*")
-
 api = Api(app)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
-    'DATABASE_URL',
-    'postgresql+psycopg2://neondb_owner:npg_QdG5nVDJl0PZ@ep-lingering-cloud-a7h29p4l-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
-)
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-secret-key')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
@@ -124,16 +120,13 @@ class UserRegistration(Resource):
         data = user_parser.parse_args()
         username = data['username']
         password = data['password']
-
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             return {'message': 'User already exists'}, 400
-
         hashed_password = sha256_crypt.hash(password)
         new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
-
         user_id = new_user.idusername
         return {'message': 'User registered successfully', 'user_id': user_id}, 201
 
@@ -142,79 +135,50 @@ class CustomerRegistration(Resource):
         try:
             data = request.get_json()
             user_id = data.get('user_id')
-
-            first_name = data['first_name']
-            surname = data['surname']
-            phone = data['phone']
-            email = data['email']
-            postcode = data['postcode']
-            suburb = data['suburb']
-
             new_customer = Customer(
                 idusername=user_id,
-                first_name=first_name,
-                surname=surname,
-                phone=phone,
-                email=email,
-                postcode=postcode,
-                suburb=suburb
+                first_name=data['first_name'],
+                surname=data['surname'],
+                phone=data['phone'],
+                email=data['email'],
+                postcode=data['postcode'],
+                suburb=data['suburb']
             )
-
             db.session.add(new_customer)
             db.session.commit()
-
-            print('Customer data added successfully to the database')
-
             return {'message': 'Customer data added successfully'}, 201
         except Exception as e:
             db.session.rollback()
-            print(f'Error adding customer data to the database: {str(e)}')
             return {'message': 'Error adding customer data to the database'}, 500
 
 class PetRegistration(Resource):
     def post(self):
         if 'photo' in request.files and request.headers['Content-Type'].startswith('multipart/form-data'):
             idusername = request.form.get('idusername')
-            name = request.form.get('name')
-            breed = request.form.get('breed')
-            age = request.form.get('age')
-            gender = request.form.get('gender')
-
-            photo = request.files['photo']
-            if photo:
-                photo_data = photo.read()
-                new_pet = Pets(
-                    idusername=idusername,
-                    name=name,
-                    breed=breed,
-                    age=age,
-                    gender=gender,
-                    photo=photo_data
-                )
-                db.session.add(new_pet)
-                db.session.commit()
-                return {'message': 'Pet data added successfully'}, 201
-
-        elif request.headers['Content-Type'] == 'application/json':
-            data = request.json
-            idusername = data['idusername']
-            name = data['name']
-            breed = data['breed']
-            age = data['age']
-            gender = data['gender']
-
             new_pet = Pets(
                 idusername=idusername,
-                name=name,
-                breed=breed,
-                age=age,
-                gender=gender,
+                name=request.form.get('name'),
+                breed=request.form.get('breed'),
+                age=request.form.get('age'),
+                gender=request.form.get('gender'),
+                photo=request.files['photo'].read()
+            )
+            db.session.add(new_pet)
+            db.session.commit()
+            return {'message': 'Pet data added successfully'}, 201
+        elif request.headers['Content-Type'] == 'application/json':
+            data = request.json
+            new_pet = Pets(
+                idusername=data['idusername'],
+                name=data['name'],
+                breed=data['breed'],
+                age=data['age'],
+                gender=data['gender'],
                 photo=None
             )
             db.session.add(new_pet)
             db.session.commit()
             return {'message': 'Pet data added successfully'}, 201
-
         else:
             return {'error': 'Unsupported Content-Type'}, 415
 
@@ -223,9 +187,7 @@ class PetList(Resource):
         selected_gender = request.args.get('gender', 'all', type=str)
         selected_age = request.args.get('age', 'all', type=str)
         selected_breed = request.args.get('breed', 'all', type=str)
-
         pets_query = Pets.query
-
         if selected_gender != 'all':
             pets_query = pets_query.filter_by(gender=selected_gender)
         if selected_age != 'all':
@@ -236,10 +198,8 @@ class PetList(Resource):
                 pass
         if selected_breed != 'all':
             pets_query = pets_query.filter_by(breed=selected_breed)
-
         pets_query = pets_query.add_columns(Pets.idusername)
         pets = pets_query.all()
-
         pet_data = []
         for pet, idusername in pets:
             pet_entry = {
@@ -255,155 +215,22 @@ class PetList(Resource):
                 with io.BytesIO(pet.photo) as binary_stream:
                     pet_entry['photo'] = base64.b64encode(binary_stream.read()).decode()
             pet_data.append(pet_entry)
-
         return jsonify(pet_data)
-
-@app.route('/get_customer_data/<int:idusername>', methods=['GET'])
-def get_customer_data(idusername):
-    customer = Customer.query.filter_by(idusername=idusername).with_entities(
-        Customer.idusername,
-        Customer.first_name,
-        Customer.surname,
-        Customer.phone,
-        Customer.email,
-        Customer.postcode,
-    ).first()
-
-    if not customer:
-        return jsonify({"message": "Customer not found"}), 404
-
-    pets = Pets.query.filter_by(idusername=idusername).with_entities(
-        Pets.petid,
-        Pets.name,
-        Pets.breed,
-        Pets.age,
-        Pets.gender,
-    ).all()
-
-    customer_data = {
-        "idusername": customer.idusername,
-        "first_name": customer.first_name,
-        "surname": customer.surname,
-        "phone": customer.phone,
-        "email": customer.email,
-        "postcode": customer.postcode,
-        "pets": [{
-            "petid": pet.petid,
-            "name": pet.name,
-            "breed": pet.breed,
-            "age": pet.age,
-            "gender": pet.gender,
-        } for pet in pets],
-    }
-    return jsonify(customer_data)
-
-@app.route('/get_customer_data2/<int:idusername>', methods=['GET'])
-def get_customer_data2(idusername):
-    return get_customer_data(idusername)
-
-@app.route('/create_playdate/<int:idusername1>/<int:idusername2>', methods=['POST'])
-def create_playdate(idusername1, idusername2):
-    try:
-        data = request.get_json()
-
-        user1 = User.query.get(idusername1)
-        user2 = User.query.get(idusername2)
-
-        if not user1 or not user2:
-            return jsonify({'error': 'One or both users not found'}), 404
-
-        customer1_first_name = data.get('customer1', {}).get('first_name', '')
-        customer2_first_name = data.get('customer2', {}).get('first_name', '')
-
-        customer1_pet_name = data.get('customer2pet', {}).get('name', '')
-        customer2_pet_name = data.get('customer1pet', {}).get('name', '')
-
-        playdate = Playdates(
-            customer1=customer1_first_name,
-            c1id=idusername1,
-            customer1pet=customer1_pet_name,
-            customer2=customer2_first_name,
-            c2id=idusername2,
-            customer2pet=customer2_pet_name,
-            time=datetime.strptime(data.get('time'), '%Y-%m-%d %H:%M:%S') if data.get('time') else None,
-            status=data.get('status', '')
-        )
-
-        db.session.add(playdate)
-        db.session.commit()
-
-        response_data = {
-            "message": "Playdate created successfully",
-            "customer1": {"first_name": customer1_first_name},
-            "customer2": {"first_name": customer2_first_name},
-            "pet1": {"name": customer1_pet_name},
-            "pet2": {"name": customer2_pet_name}
-        }
-        return jsonify(response_data), 201
-
-    except Exception as e:
-        logging.error(f"Error in create_playdate: {e}")
-        return jsonify({"error": "An error occurred"}), 500
-
-@app.route('/update_playdate_status/<int:playdateId>', methods=['PUT'])
-def update_playdate_status(playdateId):
-    try:
-        new_status = request.json.get('status')
-        playdate = Playdates.query.get(playdateId)
-
-        if not playdate:
-            return jsonify({'error': 'Playdate not found'}), 404
-
-        playdate.status = new_status
-        db.session.commit()
-        return jsonify({'message': 'Playdate status updated successfully'}), 200
-
-    except Exception as e:
-        logging.error(f"Error updating playdate status: {e}")
-        return jsonify({'error': 'An error occurred'}), 500
-
-class UserLogin(Resource):
-    def post(self):
-        data = user_parser.parse_args()
-        username = data['username']
-        password = data['password']
-
-        user = User.query.filter_by(username=username).first()
-
-        if not user or not sha256_crypt.verify(password, user.password):
-            return {'message': 'Invalid username or password'}, 401
-
-        access_token = create_access_token(identity={
-            "idusername": user.idusername,
-            "username": user.username
-        })
-
-        response_data = {
-            'message': 'Login successful',
-            'access_token': access_token,
-            'idusername': user.idusername,
-            'username': user.username
-        }
-        return response_data, 200
 
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
-    current_user_id = get_jwt_identity()
-    if idusername != current_user_id:
+    current_user = get_jwt_identity()
+    if current_user['idusername'] != idusername:
         return {'message': 'Unauthorized'}, 403
-
-    user = User.query.filter_by(idusername=current_user_id).first()
+    user = User.query.filter_by(idusername=idusername).first()
     if not user:
         return {'message': 'User not found'}, 404
-
-    pets = Pets.query.filter_by(idusername=current_user_id).all()
-
+    pets = Pets.query.filter_by(idusername=idusername).all()
     user_data = {
         'username': user.username,
         'pets': []
     }
-
     for pet in pets:
         pet_dict = {
             'name': pet.name,
@@ -419,28 +246,26 @@ def user_profile(idusername):
                 pet_dict['photo'] = encoded
                 pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
         user_data['pets'].append(pet_dict)
-
     return user_data
 
-@app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
-def get_playdates_by_idusername(idusername):
-    playdates = Playdates.query.filter(
-        (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
-    ).all()
-
-    playdates_data = []
-    for playdate in playdates:
-        playdates_data.append({
-            'id': playdate.playdatesid,
-            'customer1': playdate.customer1,
-            'customer1pet': playdate.customer1pet,
-            'customer2': playdate.customer2,
-            'customer2pet': playdate.customer2pet,
-            'time': playdate.time.strftime('%Y-%m-%d %H:%M:%S') if playdate.time else None,
-            'status': playdate.status
+class UserLogin(Resource):
+    def post(self):
+        data = user_parser.parse_args()
+        username = data['username']
+        password = data['password']
+        user = User.query.filter_by(username=username).first()
+        if not user or not sha256_crypt.verify(password, user.password):
+            return {'message': 'Invalid username or password'}, 401
+        access_token = create_access_token(identity={
+            "idusername": user.idusername,
+            "username": user.username
         })
-
-    return jsonify(playdates_data)
+        return {
+            'message': 'Login successful',
+            'access_token': access_token,
+            'idusername': user.idusername,
+            'username': user.username
+        }, 200
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
@@ -454,8 +279,6 @@ if __name__ == '__main__':
             db.create_all()
             query = text('SELECT 1')
             db.session.execute(query)
-            print('Database connection successful')
         except Exception as e:
             print(f'Database connection error: {str(e)}')
-
     app.run(host='0.0.0.0', port=5000, debug=False)
