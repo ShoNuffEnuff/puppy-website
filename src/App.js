@@ -30,18 +30,19 @@ function App() {
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
     const fetchUserPets = async (idusername) => {
-      try {
-        const res = await fetch(`${backendUrl}/api/userpets?idusername=${idusername}`);
-        if (res.ok) {
-          const data = await res.json();
-          setUserPets(data.pets);
-        } else {
-          console.error('Failed to fetch user pets');
-        }
-      } catch (error) {
-        console.error('Error fetching user pets:', error);
-      }
-    };
+  try {
+    const res = await fetch(`${backendUrl}/api/userpets?idusername=${idusername}`);
+    if (res.ok) {
+      const data = await res.json();
+      setUserPets(data.pets);
+    } else {
+      console.error('Failed to fetch user pets');
+    }
+  } catch (error) {
+    console.error('Error fetching user pets:', error);
+  }
+};
+
 
     const handleBackgroundChange = (index) => {
         setCurrentBackgroundIndex(index);
