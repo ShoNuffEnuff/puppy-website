@@ -27,15 +27,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['JWT_SECRET_KEY'] = os.environ.get('JWT_SECRET_KEY', 'your-secret-key')
 app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
+app.config["JWT_IDENTITY_CLAIM"] = "sub"
 
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
-
-@jwt.additional_claims_loader
-def add_claims_to_access_token(identity):
-    return {
-        "username": identity.get("username")
-    }
 
 @jwt.user_identity_loader
 def user_identity_lookup(user):
@@ -256,10 +251,9 @@ class UserLogin(Resource):
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
-        access_token = create_access_token(identity={
-            "idusername": user.idusername,
-            "username": user.username
-        })
+        access_token = create_access_token(
+        identity={"idusername": user.id, "username": user.username}
+    )
         return {
             'message': 'Login successful',
             'access_token': access_token,
