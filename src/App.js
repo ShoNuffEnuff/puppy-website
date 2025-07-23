@@ -30,55 +30,54 @@ function App() {
     const [currentBackgroundIndex, setCurrentBackgroundIndex] = useState(0);
 
     const fetchUserPets = async (idusername) => {
-  try {
-    const token = localStorage.getItem('access_token');  // Get JWT token
+      try {
+        const token = localStorage.getItem('access_token');
 
-    const res = await fetch(`${backendUrl}/user-profile/${idusername}`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,  // Pass the JWT token here
-        'Content-Type': 'application/json'
+        const userId = Number(idusername);
+
+        const res = await fetch(`${backendUrl}/user-profile/${userId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          }
+        });
+
+        if (res.ok) {
+          const data = await res.json();
+          setUserPets(data.pets || []); 
+        } else {
+          console.error('Failed to fetch user profile:', res.status);
+        }
+      } catch (error) {
+        console.error('Error fetching user profile:', error);
       }
-    });
-
-    if (res.ok) {
-      const data = await res.json();
-      setUserPets(data.pets || []); 
-    } else {
-      console.error('Failed to fetch user profile:', res.status);
-    }
-  } catch (error) {
-    console.error('Error fetching user profile:', error);
-  }
-};
-
-
-
+    };
 
     const handleBackgroundChange = (index) => {
         setCurrentBackgroundIndex(index);
     };
 
     const handleLogin = () => {
-    setIsLoggedIn(true);
-    const token = localStorage.getItem('access_token');
-    if (token) {
-        try {
-            const decoded = jwtDecode(token);
-            const id = decoded.sub?.idusername || decoded.idusername;
-            const name = decoded.sub?.username || decoded.username;
+      setIsLoggedIn(true);
+      const token = localStorage.getItem('access_token');
+      if (token) {
+          try {
+              const decoded = jwtDecode(token);
+              const id = decoded.sub?.idusername || decoded.idusername;
+              const name = decoded.sub?.username || decoded.username;
 
-            if (id) {
-                setIdUsername(id.toString());
-                fetchUserPets(id.toString());
-            }
-            if (name) {
-                setUsername(name.toString());
-            }
-        } catch (err) {
-            console.error("JWT decode failed on login:", err);
-        }
-    }
-};
+              if (id) {
+                  const numericId = Number(id);
+                  setIdUsername(numericId);
+                  fetchUserPets(numericId);
+              }
+              if (name) {
+                  setUsername(name.toString());
+              }
+          } catch (err) {
+              console.error("JWT decode failed on login:", err);
+          }
+      }
+    };
 
     const handleLogout = () => {
         setIsLoggedIn(false);
