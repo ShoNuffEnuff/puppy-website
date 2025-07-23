@@ -20,7 +20,10 @@ from datetime import timedelta, datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://shonuffenuff.github.io"], supports_credentials=True, headers="*")
+CORS(app,
+     origins=["https://shonuffenuff.github.io"],
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"])
 api = Api(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')

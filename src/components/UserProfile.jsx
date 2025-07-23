@@ -75,8 +75,9 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
 
         const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
             headers: {
-                Authorization: `Bearer ${token}`   // add the token here
-            }
+                Authorization: `Bearer ${token}`   
+            },
+            withCredentials: true
         });
 
         if (response.status === 200) {
@@ -109,6 +110,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
+                withCredentials: true
             })
                 .then((response) => {
                     setPlaydates(response.data);
@@ -151,6 +153,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
+            withCredentials: true
         })
         .then(() => {
             const updatedPlaydates = playdates.map((playdate) => {
