@@ -25,7 +25,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         isLoggedInRef.current = isLoggedIn;
     }, [isLoggedIn]);
 
-    // Decode token and set idusername on mount or when login state changes
     useEffect(() => {
         const token = localStorage.getItem('access_token');
         if (token) {
@@ -46,7 +45,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         }
     }, [isLoggedIn]);
 
-    // You can keep this block to load cached profile data if you want
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
         const usernameFromStorage = localStorage.getItem('username');
@@ -65,65 +63,64 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     };
 
     const fetchUserData = useCallback(async () => {
-    if (!isLoggedInRef.current || !idusername) {
-        return;
-    }
+        if (!isLoggedInRef.current || !idusername) return;
 
-    try {
-        const userId = Number(idusername);
-        const token = localStorage.getItem('access_token');  // get the token from storage
-
-        const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
-            headers: {
-                Authorization: `Bearer ${token}`   
-            },
-            withCredentials: true
-        });
-
-        if (response.status === 200) {
-            const userdata = response.data;
-            setUser({ username: userdata.username });
-            setUserPets(userdata.pets);
-
-            const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
-            localStorage.setItem('userProfileData', userProfileData);
-        } else {
-            console.error('Error fetching user data:', response.status);
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-    }
-}, [idusername]);
-
-
-    const fetchPlaydates = useCallback(() => {
-        if (isLoggedInRef.current && idusername) {
+        try {
             const token = localStorage.getItem('access_token');
-            if (!token) {
-                console.error('Unauthorized access');
-                return;
-            }
-
             const userId = Number(idusername);
 
-            axios.get(`${backendUrl}/api/get_playdates/${userId}`, {
+            const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`
                 },
                 withCredentials: true
-            })
-                .then((response) => {
-                    setPlaydates(response.data);
+            });
 
-                    const hasPendingPlaydates = response.data.some(
-                        playdate => playdate.status !== 'accepted' && playdate.status !== 'declined'
-                    );
-                    toggleAlert(hasPendingPlaydates);
-                })
-                .catch((error) => {
-                    console.error('Error fetching playdates:', error);
-                });
+            if (response.status === 200) {
+                const userdata = response.data;
+                setUser({ username: userdata.username });
+                setUserPets(userdata.pets);
+
+                localStorage.setItem(
+                    'userProfileData',
+                    JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets })
+                );
+            } else {
+                console.error('Error fetching user data:', response.status);
+            }
+        } catch (error) {
+            console.error('Error fetching user data:', error);
         }
+    }, [idusername]);
+
+    const fetchPlaydates = useCallback(() => {
+        if (!isLoggedInRef.current || !idusername) return;
+
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            console.error('Unauthorized access');
+            return;
+        }
+
+        const userId = Number(idusername);
+
+        axios.get(`${backendUrl}/api/get_playdates/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            withCredentials: true
+        })
+        .then((response) => {
+            setPlaydates(response.data);
+
+            const hasPendingPlaydates = response.data.some(
+                playdate => playdate.status !== 'accepted' && playdate.status !== 'declined'
+            );
+            toggleAlert(hasPendingPlaydates);
+        })
+        .catch((error) => {
+            console.error('Error fetching playdates:', error);
+        });
     }, [idusername]);
 
     useEffect(() => {
@@ -151,13 +148,13 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
 
         axios.put(`${backendUrl}/update_playdate_status/${playdateId}`, { status: newStatus }, {
             headers: {
-                Authorization: `Bearer ${token}`,
+                Authorization: `Bearer ${token}`
             },
             withCredentials: true
         })
         .then(() => {
             const updatedPlaydates = playdates.map((playdate) => {
-                if (playdate.id === playdateId) {
+                if (playdate.playdatesid === playdateId) {
                     return { ...playdate, status: newStatus };
                 }
                 return playdate;
@@ -204,30 +201,28 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
                     <h4>Your Play Dates</h4>
                     <div className="card-deck">
                         {playdates.map((playdate) => (
-                            <div key={playdate.id} className="card">
+                            <div key={playdate.playdatesid} className="card">
                                 <div className="card-body">
                                     <h5 className="card-title">Playdate</h5>
-                                    <p className="card-text"> {playdate.customer1}</p>
-                                    <p className="card-text"> {playdate.customer1}'s Pet: {playdate.customer1pet}</p>
-                                    <p className="card-text"> {playdate.customer2}</p>
-                                    <p className="card-text"> {playdate.customer2}'s Pet: {playdate.customer2pet}</p>
+                                    <p className="card-text">{playdate.customer1}</p>
+                                    <p className="card-text">{playdate.customer1}'s Pet: {playdate.customer1pet}</p>
+                                    <p className="card-text">{playdate.customer2}</p>
+                                    <p className="card-text">{playdate.customer2}'s Pet: {playdate.customer2pet}</p>
                                     <p className="card-text">Time: {playdate.time}</p>
                                     <p className="card-text">Status: {playdate.status}</p>
                                     <Form.Check
                                         type="switch"
-                                        id={`switch-${playdate.id}`}
+                                        id={`switch-${playdate.playdatesid}`}
                                         label={playdate.status}
                                         checked={playdate.status === 'accepted' || playdate.status === 'neutral'}
                                         onChange={(e) => {
                                             let newStatus = 'neutral';
-
                                             if (e.target.checked) {
                                                 newStatus = 'accepted';
-                                            } else if (!e.target.checked) {
+                                            } else {
                                                 newStatus = 'declined';
                                             }
-
-                                            updatePlaydateStatus(playdate.id, newStatus);
+                                            updatePlaydateStatus(playdate.playdatesid, newStatus);
                                         }}
                                     />
                                 </div>
