@@ -31,17 +31,26 @@ function App() {
 
     const fetchUserPets = async (idusername) => {
   try {
-    const res = await fetch(`${backendUrl}/user-profile/${idusername}`);
+    const token = localStorage.getItem('access_token');  // Get JWT token
+
+    const res = await fetch(`${backendUrl}/user-profile/${idusername}`, {
+      headers: {
+        'Authorization': `Bearer ${token}`,  // Pass the JWT token here
+        'Content-Type': 'application/json'
+      }
+    });
+
     if (res.ok) {
       const data = await res.json();
       setUserPets(data.pets || []); 
     } else {
-      console.error('Failed to fetch user profile');
+      console.error('Failed to fetch user profile:', res.status);
     }
   } catch (error) {
     console.error('Error fetching user profile:', error);
   }
 };
+
 
 
 
