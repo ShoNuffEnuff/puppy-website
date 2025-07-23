@@ -65,28 +65,35 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     };
 
     const fetchUserData = useCallback(async () => {
-        if (!isLoggedInRef.current || !idusername) {
-            return;
-        }
+    if (!isLoggedInRef.current || !idusername) {
+        return;
+    }
 
-        try {
-            const userId = Number(idusername);
-            const response = await axios.get(`${backendUrl}/user-profile/${userId}`);
+    try {
+        const userId = Number(idusername);
+        const token = localStorage.getItem('access_token');  // get the token from storage
 
-            if (response.status === 200) {
-                const userdata = response.data;
-                setUser({ username: userdata.username });
-                setUserPets(userdata.pets);
-
-                const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
-                localStorage.setItem('userProfileData', userProfileData);
-            } else {
-                console.error('Error fetching user data:', response.status);
+        const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`   // add the token here
             }
-        } catch (error) {
-            console.error('Error fetching user data:', error);
+        });
+
+        if (response.status === 200) {
+            const userdata = response.data;
+            setUser({ username: userdata.username });
+            setUserPets(userdata.pets);
+
+            const userProfileData = JSON.stringify({ user: { username: userdata.username }, pets: userdata.pets });
+            localStorage.setItem('userProfileData', userProfileData);
+        } else {
+            console.error('Error fetching user data:', response.status);
         }
-    }, [idusername]);
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+    }
+}, [idusername]);
+
 
     const fetchPlaydates = useCallback(() => {
         if (isLoggedInRef.current && idusername) {
