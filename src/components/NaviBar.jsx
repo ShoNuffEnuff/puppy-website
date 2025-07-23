@@ -17,7 +17,6 @@ import UserProfile from './UserProfile';
 import PetGroupCard from './PetGroupCard';
 import './NaviBar.css';
 
-// Backend URL config with fallback
 const backendUrl = process.env.REACT_APP_BACKEND_URL || 'https://puppy-website.onrender.com';
 
 function NaviBar({
@@ -116,7 +115,6 @@ function NaviBar({
             localStorage.setItem("idusername", idusernameFromToken);
             localStorage.setItem('username', usernameFromToken);
 
-
             setIdUsername(idusernameFromToken);
             setIsLoggedIn(true);
 
@@ -144,10 +142,6 @@ function NaviBar({
         <div>
             <Navbar expand="sm" className="custom-nav-bar">
                 <Container className="custNavTest">
-                    {/* Uncomment and update if you want the logo */}
-                    {/* <Navbar.Brand as={Link} to="/">
-                        <Image src={petplusLogo} className="custom-logo" alt="Logo" />
-                    </Navbar.Brand> */}
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="navbarFixes">
@@ -176,9 +170,11 @@ function NaviBar({
                                         keyProp={keyProp}
                                         userPets={userPets}
                                         userProfileData={userProfileData}
-                                        token={token}
+                                        token={localStorage.getItem('access_token')}
                                     />
-                                    <PetGroupCard />
+                                    <PetGroupCard
+                                        token={localStorage.getItem('access_token')}
+                                    />
                                     <Button onClick={handleLogoutClick} className="custom-btn-Logout">
                                         Logout
                                     </Button>

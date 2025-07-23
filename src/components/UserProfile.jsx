@@ -19,7 +19,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     const [showAlert, setShowAlert] = useState(false);
 
     const isLoggedInRef = useRef(isLoggedIn);
-    const [idusername, setIdUsername] = useState('');
+    const [idusername, setIdUsername] = useState(null);
 
     useEffect(() => {
         isLoggedInRef.current = isLoggedIn;
@@ -31,17 +31,17 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
             try {
                 const decoded = jwtDecode(token);
                 const idFromToken = decoded.sub?.idusername;
-                if (idFromToken) {
-                    setIdUsername(idFromToken.toString());
+                if (idFromToken !== undefined && idFromToken !== null) {
+                    setIdUsername(Number(idFromToken));
                 } else {
-                    setIdUsername('');
+                    setIdUsername(null);
                 }
             } catch (error) {
                 console.error('Invalid token:', error);
-                setIdUsername('');
+                setIdUsername(null);
             }
         } else {
-            setIdUsername('');
+            setIdUsername(null);
         }
     }, [isLoggedIn]);
 
@@ -63,13 +63,12 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     };
 
     const fetchUserData = useCallback(async () => {
-        if (!isLoggedInRef.current || !idusername) return;
+        if (!isLoggedInRef.current || idusername === null) return;
 
         try {
             const token = localStorage.getItem('access_token');
-            const userId = Number(idusername);
 
-            const response = await axios.get(`${backendUrl}/user-profile/${userId}`, {
+            const response = await axios.get(`${backendUrl}/user-profile/${idusername}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                 },
@@ -94,7 +93,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     }, [idusername]);
 
     const fetchPlaydates = useCallback(() => {
-        if (!isLoggedInRef.current || !idusername) return;
+        if (!isLoggedInRef.current || idusername === null) return;
 
         const token = localStorage.getItem('access_token');
         if (!token) {
@@ -102,9 +101,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
             return;
         }
 
-        const userId = Number(idusername);
-
-        axios.get(`${backendUrl}/api/get_playdates/${userId}`, {
+        axios.get(`${backendUrl}/api/get_playdates/${idusername}`, {
             headers: {
                 Authorization: `Bearer ${token}`
             },
