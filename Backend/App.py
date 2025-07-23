@@ -21,7 +21,7 @@ load_dotenv()
 
 app = Flask(__name__)
 CORS(app,
-     origins=["https://shonuffenuff.github.io"],
+     origins=["https://shonuffenuff.github.io", "https://shonuffenuff.github.io/puppy-website"],
      supports_credentials=True,
      allow_headers=["Content-Type", "Authorization"])
 api = Api(app)
