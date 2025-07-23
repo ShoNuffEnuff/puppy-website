@@ -20,10 +20,8 @@ from datetime import timedelta, datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app,
-     origins=["https://shonuffenuff.github.io", "https://shonuffenuff.github.io/puppy-website"],
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization"])
+CORS(app, origins=["https://shonuffenuff.github.io", "https://shonuffenuff.github.io/"], supports_credentials=True)
+
 api = Api(app)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '')
@@ -269,6 +267,33 @@ class UserLogin(Resource):
             'idusername': user.idusername,
             'username': user.username
         }, 200
+@app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
+@jwt_required()
+def get_playdates(idusername):
+    current_user = get_jwt_identity()
+    if current_user['idusername'] != idusername:
+        return {'message': 'Unauthorized'}, 403
+
+    playdates = Playdates.query.filter(
+        (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
+    ).all()
+
+    result = []
+    for pd in playdates:
+        result.append({
+            'id': pd.playdatesid,
+            'customer1': pd.customer1,
+            'c1id': pd.c1id,
+            'customer1pet': pd.customer1pet,
+            'customer2': pd.customer2,
+            'c2id': pd.c2id,
+            'customer2pet': pd.customer2pet,
+            'time': pd.time.isoformat() if pd.time else None,
+            'status': pd.status
+        })
+
+    return jsonify(result)
+
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
