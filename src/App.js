@@ -31,17 +31,18 @@ function App() {
 
     const fetchUserPets = async (idusername) => {
   try {
-    const res = await fetch(`${backendUrl}/api/userpets?idusername=${idusername}`);
+    const res = await fetch(`${backendUrl}/user-profile/${idusername}`);
     if (res.ok) {
       const data = await res.json();
-      setUserPets(data.pets);
+      setUserPets(data.pets || []); 
     } else {
-      console.error('Failed to fetch user pets');
+      console.error('Failed to fetch user profile');
     }
   } catch (error) {
-    console.error('Error fetching user pets:', error);
+    console.error('Error fetching user profile:', error);
   }
 };
+
 
 
     const handleBackgroundChange = (index) => {
