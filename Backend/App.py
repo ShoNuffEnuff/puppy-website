@@ -20,7 +20,9 @@ from datetime import timedelta, datetime
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, origins=["https://shonuffenuff.github.io", "https://shonuffenuff.github.io/"], supports_credentials=True)
+CORS(app, origins=["https://shonuffenuff.github.io"],
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization"])
 
 api = Api(app)
 
@@ -221,6 +223,7 @@ class PetList(Resource):
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
+    print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
     current_user = get_jwt_identity()
     if current_user['idusername'] != idusername:
         return {'message': 'Unauthorized'}, 403
