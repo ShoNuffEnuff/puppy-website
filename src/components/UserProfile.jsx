@@ -30,12 +30,13 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
         if (token) {
             try {
                 const decoded = jwtDecode(token);
-                const idFromToken = decoded.sub?.idusername;
-                if (idFromToken !== undefined && idFromToken !== null) {
-                    setIdUsername(Number(idFromToken));
-                } else {
-                    setIdUsername(null);
-                }
+const idFromToken = Number(decoded.sub);
+if (!isNaN(idFromToken)) {
+    setIdUsername(idFromToken);
+} else {
+    setIdUsername(null);
+}
+
             } catch (error) {
                 console.error('Invalid token:', error);
                 setIdUsername(null);

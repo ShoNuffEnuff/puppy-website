@@ -43,15 +43,9 @@ def add_claims_to_access_token(identity):
 @jwt.user_identity_loader
 def user_identity_lookup(user):
     if isinstance(user, dict):
-        return {
-            "idusername": user.get("idusername"),
-            "username": user.get("username")
-        }
+        return str(user.get("idusername"))
     else:
-        return {
-            "idusername": user.idusername,
-            "username": user.username
-        }
+        return str(user.idusername)
 
 class User(db.Model):
     __tablename__ = 'username'
@@ -224,8 +218,8 @@ class PetList(Resource):
 @jwt_required()
 def user_profile(idusername):
     print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
-    current_user = get_jwt_identity()
-    if current_user['idusername'] != idusername:
+    current_user = int(get_jwt_identity())
+    if current_user != idusername:
         return {'message': 'Unauthorized'}, 403
     user = User.query.filter_by(idusername=idusername).first()
     if not user:
@@ -260,21 +254,22 @@ class UserLogin(Resource):
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
-        access_token = create_access_token(identity={
-            "idusername": user.idusername,
-            "username": user.username
-        })
+        access_token = create_access_token(
+            identity=str(user.idusername),
+            additional_claims={"username": user.username}
+        )
         return {
             'message': 'Login successful',
             'access_token': access_token,
             'idusername': user.idusername,
             'username': user.username
         }, 200
+
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 @jwt_required()
 def get_playdates(idusername):
-    current_user = get_jwt_identity()
-    if current_user['idusername'] != idusername:
+    current_user = int(get_jwt_identity())
+    if current_user != idusername:
         return {'message': 'Unauthorized'}, 403
 
     playdates = Playdates.query.filter(
