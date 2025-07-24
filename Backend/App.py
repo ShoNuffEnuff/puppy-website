@@ -49,9 +49,9 @@ def add_claims_to_access_token(identity):
 @jwt.user_identity_loader
 def user_identity_lookup(user):
     if isinstance(user, dict):
-        return str(user.get("idusername"))
+        return (user.get("idusername"))
     else:
-        return str(user.idusername)
+        return (user.idusername)
 
 class User(db.Model):
     __tablename__ = 'username'
@@ -261,9 +261,10 @@ class UserLogin(Resource):
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
         access_token = create_access_token(
-            identity=str(user.idusername),
-            additional_claims={"username": user.username}
-        )
+    identity=user.idusername,  # keep as integer
+    additional_claims={"username": user.username}
+)
+
         return {
             'message': 'Login successful',
             'access_token': access_token,
