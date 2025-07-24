@@ -35,8 +35,9 @@ db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
 @jwt.user_identity_loader
-def user_identity_lookup(user_id):
-    return int(user_id)
+def user_identity_lookup(identity):
+    return int(identity)
+
 
 @jwt.additional_claims_loader
 def add_claims_to_access_token(identity):
@@ -219,20 +220,9 @@ class PetList(Resource):
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
-    print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
-    current_user = get_jwt_identity()
-    print(f"Decoded identity: {current_user}, type: {type(current_user)}")
-
-    # Handle both int and dict formats
-    if isinstance(current_user, dict):
-        current_user_id = current_user.get("idusername")
-    else:
-        current_user_id = current_user
-
-    try:
-        current_user_id = int(current_user_id)
-    except (ValueError, TypeError):
-        return {'message': f'Invalid token identity: {current_user}'}, 422
+    print(f"Authorization header: {request.headers.get('Authorization')}")
+    current_user_id = get_jwt_identity()
+    print(f"get_jwt_identity() returned: {current_user_id} (type: {type(current_user_id)})")
 
     if current_user_id != idusername:
         return {'message': 'Unauthorized'}, 403
@@ -265,6 +255,7 @@ def user_profile(idusername):
         user_data['pets'].append(pet_dict)
 
     return user_data
+
 
 
 
