@@ -34,6 +34,10 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
+@jwt.user_identity_loader
+def user_identity_lookup(user_id):
+    return int(user_id)
+
 @jwt.additional_claims_loader
 def add_claims_to_access_token(identity):
     try:
