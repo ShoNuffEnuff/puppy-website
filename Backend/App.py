@@ -219,9 +219,14 @@ def user_profile(idusername):
     current_user = get_jwt_identity()
     print(f"Decoded identity: {current_user}, type: {type(current_user)}")
 
-    # Accept either int or str that can be cast to int
+    # Handle both int and dict formats
+    if isinstance(current_user, dict):
+        current_user_id = current_user.get("idusername")
+    else:
+        current_user_id = current_user
+
     try:
-        current_user_id = int(current_user)
+        current_user_id = int(current_user_id)
     except (ValueError, TypeError):
         return {'message': f'Invalid token identity: {current_user}'}, 422
 
@@ -256,6 +261,7 @@ def user_profile(idusername):
         user_data['pets'].append(pet_dict)
 
     return user_data
+
 
 
 
