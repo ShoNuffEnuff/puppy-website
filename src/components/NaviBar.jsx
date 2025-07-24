@@ -51,7 +51,9 @@ function NaviBar({
                 const decoded = jwtDecode(token);
                 console.log('Decoded JWT token:', decoded);
                 const idusernameFromToken = decoded.sub;
-                if (idusernameFromToken) {
+                const usernameFromToken = decoded.username;
+
+                if (idusernameFromToken && usernameFromToken) {
                     setIdUsername(idusernameFromToken);
                     setIsLoggedIn(true);
                 } else {
@@ -146,18 +148,10 @@ function NaviBar({
                     <Navbar.Collapse id="basic-navbar-nav">
                         <div className="navbarFixes">
                             <Nav className="mr-auto">
-                                <Nav.Link as={Link} to="/" className="homeLink">
-                                    Home
-                                </Nav.Link>
-                                <Nav.Link as={Link} to="/staff" className="staffLink">
-                                    Staff
-                                </Nav.Link>
-                                <Nav.Link as={Link} to="/services" className="servicesLink">
-                                    Services
-                                </Nav.Link>
-                                <Nav.Link as={Link} to="/contacts" className="contactsLink">
-                                    Contacts
-                                </Nav.Link>
+                                <Nav.Link as={Link} to="/" className="homeLink">Home</Nav.Link>
+                                <Nav.Link as={Link} to="/staff" className="staffLink">Staff</Nav.Link>
+                                <Nav.Link as={Link} to="/services" className="servicesLink">Services</Nav.Link>
+                                <Nav.Link as={Link} to="/contacts" className="contactsLink">Contacts</Nav.Link>
                             </Nav>
 
                             {isLoggedIn ? (
@@ -172,12 +166,8 @@ function NaviBar({
                                         userProfileData={userProfileData}
                                         token={localStorage.getItem('access_token')}
                                     />
-                                    <PetGroupCard
-                                        token={localStorage.getItem('access_token')}
-                                    />
-                                    <Button onClick={handleLogoutClick} className="custom-btn-Logout">
-                                        Logout
-                                    </Button>
+                                    <PetGroupCard token={localStorage.getItem('access_token')} />
+                                    <Button onClick={handleLogoutClick} className="custom-btn-Logout">Logout</Button>
                                 </div>
                             ) : (
                                 <Form onSubmit={handleSubmit} className="d-flex">
@@ -204,9 +194,7 @@ function NaviBar({
                                             onChange={handleChange}
                                         />
                                     </InputGroup>
-                                    <Button type="submit" className="custom-btn-Login">
-                                        Login
-                                    </Button>
+                                    <Button type="submit" className="custom-btn-Login">Login</Button>
                                     <RegistrationForm
                                         backgroundClasses={backgroundClasses}
                                         currentBackgroundIndex={currentBackgroundIndex}
