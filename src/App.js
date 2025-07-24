@@ -61,9 +61,8 @@ function App() {
       const token = localStorage.getItem('access_token');
       if (token) {
           try {
-              const decoded = jwtDecode(token);
-              const id = decoded.sub?.idusername || decoded.idusername;
-              const name = decoded.sub?.username || decoded.username;
+              const decoded = jwtDecode(token);const id = decoded.sub;
+              const name = decoded.username;
 
               if (id) {
                   const numericId = Number(id);
