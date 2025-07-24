@@ -217,16 +217,26 @@ class PetList(Resource):
 def user_profile(idusername):
     print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
     current_user = get_jwt_identity()
-    if current_user != idusername:
+
+    try:
+        current_user_id = int(current_user)
+    except (ValueError, TypeError):
+        return {'message': 'Invalid token identity'}, 422
+
+    if current_user_id != idusername:
         return {'message': 'Unauthorized'}, 403
+
     user = User.query.filter_by(idusername=idusername).first()
     if not user:
         return {'message': 'User not found'}, 404
+
     pets = Pets.query.filter_by(idusername=idusername).all()
     user_data = {
+        'idusername': user.idusername,
         'username': user.username,
         'pets': []
     }
+
     for pet in pets:
         pet_dict = {
             'name': pet.name,
@@ -242,7 +252,9 @@ def user_profile(idusername):
                 pet_dict['photo'] = encoded
                 pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
         user_data['pets'].append(pet_dict)
+
     return user_data
+
 
 class UserLogin(Resource):
     def post(self):
