@@ -45,31 +45,27 @@ function NaviBar({
     });
 
     useEffect(() => {
-        const token = localStorage.getItem('access_token');
-        if (token) {
-            try {
-                const decoded = jwtDecode(token);
-                console.log('Decoded JWT token:', decoded);
-                const idusernameFromToken = Number(decoded.sub);
-                const usernameFromToken = decoded.username;
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            console.log('Decoded JWT token:', decoded);
+            const idusernameFromToken = Number(decoded.sub);
+            const usernameFromToken = decoded.username;
 
-                if (idusernameFromToken && usernameFromToken) {
-                    setIdUsername(idusernameFromToken);
-                    setIsLoggedIn(true);
-                } else {
-                    setIsLoggedIn(false);
-                    setIdUsername('');
-                }
-            } catch (error) {
-                console.error('Invalid token:', error);
-                setIsLoggedIn(false);
-                setIdUsername('');
-            }
-        } else {
+            setIdUsername(idusernameFromToken);
+            setIsLoggedIn(Boolean(idusernameFromToken && usernameFromToken));
+        } catch (error) {
+            console.error('Invalid token:', error);
             setIsLoggedIn(false);
             setIdUsername('');
         }
-    }, [setIdUsername, setIsLoggedIn]);
+    } else {
+        setIsLoggedIn(false);
+        setIdUsername('');
+    }
+}, [setIdUsername, setIsLoggedIn]);
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
