@@ -50,7 +50,7 @@ function NaviBar({
             try {
                 const decoded = jwtDecode(token);
                 console.log('Decoded JWT token:', decoded);
-                const idusernameFromToken = decoded.sub;
+                const idusernameFromToken = Number(decoded.sub);
                 const usernameFromToken = decoded.username;
 
                 if (idusernameFromToken && usernameFromToken) {
@@ -111,10 +111,10 @@ function NaviBar({
             localStorage.setItem('isLoggedIn', 'true');
 
             const decoded = jwtDecode(access_token);
-            const idusernameFromToken = decoded.sub;
+            const idusernameFromToken = Number(decoded.sub);
             const usernameFromToken = decoded.username;
 
-            localStorage.setItem("idusername", idusernameFromToken);
+            localStorage.setItem("idusername", idusernameFromToken.toString());
             localStorage.setItem('username', usernameFromToken);
 
             setIdUsername(idusernameFromToken);
