@@ -45,14 +45,6 @@ def add_claims_to_access_token(identity):
         pass
     return {}
 
-
-@jwt.user_identity_loader
-def user_identity_lookup(user):
-    if isinstance(user, dict):
-        return (user.get("idusername"))
-    else:
-        return (user.idusername)
-
 class User(db.Model):
     __tablename__ = 'username'
     __table_args__ = {'schema': 'public'}
@@ -224,7 +216,7 @@ class PetList(Resource):
 @jwt_required()
 def user_profile(idusername):
     print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
-    current_user = int(get_jwt_identity())
+    current_user = get_jwt_identity()
     if current_user != idusername:
         return {'message': 'Unauthorized'}, 403
     user = User.query.filter_by(idusername=idusername).first()
@@ -260,11 +252,7 @@ class UserLogin(Resource):
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
-        access_token = create_access_token(
-    identity=user.idusername,  # keep as integer
-    additional_claims={"username": user.username}
-)
-
+        access_token = create_access_token(identity=user.idusername)
         return {
             'message': 'Login successful',
             'access_token': access_token,
@@ -275,14 +263,12 @@ class UserLogin(Resource):
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 @jwt_required()
 def get_playdates(idusername):
-    current_user = int(get_jwt_identity())
+    current_user = get_jwt_identity()
     if current_user != idusername:
         return {'message': 'Unauthorized'}, 403
-
     playdates = Playdates.query.filter(
         (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
     ).all()
-
     result = []
     for pd in playdates:
         result.append({
@@ -296,9 +282,7 @@ def get_playdates(idusername):
             'time': pd.time.isoformat() if pd.time else None,
             'status': pd.status
         })
-
     return jsonify(result)
-
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
