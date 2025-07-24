@@ -217,11 +217,13 @@ class PetList(Resource):
 def user_profile(idusername):
     print(f"Authorization header in user_profile: {request.headers.get('Authorization')}")
     current_user = get_jwt_identity()
+    print(f"Decoded identity: {current_user}, type: {type(current_user)}")
 
+    # Accept either int or str that can be cast to int
     try:
         current_user_id = int(current_user)
     except (ValueError, TypeError):
-        return {'message': 'Invalid token identity'}, 422
+        return {'message': f'Invalid token identity: {current_user}'}, 422
 
     if current_user_id != idusername:
         return {'message': 'Unauthorized'}, 403
@@ -254,6 +256,7 @@ def user_profile(idusername):
         user_data['pets'].append(pet_dict)
 
     return user_data
+
 
 
 class UserLogin(Resource):

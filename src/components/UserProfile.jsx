@@ -32,6 +32,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        console.log("Decoded token:", decoded);
         const idFromToken = Number(decoded.sub);
         if (!isNaN(idFromToken)) {
           setIdUsername(idFromToken);
