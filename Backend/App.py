@@ -36,9 +36,15 @@ jwt = JWTManager(app)
 
 @jwt.additional_claims_loader
 def add_claims_to_access_token(identity):
-    # Since identity is a string user ID, no username available here
-    # If you want username in claims, you need to pass a dict as identity or get username some other way
+    try:
+        user_id = int(identity)
+        user = User.query.get(user_id)
+        if user:
+            return {"username": user.username}
+    except Exception:
+        pass
     return {}
+
 
 @jwt.user_identity_loader
 def user_identity_lookup(user):
