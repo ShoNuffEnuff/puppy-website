@@ -14,6 +14,8 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
     const [toastMessage, setToastMessage] = useState('');
     const [playdates, setPlaydates] = useState([]);
 
+    const backendUrl = 'https://puppy-website.onrender.com';
+
     const showToastError = (message) => {
         setToastMessage(message);
         setShowToast(true);
@@ -33,10 +35,10 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             return;
         }
 
-        axios.get(`http://20.211.223.142:5000/get_customer_data/${customer1Id}`)
+        axios.get(`${backendUrl}/get_customer_data/${customer1Id}`)
             .then((response1) => {
                 const customer1Data = response1.data;
-                axios.get(`http://20.211.223.142:5000/get_customer_data2/${customer2Id}`)
+                axios.get(`${backendUrl}/get_customer_data2/${customer2Id}`)
                     .then((response2) => {
                         const customer2Data = response2.data;
                         const formattedDate = selectedDate
@@ -56,7 +58,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                             status: 'pending',
                         };
 
-                        axios.post(`http://20.211.223.142:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
+                        axios.post(`${backendUrl}/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
                             .then((response3) => {
                                 console.log('Playdate created successfully:', response3.data);
                                 setToastMessage('Playdate booked successfully.');
@@ -86,7 +88,6 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
     };
 
     useEffect(() => {
-        // Load user's pets
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
             const parsedData = JSON.parse(userProfileData);
@@ -94,7 +95,6 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             setDatepickerUserPets(userPets);
         }
 
-        // Fetch playdates with JWT
         const fetchPlaydates = async () => {
             const idusername = localStorage.getItem('idUsername');
             const token = localStorage.getItem('access_token');
@@ -106,7 +106,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
 
             try {
                 const response = await axios.get(
-                    `https://puppy-website.onrender.com/api/get_playdates/${idusername}`,
+                    `${backendUrl}/api/get_playdates/${idusername}`,
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
