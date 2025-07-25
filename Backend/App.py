@@ -277,7 +277,11 @@ class UserLogin(Resource):
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
-        access_token = create_access_token(identity=user.idusername)
+        access_token = create_access_token(
+    identity=user.idusername,
+    additional_claims={"username": user.username}
+)
+
         return {
             'message': 'Login successful',
             'access_token': access_token,
