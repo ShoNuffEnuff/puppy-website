@@ -6,7 +6,6 @@ import Navbar from 'react-bootstrap/Navbar';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import Image from 'react-bootstrap/Image';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, Toast } from 'react-bootstrap';
@@ -31,7 +30,7 @@ function NaviBar({
     showToast,
     toastMessage,
     idusername,
-    username,                
+    username,
     keyProp,
     userPets,
     userProfileData,
@@ -45,40 +44,38 @@ function NaviBar({
     });
 
     useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-        try {
-            const decoded = jwtDecode(token);
-            console.log('Decoded JWT token:', decoded);
+        const token = localStorage.getItem('access_token');
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+                console.log('Decoded JWT token:', decoded);
 
-            let idusernameFromToken;
-            let usernameFromToken;
+                let idusernameFromToken;
+                let usernameFromToken;
 
-            // Handle both cases: dict format and plain int
-            if (typeof decoded === 'object' && decoded !== null && 'sub' in decoded && 'username' in decoded) {
-                idusernameFromToken = Number(decoded.sub);
-                usernameFromToken = decoded.username;
-            } else if (typeof decoded === 'number') {
-                idusernameFromToken = decoded;
-                usernameFromToken = localStorage.getItem('username') || '';
-            } else {
-                throw new Error('Malformed token payload');
+                const sub = decoded.sub;
+                if (typeof sub === 'object' && sub !== null && 'sub' in sub && 'username' in sub) {
+                    idusernameFromToken = Number(sub.sub);
+                    usernameFromToken = sub.username;
+                } else if (typeof sub === 'number') {
+                    idusernameFromToken = sub;
+                    usernameFromToken = decoded.username || localStorage.getItem('username') || '';
+                } else {
+                    throw new Error('Malformed token payload');
+                }
+
+                setIdUsername(idusernameFromToken);
+                setIsLoggedIn(Boolean(idusernameFromToken && usernameFromToken));
+            } catch (error) {
+                console.error('Invalid token:', error);
+                setIsLoggedIn(false);
+                setIdUsername('');
             }
-
-            setIdUsername(idusernameFromToken);
-            setIsLoggedIn(Boolean(idusernameFromToken && usernameFromToken));
-        } catch (error) {
-            console.error('Invalid token:', error);
+        } else {
             setIsLoggedIn(false);
             setIdUsername('');
         }
-    } else {
-        setIsLoggedIn(false);
-        setIdUsername('');
-    }
-}, [setIdUsername, setIsLoggedIn]);
-
-
+    }, [setIdUsername, setIsLoggedIn]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -120,8 +117,16 @@ function NaviBar({
             localStorage.setItem('isLoggedIn', 'true');
 
             const decoded = jwtDecode(access_token);
-            const idusernameFromToken = Number(decoded.sub);
-            const usernameFromToken = decoded.username;
+            const sub = decoded.sub;
+            let idusernameFromToken, usernameFromToken;
+
+            if (typeof sub === 'object' && sub !== null && 'sub' in sub && 'username' in sub) {
+                idusernameFromToken = Number(sub.sub);
+                usernameFromToken = sub.username;
+            } else {
+                idusernameFromToken = Number(sub);
+                usernameFromToken = decoded.username;
+            }
 
             localStorage.setItem("idusername", idusernameFromToken.toString());
             localStorage.setItem('username', usernameFromToken);
@@ -168,7 +173,7 @@ function NaviBar({
                                     <UserProfile
                                         isLoggedIn={isLoggedIn}
                                         idusername={idusername}
-                                        username={username}           
+                                        username={username}
                                         setIdUsername={setIdUsername}
                                         keyProp={keyProp}
                                         userPets={userPets}

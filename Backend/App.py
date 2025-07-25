@@ -281,8 +281,12 @@ class UserLogin(Resource):
             return {'message': 'Invalid username or password'}, 401
 
         access_token = create_access_token(
-            identity={"sub": user.idusername, "username": user.username}
-        )
+    identity={
+        "sub": str(user.idusername),  # JWTs expect sub to be a string
+        "username": user.username
+    }
+)
+
 
         return {
             'message': 'Login successful',
