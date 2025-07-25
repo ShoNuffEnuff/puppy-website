@@ -350,10 +350,10 @@ def get_playdates(idusername):
     for pd in playdates:
         result.append({
             'playdatesid': pd.playdatesid,
-            'customer1': pd.customer1,
-            'customer1pet': pd.customer1pet,
-            'customer2': pd.customer2,
-            'customer2pet': pd.customer2pet,
+            'customer1': pd.customer1.username,
+            'customer1pet': pd.customer1pet.name,
+            'customer2': pd.customer2.username,
+            'customer2pet': pd.customer2pet.name,
             'time': pd.time.strftime("%Y-%m-%d %H:%M:%S") if pd.time else None,
             'status': pd.status
         })
