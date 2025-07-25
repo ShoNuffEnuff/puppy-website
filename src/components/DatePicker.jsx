@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 
 function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedUserPet, setSelectedUserPet] = useState('');
+    const [selectedUserPet, setSelectedUserPet] = useState(null); // store petid
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
@@ -37,11 +37,11 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         const c2id = selectedPet?.idusername || null;
 
         if (!c1id || !c2id) {
-            console.error('Customer IDs not found in local storage');
+            console.error('Customer IDs not found or invalid');
             return;
         }
 
-        const customer1pet = datepickerUserPets.find((pet) => pet.name === selectedUserPet);
+        const customer1pet = datepickerUserPets.find((pet) => pet.petid === selectedUserPet);
         const customer2pet = selectedPet;
 
         if (!customer1pet || !customer2pet) {
@@ -63,6 +63,8 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             status: 'pending',
         };
 
+        console.log("Sending playdate data:", playdateData);
+
         axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -72,9 +74,8 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             console.log('Playdate created successfully:', response.data);
             setToastMessage('Playdate booked successfully.');
             setShowToast(true);
-            localStorage.removeItem('selectedPetIdusername');
             setSelectedDate(null);
-            setSelectedUserPet('');
+            setSelectedUserPet(null);
             clearSelectedPet();
         })
         .catch((error) => {
@@ -88,16 +89,8 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
     };
 
     const handleUserPetChange = (event) => {
-        setSelectedUserPet(event.target.value);
+        setSelectedUserPet(parseInt(event.target.value, 10));
     };
-
-    //useEffect(() => {
-        //if (selectedPet && selectedPet.idusername) {
-          //  localStorage.setItem('selectedPetIdusername', selectedPet.idusername);
-        //} else {
-          //  localStorage.removeItem('selectedPetIdusername');
-        //}
-    //}, [selectedPet]);
 
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
@@ -181,10 +174,10 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             {datepickerUserPets.length > 0 && (
                 <div>
                     <h3>Your Pets</h3>
-                    <select value={selectedUserPet} onChange={handleUserPetChange}>
+                    <select value={selectedUserPet || ''} onChange={handleUserPetChange}>
                         <option value="">Select a pet</option>
                         {datepickerUserPets.map((pet) => (
-                            <option key={pet.petid} value={pet.name}>
+                            <option key={pet.petid} value={pet.petid}>
                                 {pet.name}
                             </option>
                         ))}
