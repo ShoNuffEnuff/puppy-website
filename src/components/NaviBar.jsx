@@ -50,8 +50,20 @@ function NaviBar({
         try {
             const decoded = jwtDecode(token);
             console.log('Decoded JWT token:', decoded);
-            const idusernameFromToken = Number(decoded.sub);
-            const usernameFromToken = decoded.username;
+
+            let idusernameFromToken;
+            let usernameFromToken;
+
+            // Handle both cases: dict format and plain int
+            if (typeof decoded === 'object' && decoded !== null && 'sub' in decoded && 'username' in decoded) {
+                idusernameFromToken = Number(decoded.sub);
+                usernameFromToken = decoded.username;
+            } else if (typeof decoded === 'number') {
+                idusernameFromToken = decoded;
+                usernameFromToken = localStorage.getItem('username') || '';
+            } else {
+                throw new Error('Malformed token payload');
+            }
 
             setIdUsername(idusernameFromToken);
             setIsLoggedIn(Boolean(idusernameFromToken && usernameFromToken));
@@ -65,6 +77,7 @@ function NaviBar({
         setIdUsername('');
     }
 }, [setIdUsername, setIsLoggedIn]);
+
 
 
     const handleChange = (e) => {
