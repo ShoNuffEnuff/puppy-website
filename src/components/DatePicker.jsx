@@ -34,7 +34,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         }
 
         const c1id = parseInt(localStorage.getItem('idusername'), 10);
-        const c2id = parseInt(localStorage.getItem('selectedPetIdusername'), 10);
+        const c2id = selectedPet?.idusername || null;
 
         if (!c1id || !c2id) {
             console.error('Customer IDs not found in local storage');
@@ -91,13 +91,13 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         setSelectedUserPet(event.target.value);
     };
 
-    useEffect(() => {
-        if (selectedPet && selectedPet.idusername) {
-            localStorage.setItem('selectedPetIdusername', selectedPet.idusername);
-        } else {
-            localStorage.removeItem('selectedPetIdusername');
-        }
-    }, [selectedPet]);
+    //useEffect(() => {
+        //if (selectedPet && selectedPet.idusername) {
+          //  localStorage.setItem('selectedPetIdusername', selectedPet.idusername);
+        //} else {
+          //  localStorage.removeItem('selectedPetIdusername');
+        //}
+    //}, [selectedPet]);
 
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
