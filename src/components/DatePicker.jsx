@@ -87,6 +87,15 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         setSelectedUserPet(selectedPetName);
     };
 
+   //Store selected pet's owner ID to localStorage
+    useEffect(() => {
+        if (selectedPet && selectedPet.idusername) {
+            localStorage.setItem('selectedPetIdusername', selectedPet.idusername);
+        } else {
+            localStorage.removeItem('selectedPetIdusername');
+        }
+    }, [selectedPet]);
+
     useEffect(() => {
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
