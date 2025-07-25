@@ -220,41 +220,50 @@ class PetList(Resource):
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
-    print(f"Authorization header: {request.headers.get('Authorization')}")
-    current_user_id = get_jwt_identity()
-    print(f"get_jwt_identity() returned: {current_user_id} (type: {type(current_user_id)})")
+    print("Authorization header in user_profile:", request.headers.get("Authorization"))
+    current_user = get_jwt_identity()
+    print("get_jwt_identity() ->", current_user, "type:", type(current_user))
 
-    if current_user_id != idusername:
-        return {'message': 'Unauthorized'}, 403
+    if not isinstance(current_user, int):
+        try:
+            current_user = int(current_user)
+        except Exception as e:
+            print("Identity casting error:", e)
+            return {"message": "Invalid token identity"}, 422
+
+    if current_user != idusername:
+        return {"message": "Unauthorized"}, 403
 
     user = User.query.filter_by(idusername=idusername).first()
     if not user:
-        return {'message': 'User not found'}, 404
+        return {"message": "User not found"}, 404
 
     pets = Pets.query.filter_by(idusername=idusername).all()
+
     user_data = {
-        'idusername': user.idusername,
-        'username': user.username,
-        'pets': []
+        "username": user.username,
+        "pets": []
     }
 
     for pet in pets:
         pet_dict = {
-            'name': pet.name,
-            'breed': pet.breed,
-            'age': pet.age,
-            'gender': pet.gender,
-            'photo': None,
-            'photo_url': None
+            "name": pet.name,
+            "breed": pet.breed,
+            "age": pet.age,
+            "gender": pet.gender,
+            "photo": None,
+            "photo_url": None
         }
+
         if pet.photo:
             with io.BytesIO(pet.photo) as binary_stream:
                 encoded = base64.b64encode(binary_stream.read()).decode()
-                pet_dict['photo'] = encoded
-                pet_dict['photo_url'] = f"data:image/jpeg;base64,{encoded}"
-        user_data['pets'].append(pet_dict)
+                pet_dict["photo"] = encoded
 
-    return user_data
+        user_data["pets"].append(pet_dict)
+
+    return jsonify(user_data)
+
 
 
 
@@ -279,26 +288,33 @@ class UserLogin(Resource):
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 @jwt_required()
 def get_playdates(idusername):
+    print("Authorization header in get_playdates:", request.headers.get("Authorization"))
     current_user = get_jwt_identity()
+    print("get_jwt_identity() ->", current_user, "type:", type(current_user))
+
+    if not isinstance(current_user, int):
+        try:
+            current_user = int(current_user)
+        except Exception as e:
+            print("Identity casting error:", e)
+            return {"message": "Invalid token identity"}, 422
+
     if current_user != idusername:
-        return {'message': 'Unauthorized'}, 403
-    playdates = Playdates.query.filter(
-        (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
-    ).all()
-    result = []
-    for pd in playdates:
-        result.append({
-            'id': pd.playdatesid,
-            'customer1': pd.customer1,
-            'c1id': pd.c1id,
-            'customer1pet': pd.customer1pet,
-            'customer2': pd.customer2,
-            'c2id': pd.c2id,
-            'customer2pet': pd.customer2pet,
-            'time': pd.time.isoformat() if pd.time else None,
-            'status': pd.status
-        })
-    return jsonify(result)
+        return {"message": "Unauthorized"}, 403
+
+    playdates = Playdates.query.filter_by(idusername=idusername).all()
+    playdate_data = []
+
+    for playdate in playdates:
+        playdate_dict = {
+            "date": playdate.date.isoformat() if playdate.date else None,
+            "location": playdate.location,
+            "description": playdate.description,
+        }
+        playdate_data.append(playdate_dict)
+
+    return jsonify(playdate_data)
+
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
 api.add_resource(CustomerRegistration, '/register_customer', methods=['POST'])
