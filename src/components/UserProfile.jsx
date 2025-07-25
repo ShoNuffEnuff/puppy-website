@@ -33,6 +33,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
+        console.log("Decoded JWT:", decoded);
         const idFromToken = Number(decoded.sub);
         if (!isNaN(idFromToken)) {
           setIdUsername(idFromToken);
@@ -83,6 +84,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
   };
 
   const fetchUserData = useCallback(async () => {
+    console.log("fetchUserData called with idusername:", idusername);
     if (!isLoggedInRef.current || idusername === null) return;
 
     try {
@@ -96,6 +98,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
 
       if (response.status === 200) {
         const userdata = response.data;
+        console.log("Fetched user data:", userdata);
         setUser({ idusername: userdata.idusername, username: userdata.username });
         setUserPets(userdata.pets);
 
@@ -114,6 +117,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
   }, [idusername]);
 
   const fetchPlaydates = useCallback(() => {
+    console.log("fetchPlaydates called with idusername:", idusername);
     if (!isLoggedInRef.current || idusername === null) return;
 
     const token = localStorage.getItem('access_token');
@@ -129,6 +133,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
       withCredentials: true
     })
       .then((response) => {
+        console.log("Fetched playdates:", response.data);
         setPlaydates(response.data);
         const hasPendingPlaydates = response.data.some(
           playdate => playdate.status !== 'accepted' && playdate.status !== 'declined'
@@ -141,14 +146,16 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
   }, [idusername]);
 
   useEffect(() => {
-    if (isLoggedIn) {
+    if (isLoggedIn && idusername !== null) {
+      console.log("Triggering fetchUserData and fetchPlaydates from showProfile/isLoggedIn effect");
       fetchUserData();
       fetchPlaydates();
     }
-  }, [showProfile, isLoggedIn, fetchUserData, fetchPlaydates]);
+  }, [showProfile, isLoggedIn, idusername, fetchUserData, fetchPlaydates]);
 
   useEffect(() => {
     if (isLoggedInRef.current && showProfile) {
+      console.log("Triggering fetchUserData and fetchPlaydates from keyProp effect");
       fetchUserData();
       fetchPlaydates();
     }
