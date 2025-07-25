@@ -340,30 +340,31 @@ def create_playdate(idusername1, idusername2):
 def get_playdates(idusername):
     current_user = get_jwt_identity()
 
-    # Since identity is stored as a string (e.g., "4"), convert it to int before comparison
     try:
         if int(current_user) != idusername:
             return {'message': 'Unauthorized'}, 403
     except (ValueError, TypeError):
         return {'message': 'Invalid identity in token'}, 400
 
+    # Use integer ID fields instead of varchar usernames
     playdates = Playdates.query.filter(
-        (Playdates.customer1 == idusername) | (Playdates.customer2 == idusername)
+        (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
     ).all()
 
     result = []
     for pd in playdates:
         result.append({
             'playdatesid': pd.playdatesid,
-            'customer1': pd.customer1.username,
-            'customer1pet': pd.customer1pet.name,
-            'customer2': pd.customer2.username,
-            'customer2pet': pd.customer2pet.name,
+            'customer1': pd.customer1,
+            'customer1pet': pd.customer1pet,
+            'customer2': pd.customer2,
+            'customer2pet': pd.customer2pet,
             'time': pd.time.strftime("%Y-%m-%d %H:%M:%S") if pd.time else None,
             'status': pd.status
         })
 
     return jsonify(result)
+
 
 
 
