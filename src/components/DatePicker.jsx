@@ -27,8 +27,14 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             return;
         }
 
-        const c1id = localStorage.getItem('idUsername');
-        const c2id = localStorage.getItem('selectedPetIdusername');
+        const token = localStorage.getItem('access_token');
+        if (!token) {
+            showToastError('You must be logged in to book a playdate.');
+            return;
+        }
+
+        const c1id = parseInt(localStorage.getItem('idusername'), 10);
+        const c2id = parseInt(localStorage.getItem('selectedPetIdusername'), 10);
 
         if (!c1id || !c2id) {
             console.error('Customer IDs not found in local storage');
@@ -49,25 +55,32 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             : null;
 
         const playdateData = {
-            c1id: parseInt(c1id),
-            c2id: parseInt(c2id),
+            c1id,
+            c2id,
             customer1petid: customer1pet.petid,
             customer2petid: customer2pet.petid,
             time: formattedDate,
             status: 'pending',
         };
 
-        axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData)
-            .then((response) => {
-                console.log('Playdate created successfully:', response.data);
-                setToastMessage('Playdate booked successfully.');
-                setShowToast(true);
-                localStorage.removeItem('selectedPetIdusername');
-            })
-            .catch((error) => {
-                console.error('Error creating playdate:', error);
-                showToastError('Error creating playdate.');
-            });
+        axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        .then((response) => {
+            console.log('Playdate created successfully:', response.data);
+            setToastMessage('Playdate booked successfully.');
+            setShowToast(true);
+            localStorage.removeItem('selectedPetIdusername');
+            setSelectedDate(null);
+            setSelectedUserPet('');
+            clearSelectedPet();
+        })
+        .catch((error) => {
+            console.error('Error creating playdate:', error);
+            showToastError('Error creating playdate.');
+        });
     };
 
     const handleDateChange = (date) => {
@@ -95,7 +108,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         }
 
         const fetchPlaydates = async () => {
-            const idusername = localStorage.getItem('idUsername');
+            const idusername = localStorage.getItem('idusername');
             const token = localStorage.getItem('access_token');
 
             if (!idusername || !token) {
