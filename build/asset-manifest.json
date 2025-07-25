@@ -1,6 +1,6 @@
 {
   "files": {
-    "main.css": "/puppy-website/static/css/main.66ffa0ee.css",
+    "main.css": "/puppy-website/static/css/main.756e7bc5.css",
     "main.js": "/puppy-website/static/js/main.bf38dcef.js",
     "static/js/787.bc7d429a.chunk.js": "/puppy-website/static/js/787.bc7d429a.chunk.js",
     "static/media/cat.png": "/puppy-website/static/media/cat.c1302280d9b3ac8352e5.png",
@@ -21,17 +21,18 @@
     "static/media/vetStaff03.jpg": "/puppy-website/static/media/vetStaff03.406eb42d81fe5bbd87b8.jpg",
     "static/media/vetStaff02.jpg": "/puppy-website/static/media/vetStaff02.29b2acaf041f3f57d9f2.jpg",
     "static/media/vetStaff06.jpg": "/puppy-website/static/media/vetStaff06.78e31ccc22a03fa4720b.jpg",
+    "static/media/backGround02 (2).jpg": "/puppy-website/static/media/backGround02 (2).3fca19dd7abbc6f8dfc0.jpg",
     "static/media/bg2.jpg": "/puppy-website/static/media/bg2.3fca19dd7abbc6f8dfc0.jpg",
     "static/media/pawPrint.jpg": "/puppy-website/static/media/pawPrint.0c365309392bfb8bfdcf.jpg",
     "static/media/vetStaff07.jpg": "/puppy-website/static/media/vetStaff07.17dab03c7f738f9c1ae3.jpg",
     "static/media/finalLogo.png": "/puppy-website/static/media/finalLogo.ea03b02ddcc7b57642ca.png",
     "index.html": "/puppy-website/index.html",
-    "main.66ffa0ee.css.map": "/puppy-website/static/css/main.66ffa0ee.css.map",
+    "main.756e7bc5.css.map": "/puppy-website/static/css/main.756e7bc5.css.map",
     "main.bf38dcef.js.map": "/puppy-website/static/js/main.bf38dcef.js.map",
     "787.bc7d429a.chunk.js.map": "/puppy-website/static/js/787.bc7d429a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.66ffa0ee.css",
+    "static/css/main.756e7bc5.css",
     "static/js/main.bf38dcef.js"
   ]
 }
