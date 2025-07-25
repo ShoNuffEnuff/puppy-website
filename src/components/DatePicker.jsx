@@ -27,54 +27,46 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             return;
         }
 
-        const customer1Id = localStorage.getItem('idUsername');
-        const customer2Id = localStorage.getItem('selectedPetIdusername');
+        const c1id = localStorage.getItem('idUsername');
+        const c2id = localStorage.getItem('selectedPetIdusername');
 
-        if (!customer1Id || !customer2Id) {
+        if (!c1id || !c2id) {
             console.error('Customer IDs not found in local storage');
             return;
         }
 
-        axios.get(`${backendUrl}/get_customer_data/${customer1Id}`)
-            .then((response1) => {
-                const customer1Data = response1.data;
-                axios.get(`${backendUrl}/get_customer_data2/${customer2Id}`)
-                    .then((response2) => {
-                        const customer2Data = response2.data;
-                        const formattedDate = selectedDate
-                            ? selectedDate.toISOString().slice(0, 19).replace('T', ' ')
-                            : null;
+        const customer1pet = datepickerUserPets.find((pet) => pet.name === selectedUserPet);
+        const customer2pet = selectedPet;
 
-                        const playdateData = {
-                            idusername1: customer1Data.idusername,
-                            idusername2: customer2Data.idusername,
-                            customer1: { first_name: customer1Data.first_name },
-                            customer2: { first_name: customer2Data.first_name },
-                            customer1pet: { ...selectedPet },
-                            customer2pet: {
-                                ...datepickerUserPets.find((pet) => pet.name === selectedUserPet),
-                            },
-                            time: formattedDate,
-                            status: 'pending',
-                        };
+        if (!customer1pet || !customer2pet) {
+            console.error('Pet selection error');
+            showToastError('Pet selection error.');
+            return;
+        }
 
-                        axios.post(`${backendUrl}/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
-                            .then((response3) => {
-                                console.log('Playdate created successfully:', response3.data);
-                                setToastMessage('Playdate booked successfully.');
-                                setShowToast(true);
-                                localStorage.removeItem('selectedPetIdusername');
-                            })
-                            .catch((error3) => {
-                                console.error('Error creating playdate:', error3);
-                            });
-                    })
-                    .catch((error2) => {
-                        console.error('Error fetching customer 2 data:', error2);
-                    });
+        const formattedDate = selectedDate
+            ? selectedDate.toISOString().slice(0, 19).replace('T', ' ')
+            : null;
+
+        const playdateData = {
+            c1id: parseInt(c1id),
+            c2id: parseInt(c2id),
+            customer1petid: customer1pet.petid,
+            customer2petid: customer2pet.petid,
+            time: formattedDate,
+            status: 'pending',
+        };
+
+        axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData)
+            .then((response) => {
+                console.log('Playdate created successfully:', response.data);
+                setToastMessage('Playdate booked successfully.');
+                setShowToast(true);
+                localStorage.removeItem('selectedPetIdusername');
             })
             .catch((error) => {
-                console.error('Error fetching customer 1 data:', error);
+                console.error('Error creating playdate:', error);
+                showToastError('Error creating playdate.');
             });
     };
 
@@ -83,11 +75,9 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
     };
 
     const handleUserPetChange = (event) => {
-        const selectedPetName = event.target.value;
-        setSelectedUserPet(selectedPetName);
+        setSelectedUserPet(event.target.value);
     };
 
-   //Store selected pet's owner ID to localStorage
     useEffect(() => {
         if (selectedPet && selectedPet.idusername) {
             localStorage.setItem('selectedPetIdusername', selectedPet.idusername);
@@ -175,13 +165,13 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
                 </div>
             )}
 
-            {datepickerUserPets && datepickerUserPets.length > 0 && (
+            {datepickerUserPets.length > 0 && (
                 <div>
                     <h3>Your Pets</h3>
                     <select value={selectedUserPet} onChange={handleUserPetChange}>
                         <option value="">Select a pet</option>
                         {datepickerUserPets.map((pet) => (
-                            <option key={pet.name} value={pet.name}>
+                            <option key={pet.petid} value={pet.name}>
                                 {pet.name}
                             </option>
                         ))}

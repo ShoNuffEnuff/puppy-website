@@ -292,53 +292,42 @@ class UserLogin(Resource):
         }, 200
 
 
-@app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
+@app.route('/create_playdate/<int:idusername1>/<int:idusername2>', methods=['POST'])
 @jwt_required()
-def get_playdates(idusername):
-    print("Authorization header in get_playdates:", request.headers.get("Authorization"))
-    identity = get_jwt_identity()
-    print("get_jwt_identity() ->", identity, "type:", type(identity))
-
-    # Identity validation (sub as string)
-    if isinstance(identity, dict):
-        user_id = identity.get("sub")
-    else:
-        user_id = identity
+def create_playdate(idusername1, idusername2):
+    data = request.get_json()
 
     try:
-        user_id = int(user_id)
-    except Exception as e:
-        print("Identity casting error:", e)
-        return {"message": "Invalid token identity"}, 422
+        customer1 = Customer.query.filter_by(idusername=idusername1).first()
+        customer2 = Customer.query.filter_by(idusername=idusername2).first()
 
-    if user_id != idusername:
-        return {"message": "Unauthorized"}, 403
+        pet1 = Pets.query.get(data['customer1petid'])
+        pet2 = Pets.query.get(data['customer2petid'])
 
-    try:
-        playdates = Playdates.query.filter(
-            (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
-        ).all()
+        if not all([customer1, customer2, pet1, pet2]):
+            return {"message": "Customer or pet not found"}, 404
 
-        playdate_data = []
-        for playdate in playdates:
-            playdate_dict = {
-                "playdatesid": playdate.playdatesid,
-                "customer1": playdate.customer1,
-                "c1id": playdate.c1id,
-                "customer1pet": playdate.customer1pet,
-                "customer2": playdate.customer2,
-                "c2id": playdate.c2id,
-                "customer2pet": playdate.customer2pet,
-                "time": playdate.time.isoformat() if playdate.time else None,
-                "status": playdate.status
-            }
-            playdate_data.append(playdate_dict)
+        new_playdate = Playdates(
+            c1id=idusername1,
+            customer1=customer1.first_name,
+            customer1pet=pet1.name,
+            c2id=idusername2,
+            customer2=customer2.first_name,
+            customer2pet=pet2.name,
+            time=datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S'),
+            status=data['status']
+        )
 
-        return jsonify(playdate_data), 200
+        db.session.add(new_playdate)
+        db.session.commit()
+
+        return {"message": "Playdate created successfully"}, 201
 
     except Exception as e:
-        print("Error fetching playdates:", e)
-        return {"message": "Server error while fetching playdates"}, 500
+        db.session.rollback()
+        print("Error creating playdate:", e)
+        return {"message": "Server error creating playdate"}, 500
+
 
 
 
