@@ -57,26 +57,28 @@ function App() {
     };
 
     const handleLogin = () => {
-      setIsLoggedIn(true);
-      const token = localStorage.getItem('access_token');
-      if (token) {
-          try {
-              const decoded = jwtDecode(token);const id = decoded.sub;
-              const name = decoded.username;
+    setIsLoggedIn(true);
+    const token = localStorage.getItem('access_token');
+    if (token) {
+        try {
+            const decoded = jwtDecode(token);
+            const id = decoded.idusername;  
+            const name = decoded.username;
 
-              if (id) {
-                  const numericId = Number(id);
-                  setIdUsername(numericId);
-                  fetchUserPets(numericId);
-              }
-              if (name) {
-                  setUsername(name.toString());
-              }
-          } catch (err) {
-              console.error("JWT decode failed on login:", err);
-          }
-      }
-    };
+            if (id !== undefined) {
+                const numericId = Number(id);
+                setIdUsername(numericId);
+                fetchUserPets(numericId);
+            }
+            if (name) {
+                setUsername(name.toString());
+            }
+        } catch (err) {
+            console.error("JWT decode failed on login:", err);
+        }
+    }
+};
+
 
     const handleLogout = () => {
         setIsLoggedIn(false);

@@ -282,10 +282,11 @@ class UserLogin(Resource):
 
         access_token = create_access_token(
     identity={
-        "sub": str(user.idusername),  # JWTs expect sub to be a string
+        "idusername": user.idusername,
         "username": user.username
     }
 )
+
 
 
         return {

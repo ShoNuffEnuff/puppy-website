@@ -91,56 +91,49 @@ function NaviBar({
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+    e.preventDefault();
 
-        if (!formData.username || !formData.password) {
-            handleShowToast('Username and password are required.', 'error');
+    if (!formData.username || !formData.password) {
+        handleShowToast('Username and password are required.', 'error');
+        return;
+    }
+
+    try {
+        const response = await axios.post(`${backendUrl}/login`, formData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            withCredentials: true,
+        });
+
+        const { access_token } = response.data;
+
+        if (!access_token) {
+            console.error('No token returned from login');
             return;
         }
 
-        try {
-            const response = await axios.post(`${backendUrl}/login`, formData, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                withCredentials: true,
-            });
+        localStorage.setItem('access_token', access_token);
+        localStorage.setItem('isLoggedIn', 'true');
 
-            const { access_token } = response.data;
+        const decoded = jwtDecode(access_token);
+        const idusernameFromToken = Number(decoded.idusername);
+        const usernameFromToken = decoded.username;
 
-            if (!access_token) {
-                console.error('No token returned from login');
-                return;
-            }
+        localStorage.setItem("idusername", idusernameFromToken.toString());
+        localStorage.setItem('username', usernameFromToken);
 
-            localStorage.setItem('access_token', access_token);
-            localStorage.setItem('isLoggedIn', 'true');
+        setIdUsername(idusernameFromToken);
+        setIsLoggedIn(true);
 
-            const decoded = jwtDecode(access_token);
-            const sub = decoded.sub;
-            let idusernameFromToken, usernameFromToken;
+        handleShowToast('Login successful.', 'success');
+        onLogin({ idusername: idusernameFromToken, username: usernameFromToken });
+    } catch (error) {
+        console.error('Login error:', error);
+        handleShowToast('Login failed.', 'error');
+    }
+};
 
-            if (typeof sub === 'object' && sub !== null && 'sub' in sub && 'username' in sub) {
-                idusernameFromToken = Number(sub.sub);
-                usernameFromToken = sub.username;
-            } else {
-                idusernameFromToken = Number(sub);
-                usernameFromToken = decoded.username;
-            }
-
-            localStorage.setItem("idusername", idusernameFromToken.toString());
-            localStorage.setItem('username', usernameFromToken);
-
-            setIdUsername(idusernameFromToken);
-            setIsLoggedIn(true);
-
-            handleShowToast('Login successful.', 'success');
-            onLogin({ idusername: idusernameFromToken, username: usernameFromToken });
-        } catch (error) {
-            console.error('Login error:', error);
-            handleShowToast('Login failed.', 'error');
-        }
-    };
 
     const handleLogoutClick = () => {
         localStorage.removeItem('access_token');
