@@ -34,21 +34,21 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(hours=24)
 db = SQLAlchemy(app)
 jwt = JWTManager(app)
 
-@jwt.user_identity_loader
-def user_identity_lookup(identity):
-    return int(identity)
+# @jwt.user_identity_loader
+# def user_identity_lookup(identity):
+#     return int(identity)
 
 
-@jwt.additional_claims_loader
-def add_claims_to_access_token(identity):
-    try:
-        user_id = int(identity)
-        user = User.query.get(user_id)
-        if user:
-            return {"username": user.username}
-    except Exception:
-        pass
-    return {}
+# @jwt.additional_claims_loader
+# def add_claims_to_access_token(identity):
+#     try:
+#         user_id = int(identity)
+#         user = User.query.get(user_id)
+#         if user:
+#             return {"username": user.username}
+#     except Exception:
+#         pass
+#     return {}
 
 class User(db.Model):
     __tablename__ = 'username'
@@ -279,10 +279,10 @@ class UserLogin(Resource):
         user = User.query.filter_by(username=username).first()
         if not user or not sha256_crypt.verify(password, user.password):
             return {'message': 'Invalid username or password'}, 401
+
         access_token = create_access_token(
-    identity=user.idusername,
-    additional_claims={"username": user.username}
-)
+            identity={"sub": user.idusername, "username": user.username}
+        )
 
         return {
             'message': 'Login successful',
@@ -290,6 +290,7 @@ class UserLogin(Resource):
             'idusername': user.idusername,
             'username': user.username
         }, 200
+
 
 @app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
 @jwt_required()
