@@ -41,7 +41,9 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             return;
         }
 
-        const customer1pet = datepickerUserPets.find((pet) => pet.petid === selectedUserPet);
+        const customer1pet = datepickerUserPets.find(
+            (pet) => pet.petid === selectedUserPet
+        );
         const customer2pet = selectedPet;
 
         if (!customer1pet || !customer2pet) {
@@ -63,24 +65,25 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             status: 'pending',
         };
 
-        axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData, {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        })
-        .then((response) => {
-            console.log('Playdate created successfully:', response.data);
-            setToastMessage('Playdate booked successfully.');
-            setShowToast(true);
-            localStorage.removeItem('selectedPetIdusername');
-            setSelectedDate(null);
-            setSelectedUserPet('');
-            clearSelectedPet();
-        })
-        .catch((error) => {
-            console.error('Error creating playdate:', error);
-            showToastError('Error creating playdate.');
-        });
+        axios
+            .post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((response) => {
+                console.log('Playdate created successfully:', response.data);
+                setToastMessage('Playdate booked successfully.');
+                setShowToast(true);
+                localStorage.removeItem('selectedPetIdusername');
+                setSelectedDate(null);
+                setSelectedUserPet('');
+                clearSelectedPet();
+            })
+            .catch((error) => {
+                console.error('Error creating playdate:', error);
+                showToastError('Error creating playdate.');
+            });
     };
 
     const handleDateChange = (date) => {
@@ -88,7 +91,8 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
     };
 
     const handleUserPetChange = (event) => {
-        setSelectedUserPet(parseInt(event.target.value, 10));
+        const value = parseInt(event.target.value, 10);
+        setSelectedUserPet(value || '');
     };
 
     useEffect(() => {
