@@ -6,34 +6,25 @@ import { ToastContainer, Toast } from 'react-bootstrap';
 import './DatePicker.css';
 import Button from 'react-bootstrap/Button';
 
-
-
-
-
-function Datepicker({ selectedPet, clearSelectedPet, }) {
+function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
+    const [playdates, setPlaydates] = useState([]);
 
-
-    // Define a function to display a toast error message
     const showToastError = (message) => {
         setToastMessage(message);
         setShowToast(true);
     };
 
-
-
-    /*Define the handleBookPlaydate function*/
     const handleBookPlaydate = () => {
-
         if (!selectedUserPet) {
             showToastError('Please select a pet before finalising the playdate.');
             return;
         }
-        // Retrieve customer1Id and customer2Id from local storage
+
         const customer1Id = localStorage.getItem('idUsername');
         const customer2Id = localStorage.getItem('selectedPetIdusername');
 
@@ -42,25 +33,12 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
             return;
         }
 
-        
-
-        // Fetch data for customer 1
-        axios
-            .get(`http://20.211.223.142:5000/get_customer_data/${customer1Id}`)
+        axios.get(`http://20.211.223.142:5000/get_customer_data/${customer1Id}`)
             .then((response1) => {
                 const customer1Data = response1.data;
-                console.log(customer1Data);
-
-                // Fetch data for customer 2
-                axios
-                    .get(`http://20.211.223.142:5000/get_customer_data2/${customer2Id}`)
+                axios.get(`http://20.211.223.142:5000/get_customer_data2/${customer2Id}`)
                     .then((response2) => {
                         const customer2Data = response2.data;
-                        console.log(customer2Data);
-
-                        // Now you have customer1Data and customer2Data
-                        // Create a playdate or perform other actions as needed
-
                         const formattedDate = selectedDate
                             ? selectedDate.toISOString().slice(0, 19).replace('T', ' ')
                             : null;
@@ -68,15 +46,9 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
                         const playdateData = {
                             idusername1: customer1Data.idusername,
                             idusername2: customer2Data.idusername,
-                            customer1: {
-                                first_name: customer1Data.first_name,
-                            },
-                            customer2: {
-                                first_name: customer2Data.first_name,
-                            },
-                            customer1pet: {
-                                ...selectedPet,
-                            },
+                            customer1: { first_name: customer1Data.first_name },
+                            customer2: { first_name: customer2Data.first_name },
+                            customer1pet: { ...selectedPet },
                             customer2pet: {
                                 ...datepickerUserPets.find((pet) => pet.name === selectedUserPet),
                             },
@@ -84,20 +56,12 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
                             status: 'pending',
                         };
 
-                        // Create the playdate via POST request
-                        axios
-                            .post(`http://20.211.223.142:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
+                        axios.post(`http://20.211.223.142:5000/create_playdate/${customer1Data.idusername}/${customer2Data.idusername}`, playdateData)
                             .then((response3) => {
                                 console.log('Playdate created successfully:', response3.data);
-
-                                // Set the toast message and show the toast for successful booking
                                 setToastMessage('Playdate booked successfully.');
                                 setShowToast(true);
-
-                                // Remove selectedPetIdusername from local storage
                                 localStorage.removeItem('selectedPetIdusername');
-
-                                // Handle any further actions after playdate creation
                             })
                             .catch((error3) => {
                                 console.error('Error creating playdate:', error3);
@@ -122,23 +86,58 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
     };
 
     useEffect(() => {
-        // Retrieve userPets from local storage and set it as datepickerUserPets
+        // Load user's pets
         const userProfileData = localStorage.getItem('userProfileData');
         if (userProfileData) {
             const parsedData = JSON.parse(userProfileData);
             const userPets = parsedData.pets || [];
-
             setDatepickerUserPets(userPets);
         }
+
+        // Fetch playdates with JWT
+        const fetchPlaydates = async () => {
+            const idusername = localStorage.getItem('idUsername');
+            const token = localStorage.getItem('access_token');
+
+            if (!idusername || !token) {
+                console.warn('Missing idusername or token for playdate fetch.');
+                return;
+            }
+
+            try {
+                const response = await axios.get(
+                    `https://puppy-website.onrender.com/api/get_playdates/${idusername}`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                setPlaydates(response.data);
+                console.log('Fetched playdates:', response.data);
+            } catch (error) {
+                console.error('Error fetching playdates:', error);
+            }
+        };
+
+        fetchPlaydates();
     }, []);
 
     return (
         <div className="datepicker-container">
             <ToastContainer position="top-end" className="p-3">
                 {showToast && (
-                    <Toast bg={toastMessage === 'success' ? 'success' : 'danger'} onClose={() => setShowToast(false)} show={showToast} delay={3000} autohide>
+                    <Toast
+                        bg={toastMessage === 'success' ? 'success' : 'danger'}
+                        onClose={() => setShowToast(false)}
+                        show={showToast}
+                        delay={3000}
+                        autohide
+                    >
                         <Toast.Header closeButton={false}>
-                            <strong className="me-auto">{toastMessage === 'success' ? 'Success' : 'Error'}</strong>
+                            <strong className="me-auto">
+                                {toastMessage === 'success' ? 'Success' : 'Error'}
+                            </strong>
                         </Toast.Header>
                         <Toast.Body>{toastMessage}</Toast.Body>
                     </Toast>
@@ -155,8 +154,8 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
                 timeIntervals={15}
                 timeCaption="Time"
                 placeholderText="Select a date and time"
-
             />
+
             {selectedDate && selectedPet && (
                 <div>
                     <p>You selected: {selectedDate.toLocaleString()}</p>
@@ -166,7 +165,6 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
                     <p>Gender: {selectedPet.gender}</p>
                 </div>
             )}
-            {/*<button onClick={clearSelectedPet}>Back to All Pets</button>*/}
 
             {datepickerUserPets && datepickerUserPets.length > 0 && (
                 <div>
@@ -183,11 +181,11 @@ function Datepicker({ selectedPet, clearSelectedPet, }) {
             )}
 
             <div id="finalise-playdate-container">
-                <Button className="finalise-button" onClick={handleBookPlaydate}>Finalise Playdate</Button>
+                <Button className="finalise-button" onClick={handleBookPlaydate}>
+                    Finalise Playdate
+                </Button>
             </div>
         </div>
-
-
     );
 }
 
