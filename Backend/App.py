@@ -153,34 +153,38 @@ class CustomerRegistration(Resource):
 
 class PetRegistration(Resource):
     def post(self):
-        if 'photo' in request.files and request.headers['Content-Type'].startswith('multipart/form-data'):
-            idusername = request.form.get('idusername')
-            new_pet = Pets(
-                idusername=idusername,
-                name=request.form.get('name'),
-                breed=request.form.get('breed'),
-                age=request.form.get('age'),
-                gender=request.form.get('gender'),
-                photo=request.files['photo'].read()
-            )
+        try:
+            if 'photo' in request.files and request.headers['Content-Type'].startswith('multipart/form-data'):
+                idusername = int(request.form.get('idusername'))
+                new_pet = Pets(
+                    idusername=idusername,
+                    name=request.form.get('name'),
+                    breed=request.form.get('breed'),
+                    age=request.form.get('age'),
+                    gender=request.form.get('gender'),
+                    photo=request.files['photo'].read()
+                )
+            elif request.headers['Content-Type'] == 'application/json':
+                data = request.json
+                new_pet = Pets(
+                    idusername=int(data['idusername']),
+                    name=data['name'],
+                    breed=data['breed'],
+                    age=data['age'],
+                    gender=data['gender'],
+                    photo=None
+                )
+            else:
+                return {'error': 'Unsupported Content-Type'}, 415
+
             db.session.add(new_pet)
             db.session.commit()
             return {'message': 'Pet data added successfully'}, 201
-        elif request.headers['Content-Type'] == 'application/json':
-            data = request.json
-            new_pet = Pets(
-                idusername=data['idusername'],
-                name=data['name'],
-                breed=data['breed'],
-                age=data['age'],
-                gender=data['gender'],
-                photo=None
-            )
-            db.session.add(new_pet)
-            db.session.commit()
-            return {'message': 'Pet data added successfully'}, 201
-        else:
-            return {'error': 'Unsupported Content-Type'}, 415
+
+        except Exception as e:
+            db.session.rollback()
+            return {'message': 'Error adding pet to database', 'error': str(e)}, 500
+
 
 class PetList(Resource):
     def get(self):
