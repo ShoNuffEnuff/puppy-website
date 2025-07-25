@@ -314,10 +314,10 @@ def create_playdate(idusername1, idusername2):
             return {"message": "Customer or pet not found"}, 404
 
         new_playdate = Playdates(
-            c1id=idusername1,
+            c1id=idusername2,
             customer1=customer1.first_name,
             customer1pet=pet1.name,
-            c2id=idusername2,
+            c2id=idusername1,
             customer2=customer2.first_name,
             customer2pet=pet2.name,
             time=datetime.strptime(data['time'], '%Y-%m-%d %H:%M:%S'),
