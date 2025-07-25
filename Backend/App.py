@@ -281,10 +281,8 @@ class UserLogin(Resource):
             return {'message': 'Invalid username or password'}, 401
 
         access_token = create_access_token(
-    identity={
-        "idusername": user.idusername,
-        "username": user.username
-    }
+    identity=str(user.idusername),  
+    additional_claims={"username": user.username} 
 )
 
 

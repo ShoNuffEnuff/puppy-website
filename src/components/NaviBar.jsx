@@ -117,8 +117,9 @@ function NaviBar({
         localStorage.setItem('isLoggedIn', 'true');
 
         const decoded = jwtDecode(access_token);
-        const idusernameFromToken = Number(decoded.idusername);
-        const usernameFromToken = decoded.username;
+        const idusernameFromToken = Number(decoded.sub); 
+        const usernameFromToken = decoded.username;         
+
 
         localStorage.setItem("idusername", idusernameFromToken.toString());
         localStorage.setItem('username', usernameFromToken);
