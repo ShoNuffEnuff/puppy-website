@@ -315,14 +315,22 @@ def get_playdates(idusername):
         return {"message": "Unauthorized"}, 403
 
     try:
-        playdates = Playdates.query.filter_by(idusername=idusername).all()
-        playdate_data = []
+        playdates = Playdates.query.filter(
+            (Playdates.c1id == idusername) | (Playdates.c2id == idusername)
+        ).all()
 
+        playdate_data = []
         for playdate in playdates:
             playdate_dict = {
-                "date": playdate.date.isoformat() if playdate.date else None,
-                "location": playdate.location or "",
-                "description": playdate.description or "",
+                "playdatesid": playdate.playdatesid,
+                "customer1": playdate.customer1,
+                "c1id": playdate.c1id,
+                "customer1pet": playdate.customer1pet,
+                "customer2": playdate.customer2,
+                "c2id": playdate.c2id,
+                "customer2pet": playdate.customer2pet,
+                "time": playdate.time.isoformat() if playdate.time else None,
+                "status": playdate.status
             }
             playdate_data.append(playdate_dict)
 
@@ -331,6 +339,7 @@ def get_playdates(idusername):
     except Exception as e:
         print("Error fetching playdates:", e)
         return {"message": "Server error while fetching playdates"}, 500
+
 
 
 
