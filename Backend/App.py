@@ -220,15 +220,16 @@ class PetList(Resource):
 @app.route('/user-profile/<int:idusername>', methods=['GET'])
 @jwt_required()
 def user_profile(idusername):
-    print("Authorization header in user_profile:", request.headers.get("Authorization"))
-    current_user = get_jwt_identity()
-    print("get_jwt_identity() ->", current_user, "type:", type(current_user))
+    identity = get_jwt_identity()
 
-    # Expect identity to be a dict with a 'sub' key
-    if not isinstance(current_user, dict) or "sub" not in current_user:
+    # Ensure identity is a dict with a 'sub' key
+    if not isinstance(identity, dict) or 'sub' not in identity:
+        return {"message": "Malformed token identity"}, 422
+
+    try:
+        user_id = int(identity.get('sub'))
+    except (ValueError, TypeError):
         return {"message": "Invalid token identity"}, 422
-
-    user_id = current_user["sub"]
 
     if user_id != idusername:
         return {"message": "Unauthorized"}, 403
@@ -262,6 +263,7 @@ def user_profile(idusername):
         user_data["pets"].append(pet_dict)
 
     return jsonify(user_data)
+
 
 
 
