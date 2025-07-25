@@ -222,12 +222,8 @@ class PetList(Resource):
 def user_profile(idusername):
     identity = get_jwt_identity()
 
-    # Ensure identity is a dict with a 'sub' key
-    if not isinstance(identity, dict) or 'sub' not in identity:
-        return {"message": "Malformed token identity"}, 422
-
     try:
-        user_id = int(identity.get('sub'))
+        user_id = int(identity)  # direct cast from JWT "sub"
     except (ValueError, TypeError):
         return {"message": "Invalid token identity"}, 422
 
@@ -263,6 +259,7 @@ def user_profile(idusername):
         user_data["pets"].append(pet_dict)
 
     return jsonify(user_data)
+
 
 
 

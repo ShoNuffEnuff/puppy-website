@@ -99,14 +99,14 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
       if (response.status === 200) {
         const userdata = response.data;
         console.log("Fetched user data:", userdata);
-        setUser({ idusername: userdata.idusername, username: userdata.username });
+        setUser({ idusername, username: userdata.username });
         setUserPets(userdata.pets);
 
         localStorage.setItem(
           'userProfileData',
-          JSON.stringify({ user: { idusername: userdata.idusername, username: userdata.username }, pets: userdata.pets })
+          JSON.stringify({ user: { idusername, username: userdata.username }, pets: userdata.pets })
         );
-        localStorage.setItem('idusername', userdata.idusername.toString());
+        localStorage.setItem('idusername', idusername.toString());
         localStorage.setItem('username', userdata.username);
       } else {
         console.error('Error fetching user data:', response.status);
