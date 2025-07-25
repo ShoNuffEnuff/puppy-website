@@ -243,7 +243,7 @@ def user_profile(idusername):
 
     for pet in pets:
         pet_dict = {
-            "petid": pet.id,
+            "petid": pet.petid,
             "name": pet.name,
             "breed": pet.breed,
             "age": pet.age,
