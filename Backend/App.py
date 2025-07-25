@@ -224,14 +224,13 @@ def user_profile(idusername):
     current_user = get_jwt_identity()
     print("get_jwt_identity() ->", current_user, "type:", type(current_user))
 
-    if not isinstance(current_user, int):
-        try:
-            current_user = int(current_user)
-        except Exception as e:
-            print("Identity casting error:", e)
-            return {"message": "Invalid token identity"}, 422
+    # Expect identity to be a dict with a 'sub' key
+    if not isinstance(current_user, dict) or "sub" not in current_user:
+        return {"message": "Invalid token identity"}, 422
 
-    if current_user != idusername:
+    user_id = current_user["sub"]
+
+    if user_id != idusername:
         return {"message": "Unauthorized"}, 403
 
     user = User.query.filter_by(idusername=idusername).first()
@@ -263,6 +262,7 @@ def user_profile(idusername):
         user_data["pets"].append(pet_dict)
 
     return jsonify(user_data)
+
 
 
 
