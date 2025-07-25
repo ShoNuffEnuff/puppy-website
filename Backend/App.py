@@ -335,6 +335,32 @@ def create_playdate(idusername1, idusername2):
         print("Error creating playdate:", e)
         return {"message": "Server error creating playdate"}, 500
 
+@app.route('/api/get_playdates/<int:idusername>', methods=['GET'])
+@jwt_required()
+def get_playdates(idusername):
+    current_user = get_jwt_identity()
+    if current_user['idusername'] != idusername:
+        return {'message': 'Unauthorized'}, 403
+
+    playdates = Playdates.query.filter(
+        (Playdates.customer1 == idusername) | (Playdates.customer2 == idusername)
+    ).all()
+
+    result = []
+    for pd in playdates:
+        result.append({
+            'playdatesid': pd.playdatesid,
+            'customer1': pd.customer1,
+            'customer1pet': pd.customer1pet,
+            'customer2': pd.customer2,
+            'customer2pet': pd.customer2pet,
+            'time': pd.time.strftime("%Y-%m-%d %H:%M:%S") if pd.time else None,
+            'status': pd.status
+        })
+
+    return jsonify(result)
+
+
 
 
 

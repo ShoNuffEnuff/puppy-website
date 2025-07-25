@@ -128,7 +128,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             }
         };
 
-        fetchPlaydates();
+        //fetchPlaydates();
     }, []);
 
     return (
