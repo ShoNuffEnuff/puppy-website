@@ -365,6 +365,35 @@ def get_playdates(idusername):
 
     return jsonify(result)
 
+@app.route('/update_playdate_status/<int:playdate_id>', methods=['PUT'])
+@jwt_required()
+def update_playdate_status(playdate_id):
+    current_user = get_jwt_identity()
+    data = request.get_json()
+    new_status = data.get('status')
+
+    if new_status not in ['accepted', 'declined', 'neutral']:
+        return jsonify({'error': 'Invalid status'}), 400
+
+    playdate = Playdates.query.get(playdate_id)
+    if not playdate:
+        return jsonify({'error': 'Playdate not found'}), 404
+
+    try:
+        # Optional: authorize only participants
+        if int(current_user) not in [playdate.c1id, playdate.c2id]:
+            return jsonify({'message': 'Unauthorized'}), 403
+
+        playdate.status = new_status
+        db.session.commit()
+
+        return jsonify({'message': f'Status updated to {new_status}'}), 200
+
+    except Exception as e:
+        db.session.rollback()
+        print("Error updating playdate:", e)
+        return jsonify({'message': 'Server error updating status'}), 500
+
 
 
 

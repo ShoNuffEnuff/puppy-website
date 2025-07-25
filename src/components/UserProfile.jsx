@@ -188,6 +188,22 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
       });
   };
 
+  // Logout to clear state and storage
+  useEffect(() => {
+    if (!isLoggedIn) {
+      console.log("User is logged out, clearing local state and storage.");
+      setUser({ idusername: null, username: '' });
+      setUserPets([]);
+      setPlaydates([]);
+      setIdUsername(null);
+
+      localStorage.removeItem('userProfileData');
+      localStorage.removeItem('idusername');
+      localStorage.removeItem('username');
+      localStorage.removeItem('access_token');
+    }
+  }, [isLoggedIn]);
+
   return (
     <div key={keyProp}>
       <Button className="custom-btn-Profile" onClick={handleShow}>
