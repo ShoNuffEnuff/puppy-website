@@ -36,7 +36,7 @@ const RegistrationForm = ({ backgroundClasses, currentBackgroundIndex, backgroun
     const handleShowModal = () => setShowModal(true);
 
     
-    const registrationUrl = process.env.REACT_APP_API_BASE_URL;
+    const registrationUrl = process.env.REACT_APP_API_BASE_URL || 'https://puppy-website.onrender.com';
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
