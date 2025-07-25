@@ -296,13 +296,19 @@ class UserLogin(Resource):
 @jwt_required()
 def create_playdate(idusername1, idusername2):
     data = request.get_json()
-
+    print("Received JSON data:", data)
     try:
         customer1 = Customer.query.filter_by(idusername=idusername1).first()
         customer2 = Customer.query.filter_by(idusername=idusername2).first()
 
         pet1 = Pets.query.get(data['customer1petid'])
         pet2 = Pets.query.get(data['customer2petid'])
+
+        print("c1:", idusername1, "c2:", idusername2)
+        print("customer1:", customer1)
+        print("customer2:", customer2)
+        print("pet1:", pet1)
+        print("pet2:", pet2)
 
         if not all([customer1, customer2, pet1, pet2]):
             return {"message": "Customer or pet not found"}, 404
