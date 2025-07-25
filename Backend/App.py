@@ -296,31 +296,42 @@ class UserLogin(Resource):
 @jwt_required()
 def get_playdates(idusername):
     print("Authorization header in get_playdates:", request.headers.get("Authorization"))
-    current_user = get_jwt_identity()
-    print("get_jwt_identity() ->", current_user, "type:", type(current_user))
+    identity = get_jwt_identity()
+    print("get_jwt_identity() ->", identity, "type:", type(identity))
 
-    if not isinstance(current_user, int):
-        try:
-            current_user = int(current_user)
-        except Exception as e:
-            print("Identity casting error:", e)
-            return {"message": "Invalid token identity"}, 422
+    # Identity validation (sub as string)
+    if isinstance(identity, dict):
+        user_id = identity.get("sub")
+    else:
+        user_id = identity
 
-    if current_user != idusername:
+    try:
+        user_id = int(user_id)
+    except Exception as e:
+        print("Identity casting error:", e)
+        return {"message": "Invalid token identity"}, 422
+
+    if user_id != idusername:
         return {"message": "Unauthorized"}, 403
 
-    playdates = Playdates.query.filter_by(idusername=idusername).all()
-    playdate_data = []
+    try:
+        playdates = Playdates.query.filter_by(idusername=idusername).all()
+        playdate_data = []
 
-    for playdate in playdates:
-        playdate_dict = {
-            "date": playdate.date.isoformat() if playdate.date else None,
-            "location": playdate.location,
-            "description": playdate.description,
-        }
-        playdate_data.append(playdate_dict)
+        for playdate in playdates:
+            playdate_dict = {
+                "date": playdate.date.isoformat() if playdate.date else None,
+                "location": playdate.location or "",
+                "description": playdate.description or "",
+            }
+            playdate_data.append(playdate_dict)
 
-    return jsonify(playdate_data)
+        return jsonify(playdate_data), 200
+
+    except Exception as e:
+        print("Error fetching playdates:", e)
+        return {"message": "Server error while fetching playdates"}, 500
+
 
 
 api.add_resource(UserRegistration, '/register', methods=['POST'])
