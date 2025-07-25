@@ -21,18 +21,18 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
   const isLoggedInRef = useRef(isLoggedIn);
   const [idusername, setIdUsername] = useState(null);
 
-  // Keep ref updated
+  const handleShow = () => setShowProfile(true);
+  const handleClose = () => setShowProfile(false);
+
   useEffect(() => {
     isLoggedInRef.current = isLoggedIn;
   }, [isLoggedIn]);
 
-  // Decode token and set idusername
   useEffect(() => {
     const token = localStorage.getItem('access_token');
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        console.log("Decoded token:", decoded);
         const idFromToken = Number(decoded.sub);
         if (!isNaN(idFromToken)) {
           setIdUsername(idFromToken);
@@ -48,7 +48,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     }
   }, [isLoggedIn]);
 
-  // Load user and pets from localStorage on mount
   useEffect(() => {
     const userProfileData = localStorage.getItem('userProfileData');
     const idFromStorage = localStorage.getItem('idusername');
@@ -83,7 +82,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     setShowAlert(isVisible);
   };
 
-  // Fetch user data from backend
   const fetchUserData = useCallback(async () => {
     if (!isLoggedInRef.current || idusername === null) return;
 
@@ -105,7 +103,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
           'userProfileData',
           JSON.stringify({ user: { idusername: userdata.idusername, username: userdata.username }, pets: userdata.pets })
         );
-        // Also keep localStorage idusername and username in sync
         localStorage.setItem('idusername', userdata.idusername.toString());
         localStorage.setItem('username', userdata.username);
       } else {
@@ -116,7 +113,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     }
   }, [idusername]);
 
-  // Fetch playdates from backend
   const fetchPlaydates = useCallback(() => {
     if (!isLoggedInRef.current || idusername === null) return;
 
@@ -134,7 +130,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     })
       .then((response) => {
         setPlaydates(response.data);
-
         const hasPendingPlaydates = response.data.some(
           playdate => playdate.status !== 'accepted' && playdate.status !== 'declined'
         );
@@ -145,7 +140,6 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
       });
   }, [idusername]);
 
-  // When logged in or showProfile changes, fetch data
   useEffect(() => {
     if (isLoggedIn) {
       fetchUserData();
@@ -153,17 +147,13 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
     }
   }, [showProfile, isLoggedIn, fetchUserData, fetchPlaydates]);
 
-  // Reset on keyProp change
   useEffect(() => {
-    setUser({ idusername: null, username: '' });
-    setUserPets([]);
-    setPlaydates([]);
-  }, [keyProp]);
+    if (isLoggedInRef.current && showProfile) {
+      fetchUserData();
+      fetchPlaydates();
+    }
+  }, [keyProp, fetchUserData, fetchPlaydates, showProfile]);
 
-  const handleShow = () => setShowProfile(true);
-  const handleClose = () => setShowProfile(false);
-
-  // Update playdate status handler
   const updatePlaydateStatus = (playdateId, newStatus) => {
     const token = localStorage.getItem('access_token');
     if (!token) {
