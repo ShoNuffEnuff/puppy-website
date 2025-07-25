@@ -8,7 +8,7 @@ import Button from 'react-bootstrap/Button';
 
 function Datepicker({ selectedPet, clearSelectedPet }) {
     const [selectedDate, setSelectedDate] = useState(null);
-    const [selectedUserPet, setSelectedUserPet] = useState(null); // store petid
+    const [selectedUserPet, setSelectedUserPet] = useState('');
     const [datepickerUserPets, setDatepickerUserPets] = useState([]);
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
@@ -37,7 +37,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
         const c2id = selectedPet?.idusername || null;
 
         if (!c1id || !c2id) {
-            console.error('Customer IDs not found or invalid');
+            console.error('Customer IDs not found in local storage');
             return;
         }
 
@@ -63,8 +63,6 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             status: 'pending',
         };
 
-        console.log("Sending playdate data:", playdateData);
-
         axios.post(`${backendUrl}/create_playdate/${c1id}/${c2id}`, playdateData, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -74,8 +72,9 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             console.log('Playdate created successfully:', response.data);
             setToastMessage('Playdate booked successfully.');
             setShowToast(true);
+            localStorage.removeItem('selectedPetIdusername');
             setSelectedDate(null);
-            setSelectedUserPet(null);
+            setSelectedUserPet('');
             clearSelectedPet();
         })
         .catch((error) => {
@@ -174,7 +173,7 @@ function Datepicker({ selectedPet, clearSelectedPet }) {
             {datepickerUserPets.length > 0 && (
                 <div>
                     <h3>Your Pets</h3>
-                    <select value={selectedUserPet || ''} onChange={handleUserPetChange}>
+                    <select value={selectedUserPet} onChange={handleUserPetChange}>
                         <option value="">Select a pet</option>
                         {datepickerUserPets.map((pet) => (
                             <option key={pet.petid} value={pet.petid}>
