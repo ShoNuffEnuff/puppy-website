@@ -339,8 +339,13 @@ def create_playdate(idusername1, idusername2):
 @jwt_required()
 def get_playdates(idusername):
     current_user = get_jwt_identity()
-    if current_user['idusername'] != idusername:
-        return {'message': 'Unauthorized'}, 403
+
+    # Since identity is stored as a string (e.g., "4"), convert it to int before comparison
+    try:
+        if int(current_user) != idusername:
+            return {'message': 'Unauthorized'}, 403
+    except (ValueError, TypeError):
+        return {'message': 'Invalid identity in token'}, 400
 
     playdates = Playdates.query.filter(
         (Playdates.customer1 == idusername) | (Playdates.customer2 == idusername)
@@ -359,6 +364,7 @@ def get_playdates(idusername):
         })
 
     return jsonify(result)
+
 
 
 
