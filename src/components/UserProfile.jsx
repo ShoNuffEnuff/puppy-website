@@ -50,6 +50,8 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
   }, [isLoggedIn]);
 
   useEffect(() => {
+    if (!isLoggedIn) return;
+
     const userProfileData = localStorage.getItem('userProfileData');
     const idFromStorage = localStorage.getItem('idusername');
     const usernameFromStorage = localStorage.getItem('username');
@@ -77,7 +79,7 @@ const UserProfile = ({ isLoggedIn, keyProp }) => {
       });
       setUserPets([]);
     }
-  }, []);
+  }, [isLoggedIn]);
 
   const toggleAlert = (isVisible) => {
     setShowAlert(isVisible);
