@@ -85,6 +85,7 @@ function App() {
         setIdUsername(null);
         setUsername('');
         setUserPets([]);
+        changeKey();
     };
 
     const changeKey = () => {
@@ -142,6 +143,12 @@ function App() {
                       currentBackgroundIndex={currentBackgroundIndex}
                       backendUrl={backendUrl}
                     />
+                    {isLoggedIn && (
+  <UserProfile
+    isLoggedIn={isLoggedIn}
+    keyProp={keyProp}
+  />
+)}
 
                     <Routes>
                         <Route path="/" element={<Home backendUrl={backendUrl} />} />
