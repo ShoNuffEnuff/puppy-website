@@ -81,6 +81,11 @@ function App() {
 
 
     const handleLogout = () => {
+       localStorage.removeItem('access_token');
+       localStorage.removeItem('userProfileData');
+       localStorage.removeItem('idusername');
+       localStorage.removeItem('username');
+
         setIsLoggedIn(false);
         setIdUsername(null);
         setUsername('');
